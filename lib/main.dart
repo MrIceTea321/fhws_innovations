@@ -1,4 +1,10 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart';
+import 'package:velocity_x/velocity_x.dart';
+import 'package:web3dart/web3dart.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,18 +19,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'FHWS Innovations'),
     );
   }
 }
@@ -48,68 +45,93 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  late Client httpClient;
+  late Web3Client ethClient;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  final myAddress = "0x33398a5f4372DDB334aFE22d777A351b610a930C";
+
+  late List<dynamic> innovationsList;
+  int innovationsLength = 0;
+  bool data = false;
+
+  @override
+  void initState() {
+    super.initState();
+    httpClient = Client();
+    ethClient = Web3Client(
+        "https://rinkeby.infura.io/v3/dbd61902b58949348a3045a157d038ca",
+        httpClient);
+    getInnovationsLength();
+    getAllInnovations();
+  }
+
+  Future<DeployedContract> loadContract() async {
+    //Load Contract from the Abi
+    String abi = await rootBundle.loadString("abi.json");
+    String contractAddress = "0x53C55a784bea3AC3d973C882B10162E413758CB1";
+
+    //Transform contract into an object
+    final contract = DeployedContract(
+        ContractAbi.fromJson(abi, "FhwsInnovationsContract"),
+        EthereumAddress.fromHex(contractAddress));
+
+    return contract;
+  }
+
+  //Enter function name of smart contract method - optinal are the arguments
+  Future<List<dynamic>> query(String functionName, List<dynamic> args) async {
+    final contract = await loadContract();
+    final ethFunction = contract.function(functionName);
+    final result = await ethClient.call(
+        contract: contract, function: ethFunction, params: args);
+
+    return result;
+  }
+
+  Future<void> getInnovationsLength() async {
+    List<dynamic> result = await query("getInnovationsLength", []);
+
+    BigInt bigIntToInt = result[0];
+    innovationsLength = bigIntToInt.toInt();
+    data = true;
+    setState(() {});
+  }
+
+  Future<void> getAllInnovations() async {
+    List<dynamic> result = await query("getAllInnovations", []);
+    innovationsList = result[0];
+    data = true;
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      backgroundColor: Vx.red100,
+      body: ZStack([
+        VStack([
+          (context.percentHeight * 10).heightBox,
+          data
+              ? innovationsLength.text.xl4.black.bold.center
+                  .makeCentered()
+                  .py16()
+              : CircularProgressIndicator().centered(),
+        ]),
+        VStack([
+          (context.percentHeight * 30).heightBox,
+          data
+              ? innovationsList[0][3]
+                  .toString()
+                  .text
+                  .xl4
+                  .black
+                  .bold
+                  .center
+                  .makeCentered()
+                  .py16()
+              : CircularProgressIndicator().centered(),
+        ])
+      ]),
     );
   }
 }
