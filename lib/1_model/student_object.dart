@@ -3,7 +3,7 @@ import 'dart:html';
 import 'package:http/http.dart' as http;
 
 import '../constants/text_constants.dart';
-import 'innovations_object.dart';
+import 'innovation.dart';
 
 class Student {
   late String _kNumber;
