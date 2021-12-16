@@ -3,11 +3,12 @@ import 'dart:io';
 
 import 'package:fhws_innovations/1_model/innovations_object.dart';
 import 'package:fhws_innovations/1_model/student_object.dart';
+import 'package:fhws_innovations/3_controller/metamask.dart';
 import 'package:fhws_innovations/constants/rounded_alert.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../constants/text_constants.dart';
 import 'innovations_overview.dart';
@@ -26,137 +27,144 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: Card(
-                  color: fhwsGreen,
-                  margin: const EdgeInsets.all(0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(0),
-                  ),
-                  elevation: 10,
-                ),
-              ),
-              const Spacer(),
-            ],
-          ),
-          SafeArea(
-            child: ListView(
+    return ChangeNotifierProvider(
+        create: (context) => MetaMaskProvider()..init(),
+        builder: (context, snapshot) {
+          return Scaffold(
+            body: Stack(
+              fit: StackFit.expand,
               children: [
-                const SizedBox(height: 40.0),
-                Text(
-                  "Welcome to FHWS Innovations",
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headline3!.copyWith(
-                        color: Colors.white,
-                        fontFamily: openSansFontFamily,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                      child: Card(
+                        color: fhwsGreen,
+                        margin: const EdgeInsets.all(0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                        elevation: 10,
                       ),
+                    ),
+                    const Spacer(),
+                  ],
                 ),
-                const Text(
-                  "Login with your Student Account",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                    fontFamily: openSansFontFamily,
-                  ),
-                ),
-                const SizedBox(height: 30.0),
-                Card(
-                  margin: const EdgeInsets.all(32.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
+                SafeArea(
                   child: ListView(
-                    shrinkWrap: true,
-                    primary: false,
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.all(16.0),
                     children: [
-                      const SizedBox(height: 20.0),
+                      const SizedBox(height: 40.0),
                       Text(
-                        "Log In",
+                        "Welcome to FHWS Innovations",
                         textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.headline5!.copyWith(
-                              color: fhwsGreen,
+                        style: Theme.of(context).textTheme.headline3!.copyWith(
+                              color: Colors.white,
                               fontFamily: openSansFontFamily,
                             ),
                       ),
-                      const SizedBox(height: 40.0),
-                      TextField(
-                        onChanged: (value) {
-                          kNumber = value;
-                        },
-                        decoration: const InputDecoration(
-                          labelText: "Enter k-Number",
-                        ),
-                      ),
-                      TextField(
-                        obscureText: true,
-                        onChanged: (value) {
-                          password = value;
-                        },
-                        decoration: const InputDecoration(
-                          labelText: "Enter password",
+                      const Text(
+                        "Login with your Student Account",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                          fontFamily: openSansFontFamily,
                         ),
                       ),
                       const SizedBox(height: 30.0),
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.all(16.0),
-                            primary: fhwsGreen, // background
-                            onPrimary: Colors.white,
-                          ),
-                          child: const Text("Submit",
-                              style: TextStyle(
-                                  fontFamily: openSansFontFamily,
-                                  color: Colors.white)),
-                          onPressed: () async {
-                            ib.createStudentOnTheBlockchain();
-                            if (kNumber == '') {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return const RoundedAlert("❗️Achtung❗",
-                                      "Gib bitte deine k-Nummer an ☺️");
-                                },
-                              );
-                            } else if (password == '') {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return const RoundedAlert("❗️Achtung❗",
-                                      "Gib bitte dein Passwort an ☺️");
-                                },
-                              );
-                            } else {
-                              Student student =
-                                  await fetchStudent(kNumber, password);
-                              //TODO insert function alreadyExist
-                              //TODO
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          InnovationsOverview(student)));
-                            }
-                          }),
-                      const SizedBox(height: 10.0),
+                      Card(
+                        margin: const EdgeInsets.all(32.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: ListView(
+                          shrinkWrap: true,
+                          primary: false,
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: const EdgeInsets.all(16.0),
+                          children: [
+                            const SizedBox(height: 20.0),
+                            Text(
+                              "Log In",
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline5!
+                                  .copyWith(
+                                    color: fhwsGreen,
+                                    fontFamily: openSansFontFamily,
+                                  ),
+                            ),
+                            const SizedBox(height: 40.0),
+                            TextField(
+                              onChanged: (value) {
+                                kNumber = value;
+                              },
+                              decoration: const InputDecoration(
+                                labelText: "Enter k-Number",
+                              ),
+                            ),
+                            TextField(
+                              obscureText: true,
+                              onChanged: (value) {
+                                password = value;
+                              },
+                              decoration: const InputDecoration(
+                                labelText: "Enter password",
+                              ),
+                            ),
+                            const SizedBox(height: 30.0),
+                            ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.all(16.0),
+                                  primary: fhwsGreen, // background
+                                  onPrimary: Colors.white,
+                                ),
+                                child: const Text("Submit",
+                                    style: TextStyle(
+                                        fontFamily: openSansFontFamily,
+                                        color: Colors.white)),
+                                onPressed: () async {
+                                  ib.createStudentOnTheBlockchain();
+                                  if (kNumber == '') {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return const RoundedAlert("❗️Achtung❗",
+                                            "Gib bitte deine k-Nummer an ☺️");
+                                      },
+                                    );
+                                  } else if (password == '') {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return const RoundedAlert("❗️Achtung❗",
+                                            "Gib bitte dein Passwort an ☺️");
+                                      },
+                                    );
+                                  } else {
+                                    Student student =
+                                        await fetchStudent(kNumber, password);
+                                    //TODO insert function alreadyExist
+                                    //TODO
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                InnovationsOverview(student)));
+                                  }
+                                }),
+                            const SizedBox(height: 10.0),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 )
               ],
             ),
-          )
-        ],
-      ),
-    );
+          );
+        });
   }
 
   Future<Student> fetchStudent(String kNumber, String password) async {

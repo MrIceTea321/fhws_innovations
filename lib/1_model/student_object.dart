@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:http/http.dart' as http;
 
 import '../constants/text_constants.dart';
@@ -44,7 +42,7 @@ class Student {
   Innovation createInnovation(
       Student creator, String title, String description, String hash) {
     //TODO get unique hash
-    Innovation innovation = Innovation(creator, title, description,'' );
+    Innovation innovation = Innovation(creator, title, description, '');
     innovations.add(innovation);
     return innovation;
   }
