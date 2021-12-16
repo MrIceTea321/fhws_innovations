@@ -21,6 +21,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   String password = '';
   String kNumber = '';
+  var student;
 
   @override
   Widget build(BuildContext context) {
@@ -135,6 +136,8 @@ class _LoginState extends State<Login> {
                             } else {
                               Student student =
                                   await fetchStudent(kNumber, password);
+                              //TODO insert function alreadyExist
+                              //TODO
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -165,6 +168,7 @@ class _LoginState extends State<Login> {
         HttpHeaders.authorizationHeader: 'Basic $encoded',
       },
     );
+
     final responseJson = jsonDecode(response.body);
     return Student.fromJson(responseJson);
   }

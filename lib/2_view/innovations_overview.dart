@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fhws_innovations/1_model/innovations_data_object.dart';
 import 'package:fhws_innovations/1_model/innovations_object.dart';
 import 'package:fhws_innovations/1_model/student_object.dart';
@@ -16,8 +14,7 @@ class InnovationsOverview extends StatefulWidget {
 }
 
 class _InnovationsOverviewState extends State<InnovationsOverview> {
-  List<Innovation> innovationsObjectList = [];
-  var refreshKey = GlobalKey<RefreshIndicatorState>();
+  List<Innovation> innovationsDataObjectList = [];
 
   @override
   void initState() {
@@ -103,15 +100,16 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
               return ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
-                  itemCount: innovationsObjectList.length,
+                  itemCount: innovationsDataObjectList.length,
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) {
                     return GestureDetector(
-                        onTap: () => _openDestinationPage(
-                            context, innovationsObjectList.elementAt(index)),
+                        onTap: () => _openDestinationPage(context,
+                            innovationsDataObjectList.elementAt(index)),
                         child: _buildFeaturedItem(
-                          title: innovationsObjectList.elementAt(index).title,
-                          subtitle: innovationsObjectList
+                          title:
+                              innovationsDataObjectList.elementAt(index).title,
+                          subtitle: innovationsDataObjectList
                               .elementAt(index)
                               .creator
                               .emailAddress,
@@ -130,8 +128,8 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
           color: fhwsGreen,
         ),
         onPressed: () async {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => CreateNewInnovation()));
+        //  Navigator.push(context,
+        //      MaterialPageRoute(builder: (context) => CreateNewInnovation()));
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -179,8 +177,8 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
   }
 
   _openDestinationPage(BuildContext context, Innovation innovation) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (_) => InnovationDetails()));
+    //Navigator.push(
+    //    context, MaterialPageRoute(builder: (_) => InnovationDetails(innovatoin: innovatoin)));
   }
 
   getInnovations() {
