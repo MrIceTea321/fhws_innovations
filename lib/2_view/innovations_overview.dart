@@ -128,8 +128,8 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
           color: fhwsGreen,
         ),
         onPressed: () async {
-        //  Navigator.push(context,
-        //      MaterialPageRoute(builder: (context) => CreateNewInnovation()));
+          //  Navigator.push(context,
+          //      MaterialPageRoute(builder: (context) => CreateNewInnovation()));
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -183,6 +183,6 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
 
   getInnovations() {
     InnovationsObject object = InnovationsObject();
-    return object.getAllInnovations(true);
+    return object.getAllInnovations();
   }
 }

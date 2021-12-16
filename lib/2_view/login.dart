@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:fhws_innovations/1_model/innovations_object.dart';
 import 'package:fhws_innovations/1_model/student_object.dart';
 import 'package:fhws_innovations/constants/rounded_alert.dart';
 import 'package:http/http.dart' as http;
@@ -21,7 +22,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   String password = '';
   String kNumber = '';
-  var student;
+  InnovationsObject ib = InnovationsObject();
 
   @override
   Widget build(BuildContext context) {
@@ -117,6 +118,7 @@ class _LoginState extends State<Login> {
                                   fontFamily: openSansFontFamily,
                                   color: Colors.white)),
                           onPressed: () async {
+                            ib.createStudentOnTheBlockchain();
                             if (kNumber == '') {
                               showDialog(
                                 context: context,
