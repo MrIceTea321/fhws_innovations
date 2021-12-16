@@ -531,7 +531,6 @@ packages:
       name: vector_math
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0"
   velocity_x:
     dependency: "direct main"
     description:
