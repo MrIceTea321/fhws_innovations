@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 class InnovationsOverview extends StatefulWidget {
   final Student student;
 
-  const InnovationsOverview(Key key, this.student);
+  const InnovationsOverview(this.student);
 
   @override
   _InnovationsOverviewState createState() => _InnovationsOverviewState();
@@ -26,9 +26,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: fhwsGreen,
       body: ListView(
@@ -53,9 +51,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              "Hallo, " +
-                                  widget.student.firstName,
-                              // .displayName,
+                              "Hallo, " + widget.student.firstName,
                               style: const TextStyle(
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.bold,
@@ -83,7 +79,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                       decoration: InputDecoration(
                         hintText: "Nach Innovationen suchen",
                         prefixIcon:
-                        const Icon(Icons.search, color: Colors.black54),
+                            const Icon(Icons.search, color: Colors.black54),
                         enabledBorder: OutlineInputBorder(
                           borderSide: const BorderSide(
                             color: Colors.white,
@@ -95,15 +91,14 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
               ),
             ),
           ),
-          // Favorite Recipes
           FutureBuilder<List<Innovation>>(
             future: getInnovations(),
             builder: (context, AsyncSnapshot<List<Innovation>> snap) {
               if (snap.data == null) {
                 return const Center(
                     child: CircularProgressIndicator(
-                      color: fhwsGreen,
-                    ));
+                  color: fhwsGreen,
+                ));
               }
               return ListView.builder(
                   scrollDirection: Axis.vertical,
@@ -111,16 +106,11 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                   itemCount: innovationsObjectList.length,
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) {
-                    //TODO insert method
                     return GestureDetector(
-                        onTap: () =>
-                            _openDestinationPage(
-                                context, innovationsObjectList.elementAt(index)
-                            ),
+                        onTap: () => _openDestinationPage(
+                            context, innovationsObjectList.elementAt(index)),
                         child: _buildFeaturedItem(
-                          title: innovationsObjectList
-                              .elementAt(index)
-                              .title,
+                          title: innovationsObjectList.elementAt(index).title,
                           subtitle: innovationsObjectList
                               .elementAt(index)
                               .creator
@@ -129,16 +119,6 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                   });
             },
           ),
-          // Feed Me Cookbook
-          GestureDetector(
-              onTap: () =>
-                  _openDestinationPage(
-                    context,
-
-                  ),
-              child: _buildFeaturedItem(
-                  title: "Test Innovation",
-                  subtitle: 'Neu & Anders')),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -158,7 +138,6 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
     );
   }
 
-
   Container _buildFeaturedItem(
       {required String title, required String subtitle}) {
     return Container(
@@ -167,7 +146,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
       child: Material(
         elevation: 5.0,
         shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
         child: Stack(
           children: <Widget>[
             Positioned(
@@ -192,8 +171,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                               fontFamily: openSansFontFamily)),
                     ],
                   ),
-                )
-            ),
+                )),
           ],
         ),
       ),
@@ -202,17 +180,11 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
 
   _openDestinationPage(BuildContext context, Innovation innovation) {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (_) =>
-                InnovationDetails(
-
-                )));
+        context, MaterialPageRoute(builder: (_) => InnovationDetails()));
   }
 
-  getInnovatoins(){
+  getInnovations() {
     InnovationsObject object = InnovationsObject();
     return object.getAllInnovations(true);
   }
-
 }

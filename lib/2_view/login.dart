@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/text_constants.dart';
+import 'innovations_overview.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -132,14 +133,13 @@ class _LoginState extends State<Login> {
                                 },
                               );
                             } else {
-                              var student =
+                              Student student =
                                   await fetchStudent(kNumber, password);
-                              print('*******************');
-                              print(student);
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const Innovations()));
+                                      builder: (context) =>
+                                          InnovationsOverview(student)));
                             }
                           }),
                       const SizedBox(height: 10.0),
