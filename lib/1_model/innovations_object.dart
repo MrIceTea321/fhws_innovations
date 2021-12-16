@@ -1,30 +1,34 @@
-import 'dart:typed_data';
+import 'package:http/http.dart';
+import 'package:web3dart/web3dart.dart';
+import 'package:fhws_innovations/3_controller/smart_contract.dart';
 
-import 'package:fhws_innovations/1_model/student_object.dart';
+class InnovationsObject {
 
-class Innovation {
-  final String title;
-  final String description;
-  final Student creator;
-  // TODO change to unit8 list
-  final String uniqueInnovationHash;
-  int votingCount = 0;
+  late SmartContract smartContract = SmartContract();
 
-  Innovation(this.creator, this.title, this.description, this.uniqueInnovationHash);
+  var ethClient = Web3Client(
+      "https://rinkeby.infura.io/v3/dbd61902b58949348a3045a157d038ca",
+      Client());
 
-  void setVote(bool like) {
-    if (like) {
-      votingCount + 1;
-    }
+  Future<void> getInnovationsLength(int innovationsLength, bool data,) async {
+    smartContract.loadContract();
+    List<dynamic> result = await smartContract.querySmartContractFunction(
+        'getInnovationsLength', [], ethClient);
+
+    BigInt bigIntToInt = result[0];
+    innovationsLength = bigIntToInt.toInt();
+    data = true;
+    //setState(() {});
   }
 
-  void removeVote(bool removeLike) {
-    if (removeLike) {
-      votingCount - 1;
-    }
-  }
+  Future<List> getAllInnovations(bool data) async {
+    smartContract.loadContract();
+    List<dynamic> result = await smartContract.querySmartContractFunction(
+        "getAllInnovations", [], ethClient);
 
-  int getAllVotesForInnovation() {
-    return votingCount;
+    List<dynamic> innovationsList = result[0];
+
+    data = true;
+    return innovationsList;
   }
 }
