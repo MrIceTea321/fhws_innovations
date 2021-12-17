@@ -125,7 +125,7 @@ class _LoginState extends State<Login> {
                                         fontFamily: openSansFontFamily,
                                         color: Colors.white)),
                                 onPressed: () async {
-                                  ib.createStudentOnTheBlockchain();
+                                  ib.createStudentOnTheBlockchain(context);
                                   if (kNumber == '') {
                                     showDialog(
                                       context: context,
