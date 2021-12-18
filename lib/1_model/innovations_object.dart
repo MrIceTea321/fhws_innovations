@@ -17,6 +17,7 @@ class InnovationsObject {
       "https://rinkeby.infura.io/v3/dbd61902b58949348a3045a157d038ca",
       Client());
 
+  //All getters of SmartContract
   Future<List> getAllInnovations() async {
     smartContract.loadContract();
     List<dynamic> result = await smartContract.querySmartContractFunction(
@@ -25,6 +26,7 @@ class InnovationsObject {
     return innovationsList;
   }
 
+  //All functions of SmartContract
   Future<String> createStudentOnTheBlockchain(BuildContext context) async {
     var response =
         await submitTransaction("createStudentOnTheBlockchain", ["k45766"]);
