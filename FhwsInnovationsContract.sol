@@ -9,6 +9,7 @@ contract FhwsInnovationsContract {
         string kNumber;
         address studentAddress;
         bool voted;
+        bytes32 votedInnovationHash;
     }
     struct Innovation {
         bytes32 uniqueInnovationHash;
@@ -99,7 +100,7 @@ contract FhwsInnovationsContract {
     //registration process
     function initialRegistrationOfStudent(string memory _kNumber) public {
         if(!studentAlreadyRegistred(_kNumber)){
-            Student memory newStudent = Student ({kNumber: _kNumber, studentAddress: msg.sender, voted: false});
+            Student memory newStudent = Student ({kNumber: _kNumber, studentAddress: msg.sender, voted: false, votedInnovationHash: ''});
             students[msg.sender] = newStudent;
             kNumberAlreadyRegistred[_kNumber] = true;
             kNumbers.push(_kNumber);
@@ -150,7 +151,7 @@ contract FhwsInnovationsContract {
 
     function createInnovation(string memory _title, string memory _description) public onylWithRegistredStudentAddress { 
         bytes32 _uniqueInnovationHash = genereateUniqueHashForInnovation(_title, _description);
-        Innovation memory newInnovation = Innovation ({uniqueInnovationHash: _uniqueInnovationHash, votingCount: 0,  creator: getStudent(), title: _title, description: _description});
+        Innovation memory newInnovation = Innovation ({uniqueInnovationHash: _uniqueInnovationHash, votingCount: 0, creator: getStudent(), title: _title, description: _description});
         innovations.push(newInnovation);
         innovationsOfStudent[msg.sender].push(newInnovation);
         console.log("Innovation created");
@@ -159,6 +160,13 @@ contract FhwsInnovationsContract {
     function deleteInnovation(bytes32 _uniqueInnovationHash) public onylWithRegistredStudentAddress {
         for(uint i = 0; i < innovations.length; i++) {
             if(innovations[i].uniqueInnovationHash ==_uniqueInnovationHash){
+                //give students their vote back
+                for(uint z = 0; z< addresses.length; z++){
+                    if(students[addresses[i]].votedInnovationHash == _uniqueInnovationHash){
+                        students[addresses[i]].voted = false;
+                        delete students[addresses[i]].votedInnovationHash;
+                    } 
+                }
                 innovations[i]=innovations[innovations.length-1];
                 innovations.pop();
             }
@@ -174,8 +182,19 @@ contract FhwsInnovationsContract {
     }
 
     function editInnovation(bytes32 _uniqueInnovationHash, string memory _title, string memory _description) public onylWithRegistredStudentAddress{
-        deleteInnovation(_uniqueInnovationHash);
-        createInnovation(_title, _description);
+        for(uint i = 0; i < innovations.length; i++) {
+            if(innovations[i].uniqueInnovationHash ==_uniqueInnovationHash){
+                innovations[i].title = _title;
+                innovations[i].description = _description;
+            }
+        }
+
+         for(uint i = 0; i<innovationsOfStudent[msg.sender].length; i++){
+            if(innovationsOfStudent[msg.sender][i].uniqueInnovationHash ==_uniqueInnovationHash){
+                innovationsOfStudent[msg.sender][i].title = _title;
+                innovationsOfStudent[msg.sender][i].description = _description;
+            }
+        }
     }
 
 
@@ -192,6 +211,7 @@ contract FhwsInnovationsContract {
             }
         }
         students[msg.sender].voted = true;
+        students[msg.sender].votedInnovationHash = _uniqueInnovationHash;
     }
 
     function unvote(bytes32 _uniqueInnovationHash) public onylWithRegistredStudentAddress{
@@ -202,9 +222,10 @@ contract FhwsInnovationsContract {
         }
         for(uint i = 0; i<innovationsOfStudent[msg.sender].length; i++){
             if(innovationsOfStudent[msg.sender][i].uniqueInnovationHash ==_uniqueInnovationHash){
-                innovationsOfStudent[msg.sender][i].votingCount--;
+                innovationsOfStudent[msg.sender][i].votingCount--;      
             }
         }
         students[msg.sender].voted = false;
+        delete students[msg.sender].votedInnovationHash;
     }
 }
