@@ -134,16 +134,10 @@ contract FhwsInnovationsContract {
          return innovationsOfStudent[msg.sender];
     }
 
-    //test onylWithRegistredStudentAddress
+    //return all innovations
      function getAllInnovations() public onylWithRegistredStudentAddress view returns(Innovation[] memory){
         return innovations;
     }
-
-    //Nur zum Testen onylWithRegistredStudentAddress
-    function getFirstInnovation() public onylWithRegistredStudentAddress view returns(bytes32){
-        return innovations[0].uniqueInnovationHash;
-    }
-
 
      function genereateUniqueHashForInnovation(string memory _title, string memory _description) private onylWithRegistredStudentAddress view returns(bytes32) {
         return keccak256(abi.encodePacked(block.timestamp, getKNumberOfStudentAddress(), _title, _description));
