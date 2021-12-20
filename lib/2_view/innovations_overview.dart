@@ -90,7 +90,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
             ),
           ),
           FutureBuilder<List<dynamic>>(
-            future: getInnovations(),
+            future: getAllInnovations(),
             builder: (context, AsyncSnapshot<List<dynamic>> snap) {
               if (snap.data == null) {
                 return const Center(
@@ -129,8 +129,8 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
           color: fhwsGreen,
         ),
         onPressed: () async {
-          //  Navigator.push(context,
-          //      MaterialPageRoute(builder: (context) => CreateNewInnovation()));
+           //Navigator.push(context,
+           //     MaterialPageRoute(builder: (context) => CreateNewInnovation()));
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -178,12 +178,12 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
   }
 
   _openDestinationPage(BuildContext context, Innovation innovation) {
-    //Navigator.push(
-    //    context, MaterialPageRoute(builder: (_) => InnovationDetails(innovatoin: innovatoin)));
+   // Navigator.push(
+   //     context, MaterialPageRoute(builder: (_) => InnovationDetails(innovatoin: innovatoin)));
   }
 
-  getInnovations() {
+  getAllInnovations() async {
     InnovationsObject object = InnovationsObject();
-    return object.getAllInnovations();
+    return await object.getAllInnovations();
   }
 }
