@@ -21,7 +21,6 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   String password = '';
   String kNumber = '';
-  var student;
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +136,7 @@ class _LoginState extends State<Login> {
                               Student student =
                                   await fetchStudent(kNumber, password);
                               //TODO insert function alreadyExist
-                              //TODO
+                              //TODO wrap with try catch block
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
