@@ -41,7 +41,7 @@ class Student {
 
   Innovation createInnovation(
       Student creator, String title, String description, String hash) {
-    //TODO get unique hash
+    // TODO get unique hash
     Innovation innovation = Innovation(creator, title, description, '');
     innovations.add(innovation);
     return innovation;
@@ -60,4 +60,9 @@ class Student {
   String get lastName => _lastName;
 
   String get emailAddress => _emailAddress;
+
+  @override
+  String toString() {
+    return 'Student{_kNumber: $_kNumber, _emailAddress: $_emailAddress, _firstName: $_firstName, _lastName: $_lastName, innovations: $innovations, _hasLiked: $_hasLiked, createdMaxInnovations: $createdMaxInnovations}';
+  }
 }

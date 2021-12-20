@@ -125,7 +125,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
         backgroundColor: Colors.white,
         child: Icon(
           Icons.add,
-          size: size.width * 0.1,
+          size: size.width * 0.03,
           color: fhwsGreen,
         ),
         onPressed: () async {
@@ -133,7 +133,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
            //     MaterialPageRoute(builder: (context) => CreateNewInnovation()));
         },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -182,8 +182,8 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
    //     context, MaterialPageRoute(builder: (_) => InnovationDetails(innovatoin: innovatoin)));
   }
 
-  getAllInnovations() async {
+  getAllInnovations() {
     InnovationsObject object = InnovationsObject();
-    return await object.getAllInnovations();
+    return object.getAllInnovations();
   }
 }
