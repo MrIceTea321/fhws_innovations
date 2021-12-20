@@ -67,32 +67,6 @@
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "_uniqueInnovationHash",
-				"type": "bytes32"
-			}
-		],
-		"name": "unvote",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "_uniqueInnovationHash",
-				"type": "bytes32"
-			}
-		],
-		"name": "vote",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"inputs": [],
 		"name": "getAllInnovations",
 		"outputs": [
@@ -104,9 +78,9 @@
 						"type": "bytes32"
 					},
 					{
-						"internalType": "int256",
+						"internalType": "uint256",
 						"name": "votingCount",
-						"type": "int256"
+						"type": "uint256"
 					},
 					{
 						"internalType": "address",
@@ -177,6 +151,41 @@
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "getStudentObject",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "kNumber",
+						"type": "string"
+					},
+					{
+						"internalType": "address",
+						"name": "studentAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "bool",
+						"name": "voted",
+						"type": "bool"
+					},
+					{
+						"internalType": "bytes32[]",
+						"name": "createdInnovations",
+						"type": "bytes32[]"
+					}
+				],
+				"internalType": "struct FhwsInnovationsContract.Student",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "bytes32",
@@ -187,9 +196,9 @@
 		"name": "getVotingCount",
 		"outputs": [
 			{
-				"internalType": "int256",
+				"internalType": "uint256",
 				"name": "",
-				"type": "int256"
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -212,6 +221,32 @@
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "_uniqueInnovationHash",
+				"type": "bytes32"
+			}
+		],
+		"name": "unvote",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "_uniqueInnovationHash",
+				"type": "bytes32"
+			}
+		],
+		"name": "vote",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ]

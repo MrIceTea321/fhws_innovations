@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:fhws_innovations/1_model/student_object.dart';
 
 class Innovation {
@@ -10,7 +8,8 @@ class Innovation {
   final String uniqueInnovationHash;
   int votingCount = 0;
 
-  Innovation(this.creator, this.title, this.description, this.uniqueInnovationHash);
+  Innovation(
+      this.creator, this.title, this.description, this.uniqueInnovationHash);
 
   void setVote(bool like) {
     if (like) {

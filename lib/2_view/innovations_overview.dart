@@ -14,7 +14,7 @@ class InnovationsOverview extends StatefulWidget {
 }
 
 class _InnovationsOverviewState extends State<InnovationsOverview> {
-  List<Innovation> innovationsDataObjectList = [];
+  List<dynamic> innovationsDataObjectList = [];
 
   @override
   void initState() {
@@ -28,6 +28,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
       backgroundColor: fhwsGreen,
       body: ListView(
         children: <Widget>[
+          SizedBox(height: size.height * 0.025),
           Padding(
             padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 15.0),
             child: Container(
@@ -88,9 +89,9 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
               ),
             ),
           ),
-          FutureBuilder<List<Innovation>>(
+          FutureBuilder<List<dynamic>>(
             future: getInnovations(),
-            builder: (context, AsyncSnapshot<List<Innovation>> snap) {
+            builder: (context, AsyncSnapshot<List<dynamic>> snap) {
               if (snap.data == null) {
                 return const Center(
                     child: CircularProgressIndicator(
@@ -128,8 +129,8 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
           color: fhwsGreen,
         ),
         onPressed: () async {
-        //  Navigator.push(context,
-        //      MaterialPageRoute(builder: (context) => CreateNewInnovation()));
+          //  Navigator.push(context,
+          //      MaterialPageRoute(builder: (context) => CreateNewInnovation()));
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -183,6 +184,6 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
 
   getInnovations() {
     InnovationsObject object = InnovationsObject();
-    return object.getAllInnovations(true);
+    return object.getAllInnovations();
   }
 }
