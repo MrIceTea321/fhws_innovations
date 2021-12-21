@@ -140,10 +140,9 @@ class InnovationsObject {
 
   //All transaction function of SmartContract
 
-  void initialRegistrationOfStudent(BuildContext context) async {
+  void initialRegistrationOfStudent(String kNumber) async {
     var response = await smartContract
-        .submitTransaction("initialRegistrationOfStudent", ["k45466"]);
-    showAlertDialog(context, "Student auf der Blockchain erstellt", response);
+        .submitTransaction("initialRegistrationOfStudent", [kNumber]);
   }
 
   void createInnovation(String title, String description) async {

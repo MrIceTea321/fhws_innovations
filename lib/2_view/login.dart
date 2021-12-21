@@ -127,7 +127,7 @@ class _LoginState extends State<Login> {
                                       context: context,
                                       builder: (BuildContext context) {
                                         return const RoundedAlert("❗️Achtung❗",
-                                            "Gib bitte deine k-Nummer an️");
+                                            "Gib bitte deine k-Nummer an️ ☺");
                                       },
                                     );
                                   } else if (password == '') {
@@ -135,7 +135,7 @@ class _LoginState extends State<Login> {
                                       context: context,
                                       builder: (BuildContext context) {
                                         return const RoundedAlert("❗️Achtung❗",
-                                            "Gib bitte dein Passwort an");
+                                            "Gib bitte dein Passwort an ☺️");
                                       },
                                     );
                                   } else {
