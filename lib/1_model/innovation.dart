@@ -1,5 +1,4 @@
 import 'package:fhws_innovations/1_model/student_object.dart';
-import 'package:fhws_innovations/1_model/student_object.dart';
 
 class Innovation {
   final String uniqueInnovationHash;

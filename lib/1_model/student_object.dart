@@ -8,6 +8,12 @@ import 'package:web3dart/credentials.dart';
 import '../constants/text_constants.dart';
 import 'innovation.dart';
 
+class StudentFromFhwsFetch {
+  String kNumber;
+  String firstName;
+  StudentFromFhwsFetch(this.kNumber, this.firstName);
+}
+
 class Student {
   late String kNumber;
   late EthereumAddress studentAddress;
@@ -17,8 +23,7 @@ class Student {
   Student.fromSmartContract(
       this.kNumber, this.studentAddress, this.voted, this.votedInnovationHash);
 
-
-  static Future<String> fetchStudentKNumber(
+  static Future<StudentFromFhwsFetch> fetchStudentInformation(
       String kNumber, String password) async {
     String credentials = '$kNumber:$password';
     Codec<String, String> stringToBase64 = utf8.fuse(base64);
@@ -31,7 +36,7 @@ class Student {
       },
     );
     Map<String, dynamic> json = jsonDecode(response.body);
-    return json['cn'];
+    return StudentFromFhwsFetch(json['cn'], json['firstName']);
   }
 
   @override

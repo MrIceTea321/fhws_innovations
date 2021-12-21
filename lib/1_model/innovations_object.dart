@@ -84,6 +84,7 @@ class InnovationsObject {
     List<dynamic> result = await smartContract.querySmartContractFunction(
         "getStudent", [], ethClient);
     dynamic student = result[0];
+    print('student in getStrudentFromSC methode: $student');
     return Student.fromSmartContract(
         student[0], student[1], student[2], student[3]);
   }

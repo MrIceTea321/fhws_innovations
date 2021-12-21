@@ -25,7 +25,6 @@ class _LoginState extends State<Login> {
   String password = '';
   String kNumber = '';
   InnovationsObject ib = InnovationsObject();
-  var studentFromFetch;
 
   @override
   Widget build(BuildContext context) {
@@ -139,23 +138,10 @@ class _LoginState extends State<Login> {
                                       },
                                     );
                                   } else {
-                                    try {
-                                      studentFromFetch =
-                                          await Student.fetchStudentKNumber(
-                                              kNumber, password);
-                                    } catch (e) {
-                                      print('StackTrace: $e');
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return const RoundedAlert("Achtung",
-                                              "Deine Zugangsdaten sind nicht korrekt️");
-                                        },
-                                      );
-                                    }
+                                    var studentFromFhwsFetch = await getStudentFetch(context);
+
                                     var allInnovations =
                                         await ib.getAllInnovations();
-                                    print('allInnovations: $allInnovations');
                                     var studentAlreadyRegistered = await ib
                                         .studentAlreadyRegistered(kNumber);
                                     print(
@@ -173,7 +159,7 @@ class _LoginState extends State<Login> {
                                                     InnovationsOverview(
                                                       student: studentSc,
                                                       studentFirstName:
-                                                          studentFromFetch
+                                                      studentFromFhwsFetch
                                                               .firstName,
                                                       innovations:
                                                           allInnovations,
@@ -183,7 +169,7 @@ class _LoginState extends State<Login> {
                                       var s =
                                           await ib.createStudentOnTheBlockchain(
                                               context,
-                                              studentFromFetch.kNumber);
+                                              studentFromFhwsFetch.kNumber);
                                       print('createStudentOnTheBlockchain $s');
                                       var studentSc =
                                           await ib.getStudentFromSC();
@@ -197,7 +183,7 @@ class _LoginState extends State<Login> {
                                                     InnovationsOverview(
                                                       student: studentSc,
                                                       studentFirstName:
-                                                          studentFromFetch
+                                                      studentFromFhwsFetch
                                                               .firstName,
                                                       innovations:
                                                           allInnovations,
@@ -217,5 +203,22 @@ class _LoginState extends State<Login> {
             ),
           );
         });
+  }
+
+  Future<StudentFromFhwsFetch> getStudentFetch(BuildContext context) async {
+    try {
+      StudentFromFhwsFetch fetch =
+          await Student.fetchStudentInformation(
+              kNumber, password);
+      return fetch;
+    } catch (e) {
+      throw Exception(showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const RoundedAlert("Achtung",
+              "Deine Zugangsdaten sind nicht korrekt");
+        },
+      ));
+    }
   }
 }
