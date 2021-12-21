@@ -149,16 +149,25 @@ class _LoginState extends State<Login> {
                                     try {
                                       Student student =
                                           await fetchStudent(kNumber, password);
-                                      print('student');
-                                      print(student);
-                                      ib.createStudentOnTheBlockchain(
-                                          context, student.kNumber);
-                                      //TODO insert check if student already exisits
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  InnovationsOverview(student)));
+                                      var studentAlreadyRegistered = await ib
+                                          .studentAlreadyRegistered(kNumber);
+                                      if (studentAlreadyRegistered) {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    InnovationsOverview(
+                                                        student)));
+                                      } else {
+                                        ib.createStudentOnTheBlockchain(
+                                            context, student.kNumber);
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    InnovationsOverview(
+                                                        student)));
+                                      }
                                     } catch (e) {
                                       showDialog(
                                         context: context,
