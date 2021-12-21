@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:fhws_innovations/1_model/innovations_object.dart';
 import 'package:fhws_innovations/1_model/student_object.dart';
@@ -125,6 +126,9 @@ class _LoginState extends State<Login> {
                                         fontFamily: openSansFontFamily,
                                         color: Colors.white)),
                                 onPressed: () async {
+                                  ib.innovationProcessFinished();
+                                  // ib.editInnovation(
+                                  //     Uint8List.fromList(), "Test", "Test");
                                   if (kNumber == '') {
                                     showDialog(
                                       context: context,
