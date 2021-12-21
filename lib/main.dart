@@ -1,6 +1,8 @@
 
+import 'package:fhws_innovations/constants/text_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '2_view/login.dart';
 
@@ -13,10 +15,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Login(),
+      home:  Login(),
     );
   }
 }

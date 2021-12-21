@@ -25,6 +25,7 @@ class _LoginState extends State<Login> {
   String password = '';
   String kNumber = '';
   InnovationsObject ib = InnovationsObject();
+  var studentFromFetch;
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +61,6 @@ class _LoginState extends State<Login> {
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.headline3!.copyWith(
                               color: Colors.white,
-                              fontFamily: openSansFontFamily,
                             ),
                       ),
                       const Text(
@@ -69,7 +69,6 @@ class _LoginState extends State<Login> {
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 18.0,
-                          fontFamily: openSansFontFamily,
                         ),
                       ),
                       const SizedBox(height: 30.0),
@@ -93,7 +92,6 @@ class _LoginState extends State<Login> {
                                   .headline5!
                                   .copyWith(
                                     color: fhwsGreen,
-                                    fontFamily: openSansFontFamily,
                                   ),
                             ),
                             const SizedBox(height: 40.0),
@@ -122,19 +120,14 @@ class _LoginState extends State<Login> {
                                   onPrimary: Colors.white,
                                 ),
                                 child: const Text("Bestätigen",
-                                    style: TextStyle(
-                                        fontFamily: openSansFontFamily,
-                                        color: Colors.white)),
+                                    style: TextStyle(color: Colors.white)),
                                 onPressed: () async {
-                                  ib.innovationProcessFinished();
-                                  // ib.editInnovation(
-                                  //     Uint8List.fromList(), "Test", "Test");
                                   if (kNumber == '') {
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         return const RoundedAlert("❗️Achtung❗",
-                                            "Gib bitte deine k-Nummer an ☺️");
+                                            "Gib bitte deine k-Nummer an️");
                                       },
                                     );
                                   } else if (password == '') {
@@ -142,41 +135,74 @@ class _LoginState extends State<Login> {
                                       context: context,
                                       builder: (BuildContext context) {
                                         return const RoundedAlert("❗️Achtung❗",
-                                            "Gib bitte dein Passwort an ☺️");
+                                            "Gib bitte dein Passwort an");
                                       },
                                     );
                                   } else {
                                     try {
-                                      Student student =
-                                          await fetchStudent(kNumber, password);
-                                      var studentAlreadyRegistered = await ib
-                                          .studentAlreadyRegistered(kNumber);
-                                      if (studentAlreadyRegistered) {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    InnovationsOverview(
-                                                        student)));
-                                      } else {
-                                        ib.createStudentOnTheBlockchain(
-                                            context, student.kNumber);
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    InnovationsOverview(
-                                                        student)));
-                                      }
+                                      studentFromFetch =
+                                          await Student.fetchStudentKNumber(
+                                              kNumber, password);
                                     } catch (e) {
+                                      print('StackTrace: $e');
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
-                                          return const RoundedAlert(
-                                              "❗️Achtung❗",
-                                              "Deine Zugangsdaten sind nicht korrekt ☺️");
+                                          return const RoundedAlert("Achtung",
+                                              "Deine Zugangsdaten sind nicht korrekt️");
                                         },
                                       );
+                                    }
+                                    var allInnovations =
+                                        await ib.getAllInnovations();
+                                    print('allInnovations: $allInnovations');
+                                    var studentAlreadyRegistered = await ib
+                                        .studentAlreadyRegistered(kNumber);
+                                    print(
+                                        'studentAlreadyRegistered: $studentAlreadyRegistered');
+                                    if (studentAlreadyRegistered) {
+                                      var studentSc =
+                                          await ib.getStudentFromSC();
+                                      print(
+                                          'student From SmartContract: $studentSc');
+                                      Future.delayed(Duration.zero, () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    InnovationsOverview(
+                                                      student: studentSc,
+                                                      studentFirstName:
+                                                          studentFromFetch
+                                                              .firstName,
+                                                      innovations:
+                                                          allInnovations,
+                                                    )));
+                                      });
+                                    } else {
+                                      var s =
+                                          await ib.createStudentOnTheBlockchain(
+                                              context,
+                                              studentFromFetch.kNumber);
+                                      print('createStudentOnTheBlockchain $s');
+                                      var studentSc =
+                                          await ib.getStudentFromSC();
+                                      print(
+                                          'student from bc after create: $studentSc');
+                                      Future.delayed(Duration.zero, () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    InnovationsOverview(
+                                                      student: studentSc,
+                                                      studentFirstName:
+                                                          studentFromFetch
+                                                              .firstName,
+                                                      innovations:
+                                                          allInnovations,
+                                                    )));
+                                      });
                                     }
                                   }
                                 }),
@@ -191,22 +217,5 @@ class _LoginState extends State<Login> {
             ),
           );
         });
-  }
-
-  Future<Student> fetchStudent(String kNumber, String password) async {
-    String credentials = '$kNumber:$password';
-    Codec<String, String> stringToBase64 = utf8.fuse(base64);
-    String encoded = stringToBase64.encode(credentials);
-
-    final response = await http.get(
-      Uri.parse(fhwsApi),
-      // Send authorization headers to the fhws backend.
-      headers: {
-        HttpHeaders.authorizationHeader: 'Basic $encoded',
-      },
-    );
-
-    final responseJson = jsonDecode(response.body);
-    return Student.fromJson(responseJson);
   }
 }

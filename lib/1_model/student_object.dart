@@ -1,68 +1,41 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:http/http.dart' as http;
+import 'package:web3dart/credentials.dart';
 
 import '../constants/text_constants.dart';
 import 'innovation.dart';
 
 class Student {
-  late String _kNumber;
-  late String _emailAddress;
-  late String _firstName;
-  late String _lastName;
-  List<Innovation> innovations = [];
-  bool _hasLiked = false;
+  late String kNumber;
+  late EthereumAddress studentAddress;
+  bool voted = false;
+  late Uint8List votedInnovationHash;
 
-  bool createdMaxInnovations = false;
+  Student.fromSmartContract(
+      this.kNumber, this.studentAddress, this.voted, this.votedInnovationHash);
 
-  Student(this._kNumber, this._emailAddress, this._firstName, this._lastName);
 
-  factory Student.fromJson(Map<String, dynamic> json) => Student(
-        json['cn'],
-        json['emailAddress'],
-        json['firstName'],
-        json['lastName'],
-      );
-
-  Map<String, dynamic> toJson() => {
-        'cn': _kNumber,
-        'emailAddress': _emailAddress,
-        'firstName': _firstName,
-        'lastName': _lastName,
-      };
-
-  static Future<Student> getStudent() async {
-    final response = await http.get(Uri.parse(fhwsApi));
-    return Student.fromJson(response.headers);
+  static Future<String> fetchStudentKNumber(
+      String kNumber, String password) async {
+    String credentials = '$kNumber:$password';
+    Codec<String, String> stringToBase64 = utf8.fuse(base64);
+    String encoded = stringToBase64.encode(credentials);
+    final response = await http.get(
+      Uri.parse(fhwsApi),
+      // Send authorization headers to the fhws backend.
+      headers: {
+        HttpHeaders.authorizationHeader: 'Basic $encoded',
+      },
+    );
+    Map<String, dynamic> json = jsonDecode(response.body);
+    return json['cn'];
   }
-
-  void setLikeToInnovation(Innovation innovation) {
-    hasLiked = true;
-    innovation.setVote(true);
-  }
-
-  Innovation createInnovation(
-      Student creator, String title, String description, String hash) {
-    // TODO get unique hash
-    Innovation innovation = Innovation(creator, title, description, '');
-    innovations.add(innovation);
-    return innovation;
-  }
-
-  set hasLiked(bool value) {
-    _hasLiked = value;
-  }
-
-  bool get hasLiked => _hasLiked;
-
-  String get firstName => _firstName;
-
-  String get kNumber => _kNumber;
-
-  String get lastName => _lastName;
-
-  String get emailAddress => _emailAddress;
 
   @override
   String toString() {
-    return 'Student{_kNumber: $_kNumber, _emailAddress: $_emailAddress, _firstName: $_firstName, _lastName: $_lastName, innovations: $innovations, _hasLiked: $_hasLiked, createdMaxInnovations: $createdMaxInnovations}';
+    return 'Student{kNumber: $kNumber, studentAddress: $studentAddress, voted: $voted, votedInnovationHash: $votedInnovationHash}';
   }
 }

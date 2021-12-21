@@ -6,21 +6,21 @@ import 'package:flutter/material.dart';
 
 class InnovationsOverview extends StatefulWidget {
   final Student student;
+  final String studentFirstName;
+  final List<Innovation> innovations;
 
-  const InnovationsOverview(this.student);
+  const InnovationsOverview(
+      {Key? key,
+      required this.student,
+      required this.studentFirstName,
+      required this.innovations})
+      : super(key: key);
 
   @override
   _InnovationsOverviewState createState() => _InnovationsOverviewState();
 }
 
 class _InnovationsOverviewState extends State<InnovationsOverview> {
-  List<dynamic> innovationsDataObjectList = [];
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -49,42 +49,22 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              "Hallo, " + widget.student.firstName,
+                              "Hallo, " + widget.studentFirstName,
                               style: const TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: openSansFontFamily),
+                                  fontSize: 18.0, fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(
                               height: 5.0,
                             ),
                             Text(
                               "Welche Innovation möchtest du unterstützen?",
-                              style: TextStyle(
-                                  color: Colors.grey.shade700,
-                                  fontFamily: openSansFontFamily),
+                              style: TextStyle(color: Colors.grey.shade700),
                             )
                           ],
                         ),
                       ),
                     ],
                   ),
-                  TextField(
-                      onChanged: (value) {
-                        //TODO insert filtered value
-                      },
-                      showCursor: true,
-                      decoration: InputDecoration(
-                        hintText: "Nach Innovationen suchen",
-                        prefixIcon:
-                            const Icon(Icons.search, color: Colors.black54),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                          ),
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                      )),
                 ],
               ),
             ),
@@ -101,19 +81,19 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
               return ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
-                  itemCount: innovationsDataObjectList.length,
+                  itemCount: widget.innovations.length,
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) {
                     return GestureDetector(
-                        onTap: () => _openDestinationPage(context,
-                            innovationsDataObjectList.elementAt(index)),
+                        onTap: () => _openDestinationPage(
+                            context, widget.innovations.elementAt(index)),
                         child: _buildFeaturedItem(
-                          title:
-                              innovationsDataObjectList.elementAt(index).title,
-                          subtitle: innovationsDataObjectList
+                          title: widget.innovations.elementAt(index).title,
+                          subtitle: widget.innovations
                               .elementAt(index)
                               .creator
-                              .emailAddress,
+                              .studentAddress
+                              .toString(),
                         ));
                   });
             },
@@ -129,8 +109,8 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
           color: fhwsGreen,
         ),
         onPressed: () async {
-           //Navigator.push(context,
-           //     MaterialPageRoute(builder: (context) => CreateNewInnovation()));
+          //Navigator.push(context,
+          //     MaterialPageRoute(builder: (context) => CreateNewInnovation()));
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -160,14 +140,14 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                     children: <Widget>[
                       Text(title,
                           style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: openSansFontFamily)),
-                      Text('Creator: ' + subtitle,
+                            color: Colors.white,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      Text('Verfasser: ' + subtitle,
                           style: const TextStyle(
-                              color: Colors.white,
-                              fontFamily: openSansFontFamily)),
+                            color: Colors.white,
+                          )),
                     ],
                   ),
                 )),
@@ -178,8 +158,8 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
   }
 
   _openDestinationPage(BuildContext context, Innovation innovation) {
-   // Navigator.push(
-   //     context, MaterialPageRoute(builder: (_) => InnovationDetails(innovatoin: innovatoin)));
+    // Navigator.push(
+    //     context, MaterialPageRoute(builder: (_) => InnovationDetails(innovatoin: innovatoin)));
   }
 
   getAllInnovations() {

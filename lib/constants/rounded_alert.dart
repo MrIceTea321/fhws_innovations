@@ -1,5 +1,4 @@
 import 'package:fhws_innovations/constants/text_constants.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RoundedAlert extends StatelessWidget {
@@ -37,14 +36,14 @@ class RoundedAlert extends StatelessWidget {
                             color: Colors.black,
                             fontSize: 16.0,
                             fontWeight: FontWeight.bold,
-                            fontFamily: openSansFontFamily)),
+                            )),
                     const SizedBox(height: 10.0),
                     Flexible(
                       child: Text(text,
                           style: const TextStyle(
                               color: Colors.black,
                               fontSize: 14.0,
-                              fontFamily: openSansFontFamily)),
+                              )),
                     ),
                     const SizedBox(height: 10.0),
                     Container(
@@ -60,7 +59,7 @@ class RoundedAlert extends StatelessWidget {
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 12.0,
-                                fontFamily: openSansFontFamily)),
+                                )),
                         onPressed: () {
                           Navigator.pop(context);
                         },

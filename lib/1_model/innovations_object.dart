@@ -3,6 +3,7 @@ import 'dart:html';
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:fhws_innovations/1_model/student_object.dart';
 import 'package:fhws_innovations/constants/rounded_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +13,11 @@ import 'package:http/http.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:fhws_innovations/3_controller/smart_contract.dart';
 
+import 'innovation.dart';
+
 class InnovationsObject {
   SmartContract smartContract = SmartContract();
+  List<Innovation> innovationsList = [];
 
   var ethClient = Web3Client(
       "https://rinkeby.infura.io/v3/dbd61902b58949348a3045a157d038ca",
@@ -75,12 +79,13 @@ class InnovationsObject {
     return kNumberOfStudentAddress;
   }
 
-  Future<Object> getStudent() async {
+  Future<Student> getStudentFromSC() async {
     smartContract.loadContract();
     List<dynamic> result = await smartContract.querySmartContractFunction(
         "getStudent", [], ethClient);
     dynamic student = result[0];
-    return student;
+    return Student.fromSmartContract(
+        student[0], student[1], student[2], student[3]);
   }
 
   Future<Object> getInnovationsOfStudent() async {
@@ -91,28 +96,48 @@ class InnovationsObject {
     return innovationsOfStudent;
   }
 
-  Future<List> getAllInnovations() async {
+  Future<List<Innovation>> getAllInnovations() async {
     smartContract.loadContract();
     List<dynamic> result = await smartContract.querySmartContractFunction(
         "getAllInnovations", [], ethClient);
-    List<dynamic> innovationsList = result[0];
+    List<dynamic> innovationsListFromSC = result[0];
+    int i = 0;
+    innovationsListFromSC.forEach((innovationFromSC) {
+      Innovation innovation = Innovation(
+        uniqueInnovationHash: innovationFromSC[0].toString(),
+        votingCount: innovationFromSC[1],
+        creator: Student.fromSmartContract(
+            innovationFromSC[2][0],
+            innovationFromSC[2][1],
+            innovationFromSC[2][2],
+            innovationFromSC[2][3]),
+        title: innovationFromSC[3],
+        description: innovationFromSC[4],
+      );
+      print('innovation: $innovation');
+      innovationsList.insert(i, innovation);
+      i++;
+    });
+    print('innovtionsListWithObjects');
+    print(innovationsList);
     return innovationsList;
   }
 
   // All functions of SmartContract
-  Future<String> createStudentOnTheBlockchain(BuildContext context, String kNumber) async {
+  Future<String> createStudentOnTheBlockchain(
+      BuildContext context, String kNumber) async {
     var response =
-    await submitTransaction("createStudentOnTheBlockchain", [kNumber]);
+        await submitTransaction("createStudentOnTheBlockchain", [kNumber]);
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return const RoundedAlert(
-            "❗️Achtung❗",
-            "Student wurde auf BC erstellt ☺️");
+            "❗️Achtung❗", "Student wurde auf BC erstellt ☺️");
       },
     );
     return response;
   }
+
   //All transaction function of SmartContract
 
   void initialRegistrationOfStudent(BuildContext context) async {

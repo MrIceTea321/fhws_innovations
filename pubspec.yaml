@@ -39,6 +39,7 @@ dependencies:
   cached_network_image: ^3.1.0+1
   flutter_web3: ^2.1.6
   provider: ^6.0.1
+  google_fonts: ^2.1.0
 
 
 dev_dependencies:
@@ -64,7 +65,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
+  assets:
+      - google_fonts/
   #   - /assets
   #   - images/a_dot_ham.jpeg
 
@@ -79,10 +81,8 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-    - family: Open Sans
-      fonts:
-        - asset: fonts/OpenSans-Regular.ttf
+
+
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
