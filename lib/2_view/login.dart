@@ -126,7 +126,7 @@ class _LoginState extends State<Login> {
                                         fontFamily: openSansFontFamily,
                                         color: Colors.white)),
                                 onPressed: () async {
-                                  ib.innovationProcessFinished();
+                                  ib.getAllInnovations();
                                   // ib.editInnovation(
                                   //     Uint8List.fromList(), "Test", "Test");
                                   if (kNumber == '') {
