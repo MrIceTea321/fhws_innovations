@@ -8,30 +8,24 @@ import '../1_model/innovations_object.dart';
 import 'innovations_overview.dart';
 import 'login.dart';
 
-class InnovationsDetail extends StatefulWidget {
-  final Student student;
+class OverhaulInnovation extends StatefulWidget {
   final String studentFirstName;
   final Innovation userInnovation;
-  final List<Innovation> innovations;
-  final List<Innovation> userInnovations;
-  List<Innovation> testInnovations = [];
+
   int voteCount = 0;
 
-  InnovationsDetail(
-      {Key? key,
-      required this.student,
-      required this.userInnovation,
-      required this.studentFirstName,
-      required this.innovations,
-      required this.userInnovations})
-      : super(key: key);
+  OverhaulInnovation({
+    Key? key,
+    required this.studentFirstName,
+    required this.userInnovation,
+  }) : super(key: key);
 
   @override
   _InnovationsDetailOverviewState createState() =>
       _InnovationsDetailOverviewState();
 }
 
-class _InnovationsDetailOverviewState extends State<InnovationsDetail> {
+class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
   @override
   Widget build(BuildContext context) {
     InnovationsObject ib = InnovationsObject();
@@ -51,14 +45,18 @@ class _InnovationsDetailOverviewState extends State<InnovationsDetail> {
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: IconButton(
-                onPressed: () {
+                onPressed: () async {
+                  var student = await ib.getStudentFromSC();
+                  var allInnovations = await ib.getAllInnovations();
+                  var studentInnovations = await ib.getInnovationsOfStudent();
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => InnovationsOverview(
-                                student: widget.student,
-                                innovations: widget.innovations,
+                                student: student,
+                                innovations: allInnovations,
                                 studentFirstName: widget.studentFirstName,
+                                studentInnovations: studentInnovations,
                               )));
                 },
                 icon: const Icon(Icons.home)),
@@ -69,14 +67,14 @@ class _InnovationsDetailOverviewState extends State<InnovationsDetail> {
               children: [
                 const Text('Innovationen bearbeiten'),
                 IconButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      var studentInnovations =
+                          await ib.getInnovationsOfStudent();
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => UserInnovations(
-                                    student: widget.student,
-                                    innovations: widget.testInnovations,
-                                    userInnovations: widget.testInnovations,
+                                    userInnovations: studentInnovations,
                                     studentFirstName: widget.studentFirstName,
                                   )));
                     },
@@ -98,19 +96,25 @@ class _InnovationsDetailOverviewState extends State<InnovationsDetail> {
           child: Column(
         children: <Widget>[
           SizedBox(height: size.height * 0.015),
-          _overhaulInnovation(innovation: widget.userInnovation),
-          //});
+          _overhaulInnovation(),
           TextButton(
-            onPressed: () {
-              ib.editInnovation(widget.userInnovation.uniqueInnovationHash, title, description)
+            onPressed: () async {
+              ib.editInnovation(
+                  widget.userInnovation.uniqueInnovationHash,
+                  widget.userInnovation.title,
+                  widget.userInnovation.description);
+              var student = await ib.getStudentFromSC();
+              var allInnovations = await ib.getAllInnovations();
+              var studentInnovations = await ib.getInnovationsOfStudent();
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => InnovationsOverview(
-                        student: widget.student,
-                        innovations: widget.innovations,
-                        studentFirstName: widget.studentFirstName,
-                      )));
+                            student: student,
+                            innovations: allInnovations,
+                            studentFirstName: widget.studentFirstName,
+                            studentInnovations: studentInnovations,
+                          )));
             },
             child: Container(
                 height: 50,
@@ -139,7 +143,7 @@ class _InnovationsDetailOverviewState extends State<InnovationsDetail> {
     );
   }
 
-  Container _overhaulInnovation({required Innovation innovation}) {
+  Container _overhaulInnovation() {
     return Container(
       padding:
           const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0, bottom: 8.0),
@@ -154,12 +158,12 @@ class _InnovationsDetailOverviewState extends State<InnovationsDetail> {
               onChanged: (value) {
                 String input = '';
                 input = value;
-                innovation.title = input;
+                widget.userInnovation.title = input;
               },
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
-                hintText: innovation.title,
+                hintText: widget.userInnovation.title,
                 contentPadding: const EdgeInsets.symmetric(
                     vertical: 10.0, horizontal: 20.0),
                 border: const OutlineInputBorder(
@@ -179,14 +183,14 @@ class _InnovationsDetailOverviewState extends State<InnovationsDetail> {
               onChanged: (value) {
                 String input = '';
                 input = value;
-                innovation.description = input;
+                widget.userInnovation.description = input;
               },
               minLines: 7,
               maxLines: 11,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
-                hintText: innovation.description,
+                hintText: widget.userInnovation.description,
                 contentPadding: const EdgeInsets.symmetric(
                     vertical: 10.0, horizontal: 20.0),
                 border: const OutlineInputBorder(

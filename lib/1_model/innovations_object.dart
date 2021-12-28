@@ -17,7 +17,9 @@ import 'innovation.dart';
 
 class InnovationsObject {
   SmartContract smartContract = SmartContract();
-  List<Innovation> innovationsList = [];
+  List<Innovation> allInnovationsList = [];
+  List<Innovation> innovationFromStudentList = [];
+
 
   var ethClient = Web3Client(
       "https://rinkeby.infura.io/v3/dbd61902b58949348a3045a157d038ca",
@@ -89,12 +91,29 @@ class InnovationsObject {
         student[0], student[1], student[2], student[3]);
   }
 
-  Future<Object> getInnovationsOfStudent() async {
+  Future<List<Innovation>> getInnovationsOfStudent() async {
     smartContract.loadContract();
     List<dynamic> result = await smartContract.querySmartContractFunction(
         "getInnovationsOfStudent", [], ethClient);
     List<dynamic> innovationsOfStudent = result[0];
-    return innovationsOfStudent;
+    int i = 0;
+    innovationsOfStudent.forEach((innovationFromSC) {
+      Innovation innovation = Innovation(
+        uniqueInnovationHash: innovationFromSC[0],
+        votingCount: innovationFromSC[1],
+        creator: Student.fromSmartContract(
+            innovationFromSC[2][0],
+            innovationFromSC[2][1],
+            innovationFromSC[2][2],
+            innovationFromSC[2][3]),
+        title: innovationFromSC[3],
+        description: innovationFromSC[4],
+      );
+      print('innovationFromStudent: $innovation');
+      innovationFromStudentList.insert(i, innovation);
+      i++;
+    });
+    return innovationFromStudentList;
   }
 
   Future<List<Innovation>> getAllInnovations() async {
@@ -116,12 +135,12 @@ class InnovationsObject {
         description: innovationFromSC[4],
       );
       print('innovation: $innovation');
-      innovationsList.insert(i, innovation);
+      allInnovationsList.insert(i, innovation);
       i++;
     });
     print('innovtionsListWithObjects');
-    print(innovationsList);
-    return innovationsList;
+    print(allInnovationsList);
+    return allInnovationsList;
   }
 
   // All functions of SmartContract
@@ -133,7 +152,7 @@ class InnovationsObject {
       context: context,
       builder: (BuildContext context) {
         return const RoundedAlert(
-            "❗️Achtung❗", "Student wurde auf BC erstellt");
+            "Erfolgreich erstellt", "Student wurde auf BC erstellt");
       },
     );
     return response;

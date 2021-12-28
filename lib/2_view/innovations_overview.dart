@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:fhws_innovations/1_model/innovations_object.dart';
 import 'package:fhws_innovations/1_model/innovation.dart';
 import 'package:fhws_innovations/1_model/student_object.dart';
+import 'package:fhws_innovations/2_view/show_innovation.dart';
 import 'package:fhws_innovations/2_view/user_innovations.dart';
 import 'package:fhws_innovations/constants/text_constants.dart';
 import 'package:flutter/material.dart';
@@ -15,14 +16,14 @@ class InnovationsOverview extends StatefulWidget {
   final Student student;
   final String studentFirstName;
   final List<Innovation> innovations;
-
-  List<Innovation> studentInnovations = [];
+  final List<Innovation> studentInnovations;
   int voteCount = 0;
 
   InnovationsOverview(
       {Key? key,
       required this.student,
       required this.studentFirstName,
+      required this.studentInnovations,
       required this.innovations})
       : super(key: key);
 
@@ -33,11 +34,6 @@ class InnovationsOverview extends StatefulWidget {
 class _InnovationsOverviewState extends State<InnovationsOverview> {
   @override
   void initState() {
-    widget.innovations.forEach((innovation) {
-      if (innovation.creator.studentAddress == widget.student.studentAddress) {
-        widget.studentInnovations.add(innovation);
-      }
-    });
     super.initState();
   }
 
@@ -45,6 +41,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     bool isVoted = false;
+    InnovationsObject ib = InnovationsObject();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -71,14 +68,15 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
             child: Row(
               children: [
                 IconButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      var innovationsFromStudent =
+                          await ib.getInnovationsOfStudent();
+
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => UserInnovations(
-                                    student: widget.student,
-                                    innovations: widget.innovations,
-                                    userInnovations: widget.studentInnovations,
+                                    userInnovations: innovationsFromStudent,
                                     studentFirstName: widget.studentFirstName,
                                   )));
                     },
@@ -164,20 +162,25 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                   itemCount: widget.innovations.length,
                   physics: const AlwaysScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
-                    return _buildFeaturedItem(
-                        title: widget.innovations.elementAt(index).title,
-                        description: widget.innovations
-                            .elementAt(index)
-                            .description
-                            .toString(),
-                        voteCount: widget.innovations
-                            .elementAt(index)
-                            .votingCount
-                            .toString(),
-                        innovationHash: widget.innovations
-                            .elementAt(index)
-                            .uniqueInnovationHash,
-                        isVoted: isVoted);
+                    return GestureDetector(
+                      onTap: _openDestinationPage(
+                          context, widget.innovations.elementAt(index)),
+                      child: _buildFeaturedItem(
+                          title: widget.innovations.elementAt(index).title,
+                          description: widget.innovations
+                              .elementAt(index)
+                              .description
+                              .toString(),
+                          voteCount: widget.innovations
+                              .elementAt(index)
+                              .votingCount
+                              .toString(),
+                          innovationHash: widget.innovations
+                              .elementAt(index)
+                              .uniqueInnovationHash,
+                          isVoted: isVoted,
+                          ib: ib),
+                    );
                   });
             },
           ),
@@ -190,8 +193,9 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
       {required String title,
       required String description,
       required String voteCount,
-      required String innovationHash,
-      required bool isVoted}) {
+      required Uint8List innovationHash,
+      required bool isVoted,
+      required InnovationsObject ib}) {
     return Container(
       padding:
           const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0, bottom: 8.0),
@@ -220,6 +224,12 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                       setState(() {
                         widget.student.voted = !widget.student.voted;
                         isVoted != isVoted;
+                        // set the voting count on the BC
+                        if (isVoted) {
+                          ib.vote(innovationHash);
+                        } else {
+                          ib.unvote(innovationHash);
+                        }
                       });
                       setState(() {});
                     },
@@ -256,12 +266,14 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
   }
 
   _openDestinationPage(BuildContext context, Innovation innovation) {
-    Navigator.pop(context);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ShowInnovation(innovation: innovation)));
   }
 
   getAllInnovations() {
     InnovationsObject object = InnovationsObject();
     return object.getAllInnovations();
-    //object.getAllInnovations();
   }
 }

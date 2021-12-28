@@ -4,29 +4,19 @@ import 'package:fhws_innovations/1_model/innovations_object.dart';
 import 'package:fhws_innovations/1_model/innovation.dart';
 import 'package:fhws_innovations/1_model/student_object.dart';
 import 'package:fhws_innovations/2_view/create_new_innovation.dart';
-import 'package:fhws_innovations/2_view/innovations_detail_page.dart';
+import 'package:fhws_innovations/2_view/overhaul_innovations.dart';
 import 'package:fhws_innovations/constants/text_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:web3dart/credentials.dart';
-import 'package:web3dart/web3dart.dart';
-
 import 'innovations_overview.dart';
 import 'login.dart';
 
 class UserInnovations extends StatefulWidget {
-  final Student student;
   final String studentFirstName;
-  final List<Innovation> innovations;
   final List<Innovation> userInnovations;
-  List<Innovation> testInnovations = [];
   int voteCount = 0;
 
-  UserInnovations({Key? key,
-    required this.student,
-    required this.studentFirstName,
-    required this.innovations,
-    required this.userInnovations})
+  UserInnovations(
+      {Key? key, required this.studentFirstName, required this.userInnovations})
       : super(key: key);
 
   @override
@@ -37,9 +27,8 @@ class UserInnovations extends StatefulWidget {
 class _UserInnovationsOverviewState extends State<UserInnovations> {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    InnovationsObject ib = InnovationsObject();
+    Size size = MediaQuery.of(context).size;
     bool isVoted = false;
 
     return Scaffold(
@@ -56,15 +45,18 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
           Padding(
             padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: IconButton(
-                onPressed: () {
+                onPressed: () async {
+                  var student = await ib.getStudentFromSC();
+                  var allInnovations = await ib.getAllInnovations();
+                  var studentInnovations = await ib.getInnovationsOfStudent();
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              InnovationsOverview(
-                                student: widget.student,
-                                innovations: widget.innovations,
+                          builder: (context) => InnovationsOverview(
+                                student: student,
+                                innovations: allInnovations,
                                 studentFirstName: widget.studentFirstName,
+                                studentInnovations: studentInnovations,
                               )));
                 },
                 icon: Icon(Icons.home)),
@@ -90,82 +82,88 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
       ),
       body: SingleChildScrollView(
           child: Column(
-            children: <Widget>[
-              SizedBox(height: size.height * 0.015),
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: widget.userInnovations.length,
-                physics: const AlwaysScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                      onTap: () =>
-                          _openDestinationPage(
-                              context, widget.userInnovations.elementAt(index)),
-                      child: _buildFeaturedItem(
-                          title: widget.userInnovations
-                              .elementAt(index)
-                              .title,
-                          description: widget.userInnovations
-                              .elementAt(index)
-                              .description
-                              .toString(),
-                          voteCount: widget.userInnovations
-                              .elementAt(index)
-                              .votingCount
-                              .toString(),
-                          innovationHash: widget.userInnovations
-                              .elementAt(index)
-                              .uniqueInnovationHash,
-                          isVoted: isVoted));
-                  //});
-                },
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CreateNewInnovation(
-                            student: widget.student,
-                            innovations: widget.innovations,
-                            studentFirstName: widget.studentFirstName, userInnovations: [],
+        children: <Widget>[
+          SizedBox(height: size.height * 0.015),
+          FutureBuilder<List<Innovation>>(
+            future: getUserInnovations(),
+            builder: (context, AsyncSnapshot<List<Innovation>> snap) {
+              if (snap.data == null) {
+                return const Center(
+                    child: CircularProgressIndicator(
+                  color: fhwsGreen,
+                ));
+              }
+              return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: widget.userInnovations.length,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                        onTap: () => _openDestinationPage(
+                            context, widget.userInnovations.elementAt(index)),
+                        child: _buildFeaturedItem(
+                            title:
+                                widget.userInnovations.elementAt(index).title,
+                            description: widget.userInnovations
+                                .elementAt(index)
+                                .description
+                                .toString(),
+                            voteCount: widget.userInnovations
+                                .elementAt(index)
+                                .votingCount
+                                .toString(),
+                            innovationHash: widget.userInnovations
+                                .elementAt(index)
+                                .uniqueInnovationHash,
+                            isVoted: isVoted));
+                  });
+            },
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CreateNewInnovation(
+                            studentFirstName: widget.studentFirstName,
                           )));
-                },
-                child: Container(
-                    height: 50,
-                    width: size.width * 0.9,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                      color: fhwsGreen,
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                      child: Center(
-                        child: Text(
-                          'Neue Innovation anlegen',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          maxLines: 1,
-                        ),
+            },
+            child: Container(
+                height: 50,
+                width: size.width * 0.9,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  color: fhwsGreen,
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+                  child: Center(
+                    child: Text(
+                      'Neue Innovation anlegen',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
                       ),
-                    )),
-              )
-            ],
-          )),
+                      maxLines: 1,
+                    ),
+                  ),
+                )),
+          )
+        ],
+      )),
     );
   }
 
-  Container _buildFeaturedItem({required String title,
-    required String description,
-    required String voteCount,
-    required String innovationHash,
-    required bool isVoted}) {
+  Container _buildFeaturedItem(
+      {required String title,
+      required String description,
+      required String voteCount,
+      required Uint8List innovationHash,
+      required bool isVoted}) {
     return Container(
       padding:
-      const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0, bottom: 8.0),
+          const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0, bottom: 8.0),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         color: Colors.black.withOpacity(0.5),
@@ -203,13 +201,19 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
     );
   }
 
-  _openDestinationPage(BuildContext context, Innovation innovation) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => InnovationsDetail(student: widget.student, studentFirstName: widget.studentFirstName, innovations: widget.innovations, userInnovations: widget.userInnovations, userInnovation: innovation,)));
+  _openDestinationPage(BuildContext context, Innovation innovation) async {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => OverhaulInnovation(
+                  studentFirstName: widget.studentFirstName,
+                  userInnovation: innovation,
+                )));
   }
 
-  getAllInnovations() {
+  getUserInnovations() {
     InnovationsObject object = InnovationsObject();
-    return widget.testInnovations;
+    return object.getInnovationsOfStudent();
     //object.getAllInnovations();
   }
 }

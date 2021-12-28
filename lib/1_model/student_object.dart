@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:web3dart/credentials.dart';
 
 import '../constants/text_constants.dart';
-import 'innovation.dart';
 
 class StudentFromFhwsFetch {
   String kNumber;
