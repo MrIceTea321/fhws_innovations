@@ -9,7 +9,7 @@ class Innovation {
 
   // TODO change to unit8 list
 
-  Innovation({
+  Innovation( {
     required this.uniqueInnovationHash,
     required this.votingCount,
     required this.creator,

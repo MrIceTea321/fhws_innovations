@@ -28,6 +28,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return ChangeNotifierProvider(
         create: (context) => MetaMaskProvider()..init(),
         builder: (context, snapshot) {
@@ -138,7 +139,8 @@ class _LoginState extends State<Login> {
                                       },
                                     );
                                   } else {
-                                    var studentFromFhwsFetch = await getStudentFetch(context);
+                                    var studentFromFhwsFetch =
+                                        await getStudentFetch(context, size);
 
                                     var allInnovations =
                                         await ib.getAllInnovations();
@@ -159,7 +161,7 @@ class _LoginState extends State<Login> {
                                                     InnovationsOverview(
                                                       student: studentSc,
                                                       studentFirstName:
-                                                      studentFromFhwsFetch
+                                                          studentFromFhwsFetch
                                                               .firstName,
                                                       innovations:
                                                           allInnovations,
@@ -183,7 +185,7 @@ class _LoginState extends State<Login> {
                                                     InnovationsOverview(
                                                       student: studentSc,
                                                       studentFirstName:
-                                                      studentFromFhwsFetch
+                                                          studentFromFhwsFetch
                                                               .firstName,
                                                       innovations:
                                                           allInnovations,
@@ -205,18 +207,86 @@ class _LoginState extends State<Login> {
         });
   }
 
-  Future<StudentFromFhwsFetch> getStudentFetch(BuildContext context) async {
+  Future<StudentFromFhwsFetch> getStudentFetch(
+      BuildContext context, Size size) async {
+    bool isLoading = true;
     try {
-      StudentFromFhwsFetch fetch =
-          await Student.fetchStudentInformation(
-              kNumber, password);
-      return fetch;
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Center(
+              child: Dialog(
+                backgroundColor: Colors.transparent,
+                child: Container(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  width: size.width * 0.9,
+                  height: size.height * 0.2,
+                  decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.8),
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          bottomLeft: Radius.circular(15),
+                          topRight: Radius.circular(15),
+                          bottomRight: Radius.circular(15))),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            const Text('Fetch wird ausgeführt',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                            const SizedBox(height: 20.0),
+                            Container(
+                              height: 40,
+                              width: 70,
+                              decoration: BoxDecoration(
+                                color: isLoading ? Colors.transparent : fhwsGreen,
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(20.0)),
+                              ),
+                              child: isLoading
+                                  ? const CircularProgressIndicator(
+                                      color: fhwsGreen,
+                                    )
+                                  : TextButton(
+                                      child: const Text("OK",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12.0,
+                                          )),
+                                      onPressed: () {
+                                        //TODO fix onPressed close dialog
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            );
+          });
+      print('method before fetch');
+      //StudentFromFhwsFetch fetch =
+      //    await Student.fetchStudentInformation(kNumber, password);
+      isLoading = false;
+      return StudentFromFhwsFetch(kNumber, 'Maximilian Test');
     } catch (e) {
       throw Exception(showDialog(
         context: context,
         builder: (BuildContext context) {
-          return const RoundedAlert("Achtung",
-              "Deine Zugangsdaten sind nicht korrekt");
+          return const RoundedAlert(
+              "Achtung", "Die Anmeldung schlug fehl! Überprüfue bitte deine Eingaben und deine Verbindung mit MetaMask");
         },
       ));
     }

@@ -1,4 +1,6 @@
 
+import 'package:fhws_innovations/1_model/student_object.dart';
+import 'package:fhws_innovations/2_view/innovations_overview.dart';
 import 'package:fhws_innovations/constants/text_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,9 +17,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return  MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:  Login(),
+      home:  InnovationsOverview(student: Student(), studentFirstName: 'Maxi', innovations: []),
     );
   }
 }

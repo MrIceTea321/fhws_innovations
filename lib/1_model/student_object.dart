@@ -11,10 +11,12 @@ import 'innovation.dart';
 class StudentFromFhwsFetch {
   String kNumber;
   String firstName;
+
   StudentFromFhwsFetch(this.kNumber, this.firstName);
 }
 
 class Student {
+  Student();
   late String kNumber;
   late EthereumAddress studentAddress;
   bool voted = false;
