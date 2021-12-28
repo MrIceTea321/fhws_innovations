@@ -1,5 +1,4 @@
 import 'package:fhws_innovations/1_model/innovation.dart';
-import 'package:fhws_innovations/1_model/student_object.dart';
 import 'package:fhws_innovations/2_view/user_innovations.dart';
 import 'package:fhws_innovations/constants/text_constants.dart';
 import 'package:flutter/material.dart';
@@ -49,8 +48,7 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                   var student = await ib.getStudentFromSC(context);
                   var allInnovations =
                       await ib.getAllInnovations(context, student.kNumber);
-                  var studentInnovations = await ib.getInnovationsOfStudent(
-                      context, student.kNumber);
+
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -81,6 +79,31 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                                   )));
                     },
                     icon: const Icon(Icons.description)),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+            child: Row(
+              children: [
+                IconButton(
+                    onPressed: () async {
+                      var kNumber = await ib.getKNumberOfStudentAddress();
+                      ib.deleteInnovation(
+                          widget.userInnovation.uniqueInnovationHash,
+                          kNumber,
+                          context);
+                      var studentInnovations =
+                          await ib.getInnovationsOfStudent(context, kNumber);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => UserInnovations(
+                                    userInnovations: studentInnovations,
+                                    studentFirstName: widget.studentFirstName,
+                                  )));
+                    },
+                    icon: const Icon(Icons.delete)),
               ],
             ),
           ),

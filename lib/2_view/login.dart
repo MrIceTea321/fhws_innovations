@@ -27,7 +27,6 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return ChangeNotifierProvider(
         create: (context) => MetaMaskProvider()..init(),
         builder: (context, snapshot) {
