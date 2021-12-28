@@ -58,7 +58,6 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                                 student: student,
                                 innovations: allInnovations,
                                 studentFirstName: widget.studentFirstName,
-                                studentInnovations: studentInnovations,
                               )));
                 },
                 icon: const Icon(Icons.home)),
@@ -112,8 +111,6 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                   context);
               var student = await ib.getStudentFromSC(context);
               var allInnovations = await ib.getAllInnovations(context, kNumber);
-              var studentInnovations =
-                  await ib.getInnovationsOfStudent(context, kNumber);
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -121,7 +118,6 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                             student: student,
                             innovations: allInnovations,
                             studentFirstName: widget.studentFirstName,
-                            studentInnovations: studentInnovations,
                           )));
             },
             child: Container(

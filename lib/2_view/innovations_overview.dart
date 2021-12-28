@@ -7,8 +7,7 @@ import 'package:fhws_innovations/2_view/show_innovation.dart';
 import 'package:fhws_innovations/2_view/user_innovations.dart';
 import 'package:fhws_innovations/constants/text_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:web3dart/credentials.dart';
-import 'package:web3dart/web3dart.dart';
+
 
 import 'login.dart';
 
@@ -16,15 +15,14 @@ class InnovationsOverview extends StatefulWidget {
   final Student student;
   final String studentFirstName;
   final List<Innovation> innovations;
-  final List<Innovation> studentInnovations;
   int voteCount = 0;
 
   InnovationsOverview(
       {Key? key,
       required this.student,
       required this.studentFirstName,
-      required this.studentInnovations,
-      required this.innovations})
+      required this.innovations
+      })
       : super(key: key);
 
   @override
@@ -274,9 +272,10 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
             builder: (context) => ShowInnovation(innovation: innovation)));
   }
 
-  getAllInnovations() async {
+  Future<List<Innovation>> getAllInnovations() async {
     InnovationsObject object = InnovationsObject();
     var kNumber = await object.getKNumberOfStudentAddress();
-    return object.getAllInnovations(context, kNumber);
+    var stud = await object.getAllInnovations(context, kNumber);
+    return stud;
   }
 }

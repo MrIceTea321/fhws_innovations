@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'dart:html';
-import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:fhws_innovations/1_model/student_object.dart';
@@ -8,7 +7,6 @@ import 'package:fhws_innovations/constants/rounded_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:web3dart/browser.dart';
-import 'package:flutter_web3/ethereum.dart';
 import 'package:http/http.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:fhws_innovations/3_controller/smart_contract.dart';
@@ -86,7 +84,6 @@ class InnovationsObject {
     List<dynamic> result = await smartContract.querySmartContractFunction(
         "getStudent", [], ethClient);
     dynamic student = result[0];
-    print('student in getStrudentFromSC methode: $student');
     var stud = Student.fromSmartContract(
         student[0], student[1], student[2], student[3]);
     await checkIfStudentAlreadyRegistered(stud.kNumber, context);

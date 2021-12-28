@@ -166,24 +166,15 @@ class _LoginState extends State<Login> {
                                         .getAllInnovations(context, kNumber);
                                     var studentAlreadyRegistered = await ib
                                         .studentAlreadyRegistered(kNumber);
-                                    print(
-                                        'studentAlreadyRegistered: $studentAlreadyRegistered');
                                     if (studentAlreadyRegistered) {
                                       var studentSc =
                                           await ib.getStudentFromSC(context);
-                                      print(
-                                          'student From SmartContract: $studentSc');
-                                      var studentInnovations =
-                                          await ib.getInnovationsOfStudent(
-                                              context, studentSc.kNumber);
                                       Future.delayed(Duration.zero, () {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     InnovationsOverview(
-                                                      studentInnovations:
-                                                          studentInnovations,
                                                       student: studentSc,
                                                       studentFirstName:
                                                           studentFromFhwsFetch
@@ -193,36 +184,22 @@ class _LoginState extends State<Login> {
                                                     )));
                                       });
                                     } else {
-                                      var s =
-                                          await ib.createStudentOnTheBlockchain(
-                                              context,
-                                              studentFromFhwsFetch.kNumber);
-                                      print('createStudentOnTheBlockchain $s');
+                                      await ib.createStudentOnTheBlockchain(
+                                          context,
+                                          studentFromFhwsFetch.kNumber);
                                       var studentSc =
                                           await ib.getStudentFromSC(context);
-                                      print(
-                                          'student from bc after create: $studentSc');
-                                      var studentInnovations =
-                                          await ib.getInnovationsOfStudent(
-                                              context, studentSc.kNumber);
-                                      print(
-                                          'student innovations: $studentInnovations');
-                                      Future.delayed(Duration.zero, () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    InnovationsOverview(
-                                                      studentInnovations:
-                                                          studentInnovations,
-                                                      student: studentSc,
-                                                      studentFirstName:
-                                                          studentFromFhwsFetch
-                                                              .firstName,
-                                                      innovations:
-                                                          allInnovations,
-                                                    )));
-                                      });
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  InnovationsOverview(
+                                                    student: studentSc,
+                                                    studentFirstName:
+                                                        studentFromFhwsFetch
+                                                            .firstName,
+                                                    innovations: allInnovations,
+                                                  )));
                                     }
                                   }
                                 }),

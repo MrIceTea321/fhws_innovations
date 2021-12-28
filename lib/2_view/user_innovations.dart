@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:fhws_innovations/1_model/innovations_object.dart';
 import 'package:fhws_innovations/1_model/innovation.dart';
-import 'package:fhws_innovations/1_model/student_object.dart';
 import 'package:fhws_innovations/2_view/create_new_innovation.dart';
 import 'package:fhws_innovations/2_view/overhaul_innovations.dart';
 import 'package:fhws_innovations/constants/text_constants.dart';
@@ -43,14 +42,12 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
         elevation: 0,
         actions: [
           Padding(
-            padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
+            padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: IconButton(
                 onPressed: () async {
                   var student = await ib.getStudentFromSC(context);
                   var allInnovations =
                       await ib.getAllInnovations(context, student.kNumber);
-                  var studentInnovations = await ib.getInnovationsOfStudent(
-                      context, student.kNumber);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -58,28 +55,27 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
                                 student: student,
                                 innovations: allInnovations,
                                 studentFirstName: widget.studentFirstName,
-                                studentInnovations: studentInnovations,
                               )));
                 },
-                icon: Icon(Icons.home)),
+                icon: const Icon(Icons.home)),
           ),
           Padding(
-            padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
+            padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: Row(
               children: [
-                Text('Meine Innovationen'),
-                IconButton(onPressed: () {}, icon: Icon(Icons.description)),
+                const Text('Meine Innovationen'),
+                IconButton(onPressed: () {}, icon: const Icon(Icons.description)),
               ],
             ),
           ),
           Padding(
-            padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
+            padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: IconButton(
                 onPressed: () {
                   Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (context) => const Login()));
                 },
-                icon: Icon(Icons.logout)),
+                icon: const Icon(Icons.logout)),
           ),
         ],
       ),
@@ -214,10 +210,10 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
                 )));
   }
 
-  getUserInnovations() async {
+  Future<List<Innovation>> getUserInnovations() async {
     InnovationsObject object = InnovationsObject();
     var kNumber = await object.getKNumberOfStudentAddress();
-    return object.getInnovationsOfStudent(context, kNumber);
-    //object.getAllInnovations();
+    var stud = await object.getInnovationsOfStudent(context, kNumber);
+    return stud;
   }
 }
