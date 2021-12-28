@@ -1,11 +1,13 @@
+import 'dart:typed_data';
+
 import 'package:fhws_innovations/1_model/student_object.dart';
 
 class Innovation {
-  final String uniqueInnovationHash;
+  final Uint8List uniqueInnovationHash;
   final BigInt votingCount;
   final Student creator;
-  final String title;
-  final String description;
+  late String title;
+  late String description;
 
   // TODO change to unit8 list
 

@@ -105,7 +105,7 @@ class InnovationsObject {
     int i = 0;
     innovationsListFromSC.forEach((innovationFromSC) {
       Innovation innovation = Innovation(
-        uniqueInnovationHash: innovationFromSC[0].toString(),
+        uniqueInnovationHash: innovationFromSC[0],
         votingCount: innovationFromSC[1],
         creator: Student.fromSmartContract(
             innovationFromSC[2][0],
@@ -133,7 +133,7 @@ class InnovationsObject {
       context: context,
       builder: (BuildContext context) {
         return const RoundedAlert(
-            "❗️Achtung❗", "Student wurde auf BC erstellt ☺️");
+            "❗️Achtung❗", "Student wurde auf BC erstellt");
       },
     );
     return response;

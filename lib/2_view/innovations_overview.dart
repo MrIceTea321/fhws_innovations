@@ -3,16 +3,21 @@ import 'dart:typed_data';
 import 'package:fhws_innovations/1_model/innovations_object.dart';
 import 'package:fhws_innovations/1_model/innovation.dart';
 import 'package:fhws_innovations/1_model/student_object.dart';
+import 'package:fhws_innovations/2_view/user_innovations.dart';
 import 'package:fhws_innovations/constants/text_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:web3dart/credentials.dart';
 import 'package:web3dart/web3dart.dart';
 
+import 'login.dart';
+
 class InnovationsOverview extends StatefulWidget {
   final Student student;
   final String studentFirstName;
   final List<Innovation> innovations;
-  List<Innovation> testInnovations = [];
+
+  List<Innovation> studentInnovations = [];
+  int voteCount = 0;
 
   InnovationsOverview(
       {Key? key,
@@ -28,79 +33,125 @@ class InnovationsOverview extends StatefulWidget {
 class _InnovationsOverviewState extends State<InnovationsOverview> {
   @override
   void initState() {
-    var ino0 = Innovation(
-        uniqueInnovationHash: 'testHash',
-        description: 'test description lore ipsum lore ipsum',
-        title: 'Test Title Lore Ipsum',
-        creator: Student.fromSmartContract(
-            'k45447',
-            EthereumAddress.fromHex(
-                '0x0000000000000000000000000000000000000000'),
-            true,
-            Uint8List.fromList([0])),
-        votingCount: BigInt.one);
-    var ino1 = Innovation(
-        uniqueInnovationHash: 'testHash 1',
-        description: 'test description lore ipsum lore ipsum 1',
-        title: 'Test Title Lore Ipsum 1',
-        creator: Student.fromSmartContract(
-            'k15447',
-            EthereumAddress.fromHex(
-                '0x1000000000000000000000000000000000000000'),
-            true,
-            Uint8List.fromList([1])),
-        votingCount: BigInt.one);
-    var ino2 = Innovation(
-        uniqueInnovationHash: 'testHash 2',
-        description: 'test description lore ipsum lore ipsum 2',
-        title: 'Test Title Lore Ipsum 2',
-        creator: Student.fromSmartContract(
-            'k25447',
-            EthereumAddress.fromHex(
-                '0x2000000000000000000000000000000000000000'),
-            true,
-            Uint8List.fromList([2])),
-        votingCount: BigInt.two);
-    widget.testInnovations.add(ino0);
-    widget.testInnovations.add(ino1);
-    widget.testInnovations.add(ino2);
-    print('widget.testInnovations');
-    print(widget.testInnovations.length);
-    print(widget.testInnovations);
+    widget.innovations.forEach((innovation) {
+      if (innovation.creator.studentAddress == widget.student.studentAddress) {
+        widget.studentInnovations.add(innovation);
+      }
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    bool isVoted = false;
+
     return Scaffold(
-      backgroundColor: fhwsGreen,
-      body: ListView(
-        shrinkWrap: true,
-        children: <Widget>[
-          SizedBox(height: size.height * 0.025),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Text(
+          'FHWS Innovations',
+          style: TextStyle(fontSize: 18.0, color: Colors.white),
+        ),
+        backgroundColor: fhwsGreen,
+        elevation: 0,
+        actions: [
           Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  "Hallo, " + widget.studentFirstName,
-                  style: const TextStyle(
-                      fontSize: 18.0, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(
-                  height: 5.0,
-                ),
-                Text(
-                  "Welche Innovation möchtest du unterstützen?",
-                  style: TextStyle(color: Colors.grey.shade700),
-                )
+            padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+            child: Row(
+              children: [
+                const Text('Übersicht'),
+                IconButton(onPressed: () {}, icon: const Icon(Icons.home)),
               ],
             ),
           ),
-          /*FutureBuilder<List<Innovation>>(
-           future: getAllInnovations(),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+            child: Row(
+              children: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => UserInnovations(
+                                    student: widget.student,
+                                    innovations: widget.innovations,
+                                    userInnovations: widget.studentInnovations,
+                                    studentFirstName: widget.studentFirstName,
+                                  )));
+                    },
+                    icon: const Icon(Icons.description)),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+            child: IconButton(
+              onPressed: () {
+                MaterialPageRoute(builder: (context) => const Login());
+              },
+              icon: const Icon(Icons.logout),
+            ),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+          child: Column(
+        children: <Widget>[
+          SizedBox(height: size.height * 0.015),
+          Container(
+            width: size.width - 30.0,
+            decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.7),
+                border: Border.all(color: Colors.black),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(0.0),
+                )),
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Hallo, " + widget.studentFirstName,
+                    style: const TextStyle(fontSize: 18.0, color: Colors.white),
+                  ),
+                  const SizedBox(
+                    height: 5.0,
+                  ),
+                  Row(
+                    children: [
+                      const Text(
+                        'Du hast noch ',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      widget.student.voted
+                          ? const Text(
+                              '0',
+                              style: TextStyle(
+                                  color: fhwsGreen,
+                                  fontWeight: FontWeight.bold),
+                            )
+                          : const Text(
+                              '1',
+                              style: TextStyle(
+                                  color: fhwsGreen,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                      const Text(
+                        ' verbleibende Stimmen',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          FutureBuilder<List<Innovation>>(
+            future: getAllInnovations(),
             builder: (context, AsyncSnapshot<List<Innovation>> snap) {
               if (snap.data == null) {
                 return const Center(
@@ -108,67 +159,96 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                   color: fhwsGreen,
                 ));
               }
-              return*/ListView.builder(
+              return ListView.builder(
                   shrinkWrap: true,
-                  itemCount: widget.testInnovations.length,
-                  physics: const BouncingScrollPhysics(),
+                  itemCount: widget.innovations.length,
+                  physics: const AlwaysScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
-                    return GestureDetector(
-                        onTap: () => _openDestinationPage(
-                            context, widget.testInnovations.elementAt(index)),
-                        child: _buildFeaturedItem(
-                          title: widget.testInnovations.elementAt(index).title,
-                          subtitle: widget.testInnovations
-                              .elementAt(index)
-                              .creator
-                              .studentAddress
-                              .toString(),
-                        ));
-                  //});
+                    return _buildFeaturedItem(
+                        title: widget.innovations.elementAt(index).title,
+                        description: widget.innovations
+                            .elementAt(index)
+                            .description
+                            .toString(),
+                        voteCount: widget.innovations
+                            .elementAt(index)
+                            .votingCount
+                            .toString(),
+                        innovationHash: widget.innovations
+                            .elementAt(index)
+                            .uniqueInnovationHash,
+                        isVoted: isVoted);
+                  });
             },
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        tooltip: 'Innovation\nhinzufügen',
-        backgroundColor: Colors.white,
-        child: Icon(
-          Icons.add,
-          size: size.width * 0.05,
-          color: fhwsGreen,
-        ),
-        onPressed: () async {
-          //Navigator.push(context,
-          //     MaterialPageRoute(builder: (context) => CreateNewInnovation()));
-        },
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      )),
     );
   }
 
   Container _buildFeaturedItem(
-      {required String title, required String subtitle}) {
+      {required String title,
+      required String description,
+      required String voteCount,
+      required String innovationHash,
+      required bool isVoted}) {
     return Container(
-      padding: const EdgeInsets.only(
-          left: 16.0, top: 8.0, right: 16.0, bottom: 16.0),
+      padding:
+          const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0, bottom: 8.0),
       child: Container(
-        padding: const EdgeInsets.symmetric(
-            horizontal: 16.0, vertical: 8.0),
-        color: Colors.black.withOpacity(0.7),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        color: Colors.black.withOpacity(0.5),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text(title,
+            Row(
+              children: [
+                Text(title,
+                    style: const TextStyle(
+                      color: fhwsGreen,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    )),
+                IconButton(
+                    onPressed: () {
+                      //FIXME insert check after implementation
+                      if (widget.student.votedInnovationHash ==
+                          innovationHash) {
+                        isVoted = true;
+                      }
+                      setState(() {
+                        widget.student.voted = !widget.student.voted;
+                        isVoted != isVoted;
+                      });
+                      setState(() {});
+                    },
+                    icon: isVoted
+                        ? const Icon(Icons.star, color: fhwsGreen)
+                        : const Icon(
+                            Icons.star_border,
+                            color: fhwsGreen,
+                          ))
+              ],
+            ),
+            Text(description,
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
                 )),
-            Text('Verfasser: ' + subtitle,
-                style: const TextStyle(
-                  color: Colors.white,
-                )),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Anzahl an Stimmen: ',
+                    style: TextStyle(
+                      color: Colors.white,
+                    )),
+                Text(voteCount,
+                    style: const TextStyle(
+                      color: fhwsGreen,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ],
+            ),
           ],
         ),
       ),
@@ -176,13 +256,12 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
   }
 
   _openDestinationPage(BuildContext context, Innovation innovation) {
-    // Navigator.push(
-    //     context, MaterialPageRoute(builder: (_) => InnovationDetails(innovatoin: innovatoin)));
+    Navigator.pop(context);
   }
 
   getAllInnovations() {
     InnovationsObject object = InnovationsObject();
-    return widget.testInnovations;
+    return object.getAllInnovations();
     //object.getAllInnovations();
   }
 }

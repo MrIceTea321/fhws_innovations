@@ -1,16 +1,15 @@
-import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:fhws_innovations/1_model/innovations_object.dart';
 import 'package:fhws_innovations/1_model/student_object.dart';
 import 'package:fhws_innovations/3_controller/metamask.dart';
 import 'package:fhws_innovations/constants/rounded_alert.dart';
-import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:web3dart/credentials.dart';
 
+import '../1_model/innovation.dart';
 import '../constants/text_constants.dart';
 import 'innovations_overview.dart';
 
@@ -25,6 +24,49 @@ class _LoginState extends State<Login> {
   String password = '';
   String kNumber = '';
   InnovationsObject ib = InnovationsObject();
+  bool showPassword = true;
+
+
+  @override
+  void initState() {
+    var ino0 = Innovation(
+        uniqueInnovationHash: 'testHash',
+        description:
+            'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+        title: 'Test Title Lore Ipsum',
+        creator: Student.fromSmartContract(
+            'k45447',
+            EthereumAddress.fromHex(
+                '0x0000000000000000000000000000000000000000'),
+            true,
+            Uint8List.fromList([0])),
+        votingCount: BigInt.one);
+    var ino1 = Innovation(
+        uniqueInnovationHash: 'testHash 1',
+        description:
+            'test description Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. 1',
+        title: 'Test Title Lore Ipsum 1',
+        creator: Student.fromSmartContract(
+            'k15447',
+            EthereumAddress.fromHex(
+                '0x1000000000000000000000000000000000000000'),
+            true,
+            Uint8List.fromList([0])),
+        votingCount: BigInt.one);
+    var ino2 = Innovation(
+        uniqueInnovationHash: 'testHash 2',
+        description:
+            'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. 2',
+        title: 'Test Title Lore Ipsum 2',
+        creator: Student.fromSmartContract(
+            'k25447',
+            EthereumAddress.fromHex(
+                '0x2000000000000000000000000000000000000000'),
+            true,
+            Uint8List.fromList([0])),
+        votingCount: BigInt.two);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,15 +142,33 @@ class _LoginState extends State<Login> {
                                 kNumber = value;
                               },
                               decoration: const InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.account_circle,
+                                  color: fhwsGreen,
+                                ),
                                 labelText: "k-Nummer eingeben",
                               ),
                             ),
                             TextField(
-                              obscureText: true,
+                              obscureText: showPassword,
                               onChanged: (value) {
                                 password = value;
                               },
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
+                                prefixIcon: const Icon(
+                                  Icons.lock,
+                                  color: fhwsGreen,
+                                ),
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      showPassword =! showPassword;
+                                    });
+                                  },
+                                  icon: showPassword
+                                      ? const Icon(Icons.visibility_off_outlined, color: fhwsGreen,)
+                                      : const Icon(Icons.visibility_outlined, color: fhwsGreen),
+                                ),
                                 labelText: "Passwort eingeben",
                               ),
                             ),
@@ -246,9 +306,10 @@ class _LoginState extends State<Login> {
                               height: 40,
                               width: 70,
                               decoration: BoxDecoration(
-                                color: isLoading ? Colors.transparent : fhwsGreen,
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(20.0)),
+                                color:
+                                    isLoading ? Colors.transparent : fhwsGreen,
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(20.0)),
                               ),
                               child: isLoading
                                   ? const CircularProgressIndicator(
@@ -285,8 +346,8 @@ class _LoginState extends State<Login> {
       throw Exception(showDialog(
         context: context,
         builder: (BuildContext context) {
-          return const RoundedAlert(
-              "Achtung", "Die Anmeldung schlug fehl! Überprüfue bitte deine Eingaben und deine Verbindung mit MetaMask");
+          return const RoundedAlert("Achtung",
+              "Die Anmeldung schlug fehl! Überprüfue bitte deine Eingaben und deine Verbindung mit MetaMask");
         },
       ));
     }

@@ -19,7 +19,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:  InnovationsOverview(student: Student(), studentFirstName: 'Maxi', innovations: []),
+      home:Login()
+
+      //InnovationsOverview(student: Student(), studentFirstName: 'Maxi', innovations: []),
     );
   }
 }
