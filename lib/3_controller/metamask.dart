@@ -20,7 +20,6 @@ class MetaMaskProvider extends ChangeNotifier {
       if (accs.isNotEmpty) currentAddress = accs.first;
 
       currentChain = await ethereum!.getChainId();
-
       notifyListeners();
     }
   }

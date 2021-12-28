@@ -160,8 +160,8 @@ class _LoginState extends State<Login> {
                                       },
                                     );
                                   } else {
-                                    var studentFromFhwsFetch =
-                                        await getStudentFetch(context, size);
+                                    var studentFromFhwsFetch = StudentFromFhwsFetch(kNumber, 'Test Name');
+                                        //await getStudentFetch(context, size);
                                     var allInnovations = await ib
                                         .getAllInnovations(context, kNumber);
                                     var studentAlreadyRegistered = await ib
