@@ -134,12 +134,9 @@ class InnovationsObject {
         title: innovationFromSC[3],
         description: innovationFromSC[4],
       );
-      print('innovation: $innovation');
       allInnovationsList.insert(i, innovation);
       i++;
     });
-    print('innovtionsListWithObjects');
-    print(allInnovationsList);
     await checkIfStudentAlreadyRegistered(kNumber, context);
     return allInnovationsList;
   }
@@ -149,7 +146,7 @@ class InnovationsObject {
       BuildContext context, String kNumber) async {
     var response =
         await submitTransaction("createStudentOnTheBlockchain", [kNumber]);
-    await checkIfStudentAlreadyRegistered(kNumber, context);
+    //await checkIfStudentAlreadyRegistered(kNumber, context);
     showDialog(
       context: context,
       builder: (BuildContext context) {

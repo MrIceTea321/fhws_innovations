@@ -2,7 +2,9 @@ import 'package:fhws_innovations/1_model/innovations_object.dart';
 import 'package:fhws_innovations/1_model/student_object.dart';
 import 'package:fhws_innovations/3_controller/metamask.dart';
 import 'package:fhws_innovations/constants/rounded_alert.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_web3/flutter_web3.dart';
 import 'package:provider/provider.dart';
 import '../constants/text_constants.dart';
 import 'innovations_overview.dart';
@@ -159,35 +161,36 @@ class _LoginState extends State<Login> {
                                       },
                                     );
                                   } else {
-                                    var studentFromFhwsFetch = StudentFromFhwsFetch(kNumber, 'Test Name');
-                                        //await getStudentFetch(context, size);
-                                    var allInnovations = await ib
-                                        .getAllInnovations(context, kNumber);
+                                    var studentFromFhwsFetch =
+                                        StudentFromFhwsFetch(
+                                            kNumber, 'Test Name');
+                                    //await getStudentFetch(context, size);
                                     var studentAlreadyRegistered = await ib
                                         .studentAlreadyRegistered(kNumber);
                                     if (studentAlreadyRegistered) {
                                       var studentSc =
                                           await ib.getStudentFromSC(context);
-                                      Future.delayed(Duration.zero, () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    InnovationsOverview(
-                                                      student: studentSc,
-                                                      studentFirstName:
-                                                          studentFromFhwsFetch
-                                                              .firstName,
-                                                      innovations:
-                                                          allInnovations,
-                                                    )));
-                                      });
+                                      var allInnovations = await ib
+                                          .getAllInnovations(context, kNumber);
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  InnovationsOverview(
+                                                    student: studentSc,
+                                                    studentFirstName:
+                                                        studentFromFhwsFetch
+                                                            .firstName,
+                                                    innovations: allInnovations,
+                                                  )));
                                     } else {
                                       await ib.createStudentOnTheBlockchain(
                                           context,
                                           studentFromFhwsFetch.kNumber);
                                       var studentSc =
                                           await ib.getStudentFromSC(context);
+                                      var allInnovations = await ib
+                                          .getAllInnovations(context, kNumber);
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -208,7 +211,58 @@ class _LoginState extends State<Login> {
                       )
                     ],
                   ),
-                )
+                ),
+                //FIXME remove meta mask test before code goes live
+                Center(
+                  child: Consumer<MetaMaskProvider>(
+                    builder: (context, provider, child) {
+                      late final String text;
+                      if (provider.isConnected && provider.isInOperatingChain) {
+                        text = 'Connected';
+                      } else if (provider.isConnected &&
+                          !provider.isInOperatingChain) {
+                        text =
+                            'Wrong chain. Please connect to ${MetaMaskProvider.operatingChain}';
+                      } else if (provider.isEnabled) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text('Click the button...'),
+                            const SizedBox(height: 8),
+                            CupertinoButton(
+                              onPressed: () =>
+                                  context.read<MetaMaskProvider>().connect(),
+                              color: Colors.white,
+                              padding: const EdgeInsets.all(0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Image.network(
+                                    'https://i0.wp.com/kindalame.com/wp-content/uploads/2021/05/metamask-fox-wordmark-horizontal.png?fit=1549%2C480&ssl=1',
+                                    width: 300,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      } else {
+                        text = 'Please use a Web3 supported browser.';
+                      }
+
+                      return ShaderMask(
+                        shaderCallback: (bounds) => const LinearGradient(
+                          colors: [Colors.purple, Colors.blue, Colors.red],
+                        ).createShader(bounds),
+                        child: Text(
+                          text,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.headline5,
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
           );
