@@ -13,13 +13,13 @@ import 'package:http/http.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:fhws_innovations/3_controller/smart_contract.dart';
 
+import '../2_view/login.dart';
 import 'innovation.dart';
 
 class InnovationsObject {
   SmartContract smartContract = SmartContract();
   List<Innovation> allInnovationsList = [];
   List<Innovation> innovationFromStudentList = [];
-
 
   var ethClient = Web3Client(
       "https://rinkeby.infura.io/v3/dbd61902b58949348a3045a157d038ca",
@@ -81,17 +81,19 @@ class InnovationsObject {
     return kNumberOfStudentAddress;
   }
 
-  Future<Student> getStudentFromSC() async {
+  Future<Student> getStudentFromSC(BuildContext context) async {
     smartContract.loadContract();
     List<dynamic> result = await smartContract.querySmartContractFunction(
         "getStudent", [], ethClient);
     dynamic student = result[0];
     print('student in getStrudentFromSC methode: $student');
-    return Student.fromSmartContract(
+    var stud = Student.fromSmartContract(
         student[0], student[1], student[2], student[3]);
+    await checkIfStudentAlreadyRegistered(stud.kNumber, context);
+    return stud;
   }
 
-  Future<List<Innovation>> getInnovationsOfStudent() async {
+  Future<List<Innovation>> getInnovationsOfStudent(BuildContext context, String kNumber) async {
     smartContract.loadContract();
     List<dynamic> result = await smartContract.querySmartContractFunction(
         "getInnovationsOfStudent", [], ethClient);
@@ -113,10 +115,11 @@ class InnovationsObject {
       innovationFromStudentList.insert(i, innovation);
       i++;
     });
+    await checkIfStudentAlreadyRegistered(kNumber, context);
     return innovationFromStudentList;
   }
 
-  Future<List<Innovation>> getAllInnovations() async {
+  Future<List<Innovation>> getAllInnovations(BuildContext context, String kNumber) async {
     smartContract.loadContract();
     List<dynamic> result = await smartContract.querySmartContractFunction(
         "getAllInnovations", [], ethClient);
@@ -140,6 +143,7 @@ class InnovationsObject {
     });
     print('innovtionsListWithObjects');
     print(allInnovationsList);
+    await checkIfStudentAlreadyRegistered(kNumber, context);
     return allInnovationsList;
   }
 
@@ -148,6 +152,7 @@ class InnovationsObject {
       BuildContext context, String kNumber) async {
     var response =
         await submitTransaction("createStudentOnTheBlockchain", [kNumber]);
+    await checkIfStudentAlreadyRegistered(kNumber, context);
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -155,6 +160,7 @@ class InnovationsObject {
             "Erfolgreich erstellt", "Student wurde auf BC erstellt");
       },
     );
+
     return response;
   }
 
@@ -165,34 +171,59 @@ class InnovationsObject {
         .submitTransaction("initialRegistrationOfStudent", [kNumber]);
   }
 
-  void createInnovation(String title, String description) async {
+  void createInnovation(String title, String description, String kNumber,
+      BuildContext context) async {
     var response = await smartContract
         .submitTransaction("createInnovation", [title, description]);
+    await checkIfStudentAlreadyRegistered(kNumber, context);
     log(response);
   }
 
-  void deleteInnovation(Uint8List uniqueInnovationHash) async {
+  void deleteInnovation(Uint8List uniqueInnovationHash, String kNumber,
+      BuildContext context) async {
     var response = await smartContract
         .submitTransaction("deleteInnovation", [uniqueInnovationHash]);
+    await checkIfStudentAlreadyRegistered(kNumber, context);
     log(response);
   }
 
-  void editInnovation(
-      Uint8List uniqueInnovationHash, String title, String description) async {
+  void editInnovation(Uint8List uniqueInnovationHash, String title,
+      String description, String kNumber, BuildContext context) async {
     var response = await smartContract.submitTransaction(
         "editInnovation", [uniqueInnovationHash, title, description]);
+    await checkIfStudentAlreadyRegistered(kNumber, context);
     log(response);
   }
 
-  void vote(Uint8List uniqueInnovationHash) async {
+  Future<void> checkIfStudentAlreadyRegistered(
+      String kNumber, BuildContext context) async {
+    var isTrue = await studentAlreadyRegistered(kNumber);
+    if (isTrue) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const Login()));
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const RoundedAlert("️Achtung",
+              "Benutze bitte den selben MetaMask Account wie bei deinem ersten Log In️");
+        },
+      );
+    }
+  }
+
+  void vote(Uint8List uniqueInnovationHash, String kNumber,
+      BuildContext context) async {
     var response =
         await smartContract.submitTransaction("vote", [uniqueInnovationHash]);
+    await checkIfStudentAlreadyRegistered(kNumber, context);
     log(response);
   }
 
-  void unvote(Uint8List uniqueInnovationHash) async {
+  void unvote(Uint8List uniqueInnovationHash, String kNumber,
+      BuildContext context) async {
     var response =
         await smartContract.submitTransaction("unvote", [uniqueInnovationHash]);
+    await checkIfStudentAlreadyRegistered(kNumber, context);
     log(response);
   }
 
@@ -241,31 +272,5 @@ class InnovationsObject {
           fetchChainIdFromNetworkId: true);
       return result;
     }
-  }
-
-  //TODO only for test purposes! Remove after connecting with UI
-  showAlertDialog(BuildContext context, String title, String message) {
-    // set up the button
-    Widget okButton = TextButton(
-      child: Text("OK"),
-      onPressed: () {},
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text(title),
-      content: Text(message),
-      actions: [
-        okButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
   }
 }

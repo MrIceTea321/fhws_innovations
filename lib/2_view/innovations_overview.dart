@@ -69,8 +69,9 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
               children: [
                 IconButton(
                     onPressed: () async {
+                      var kNumber = await ib.getKNumberOfStudentAddress();
                       var innovationsFromStudent =
-                          await ib.getInnovationsOfStudent();
+                          await ib.getInnovationsOfStudent(context, kNumber);
 
                       Navigator.push(
                           context,
@@ -88,7 +89,8 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: IconButton(
               onPressed: () {
-                MaterialPageRoute(builder: (context) => const Login());
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => const Login()));
               },
               icon: const Icon(Icons.logout),
             ),
@@ -215,8 +217,8 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                       fontWeight: FontWeight.bold,
                     )),
                 IconButton(
-                    onPressed: () {
-                      //FIXME insert check after implementation
+                    onPressed: () async {
+                      var kNumber = await ib.getKNumberOfStudentAddress();
                       if (widget.student.votedInnovationHash ==
                           innovationHash) {
                         isVoted = true;
@@ -226,9 +228,9 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                         isVoted != isVoted;
                         // set the voting count on the BC
                         if (isVoted) {
-                          ib.vote(innovationHash);
+                          ib.vote(innovationHash, kNumber, context);
                         } else {
-                          ib.unvote(innovationHash);
+                          ib.unvote(innovationHash, kNumber, context);
                         }
                       });
                       setState(() {});
@@ -272,8 +274,9 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
             builder: (context) => ShowInnovation(innovation: innovation)));
   }
 
-  getAllInnovations() {
+  getAllInnovations() async {
     InnovationsObject object = InnovationsObject();
-    return object.getAllInnovations();
+    var kNumber = await object.getKNumberOfStudentAddress();
+    return object.getAllInnovations(context, kNumber);
   }
 }

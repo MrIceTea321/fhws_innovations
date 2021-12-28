@@ -48,9 +48,9 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: IconButton(
                 onPressed: () async {
-                  var student = await ib.getStudentFromSC();
-                  var allInnovations = await ib.getAllInnovations();
-                  var studentInnovations = await ib.getInnovationsOfStudent();
+                  var student = await ib.getStudentFromSC(context);
+                  var allInnovations = await ib.getAllInnovations(context, student.kNumber);
+                  var studentInnovations = await ib.getInnovationsOfStudent(context, student.kNumber);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -69,7 +69,8 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
                 const Text('Innovationen bearbeiten'),
                 IconButton(
                     onPressed: () async {
-                      var userInnos = await ib.getInnovationsOfStudent();
+                      var kNumber = await ib.getKNumberOfStudentAddress();
+                      var userInnos = await ib.getInnovationsOfStudent(context,kNumber);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -86,7 +87,8 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: IconButton(
                 onPressed: () {
-                  MaterialPageRoute(builder: (context) => const Login());
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => const Login()));
                 },
                 icon: const Icon(Icons.logout)),
           ),
@@ -117,7 +119,8 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
                   },
                 );
               } else {
-                ib.createInnovation(widget.title, widget.description);
+                var student = await ib.getStudentFromSC(context);
+                ib.createInnovation(widget.title, widget.description,student.kNumber,context );
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
@@ -126,9 +129,9 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
                   },
                 );
               }
-              var student = await ib.getStudentFromSC();
-              var allInnovations = await ib.getAllInnovations();
-              var studInnovations = await ib.getInnovationsOfStudent();
+              var student = await ib.getStudentFromSC(context);
+              var allInnovations = await ib.getAllInnovations(context, student.kNumber);
+              var studInnovations = await ib.getInnovationsOfStudent(context, student.kNumber);
               Navigator.push(
                   context,
                   MaterialPageRoute(

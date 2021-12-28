@@ -46,9 +46,11 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: IconButton(
                 onPressed: () async {
-                  var student = await ib.getStudentFromSC();
-                  var allInnovations = await ib.getAllInnovations();
-                  var studentInnovations = await ib.getInnovationsOfStudent();
+                  var student = await ib.getStudentFromSC(context);
+                  var allInnovations =
+                      await ib.getAllInnovations(context, student.kNumber);
+                  var studentInnovations = await ib.getInnovationsOfStudent(
+                      context, student.kNumber);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -68,8 +70,9 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                 const Text('Innovationen bearbeiten'),
                 IconButton(
                     onPressed: () async {
+                      var kNumber = await ib.getKNumberOfStudentAddress();
                       var studentInnovations =
-                          await ib.getInnovationsOfStudent();
+                          await ib.getInnovationsOfStudent(context, kNumber);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -86,7 +89,8 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: IconButton(
                 onPressed: () {
-                  MaterialPageRoute(builder: (context) => const Login());
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => const Login()));
                 },
                 icon: const Icon(Icons.logout)),
           ),
@@ -99,13 +103,17 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
           _overhaulInnovation(),
           TextButton(
             onPressed: () async {
+              var kNumber = await ib.getKNumberOfStudentAddress();
               ib.editInnovation(
                   widget.userInnovation.uniqueInnovationHash,
                   widget.userInnovation.title,
-                  widget.userInnovation.description);
-              var student = await ib.getStudentFromSC();
-              var allInnovations = await ib.getAllInnovations();
-              var studentInnovations = await ib.getInnovationsOfStudent();
+                  widget.userInnovation.description,
+                  kNumber,
+                  context);
+              var student = await ib.getStudentFromSC(context);
+              var allInnovations = await ib.getAllInnovations(context, kNumber);
+              var studentInnovations =
+                  await ib.getInnovationsOfStudent(context, kNumber);
               Navigator.push(
                   context,
                   MaterialPageRoute(

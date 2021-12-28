@@ -46,9 +46,11 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
             padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: IconButton(
                 onPressed: () async {
-                  var student = await ib.getStudentFromSC();
-                  var allInnovations = await ib.getAllInnovations();
-                  var studentInnovations = await ib.getInnovationsOfStudent();
+                  var student = await ib.getStudentFromSC(context);
+                  var allInnovations =
+                      await ib.getAllInnovations(context, student.kNumber);
+                  var studentInnovations = await ib.getInnovationsOfStudent(
+                      context, student.kNumber);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -74,7 +76,8 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
             padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: IconButton(
                 onPressed: () {
-                  MaterialPageRoute(builder: (context) => const Login());
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => const Login()));
                 },
                 icon: Icon(Icons.logout)),
           ),
@@ -211,9 +214,10 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
                 )));
   }
 
-  getUserInnovations() {
+  getUserInnovations() async {
     InnovationsObject object = InnovationsObject();
-    return object.getInnovationsOfStudent();
+    var kNumber = await object.getKNumberOfStudentAddress();
+    return object.getInnovationsOfStudent(context, kNumber);
     //object.getAllInnovations();
   }
 }

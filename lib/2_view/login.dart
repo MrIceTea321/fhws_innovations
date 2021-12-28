@@ -1,4 +1,3 @@
-
 import 'package:fhws_innovations/1_model/innovations_object.dart';
 import 'package:fhws_innovations/1_model/student_object.dart';
 import 'package:fhws_innovations/3_controller/metamask.dart';
@@ -163,26 +162,28 @@ class _LoginState extends State<Login> {
                                   } else {
                                     var studentFromFhwsFetch =
                                         await getStudentFetch(context, size);
-
-                                    var allInnovations =
-                                        await ib.getAllInnovations();
+                                    var allInnovations = await ib
+                                        .getAllInnovations(context, kNumber);
                                     var studentAlreadyRegistered = await ib
                                         .studentAlreadyRegistered(kNumber);
                                     print(
                                         'studentAlreadyRegistered: $studentAlreadyRegistered');
                                     if (studentAlreadyRegistered) {
                                       var studentSc =
-                                          await ib.getStudentFromSC();
+                                          await ib.getStudentFromSC(context);
                                       print(
                                           'student From SmartContract: $studentSc');
-                                      var studentInnovations = await ib.getInnovationsOfStudent();
+                                      var studentInnovations =
+                                          await ib.getInnovationsOfStudent(
+                                              context, studentSc.kNumber);
                                       Future.delayed(Duration.zero, () {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     InnovationsOverview(
-                                                      studentInnovations: studentInnovations,
+                                                      studentInnovations:
+                                                          studentInnovations,
                                                       student: studentSc,
                                                       studentFirstName:
                                                           studentFromFhwsFetch
@@ -198,18 +199,22 @@ class _LoginState extends State<Login> {
                                               studentFromFhwsFetch.kNumber);
                                       print('createStudentOnTheBlockchain $s');
                                       var studentSc =
-                                          await ib.getStudentFromSC();
+                                          await ib.getStudentFromSC(context);
                                       print(
                                           'student from bc after create: $studentSc');
-                                      var studentInnovations = await ib.getInnovationsOfStudent();
-                                      print('student innovations: $studentInnovations');
+                                      var studentInnovations =
+                                          await ib.getInnovationsOfStudent(
+                                              context, studentSc.kNumber);
+                                      print(
+                                          'student innovations: $studentInnovations');
                                       Future.delayed(Duration.zero, () {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     InnovationsOverview(
-                                                      studentInnovations: studentInnovations,
+                                                      studentInnovations:
+                                                          studentInnovations,
                                                       student: studentSc,
                                                       studentFirstName:
                                                           studentFromFhwsFetch
