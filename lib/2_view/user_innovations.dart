@@ -48,7 +48,7 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
                   var student = await ib.getStudentFromSC(context);
                   var allInnovations =
                       await ib.getAllInnovations(context, student.kNumber);
-                  Navigator.push(
+                  Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                           builder: (context) => InnovationsOverview(
@@ -120,7 +120,7 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
           ),
           TextButton(
             onPressed: () async {
-              Navigator.push(
+              Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                       builder: (context) => CreateNewInnovation(

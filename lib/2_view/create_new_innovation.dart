@@ -47,7 +47,7 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
                 onPressed: () async {
                   var student = await ib.getStudentFromSC(context);
                   var allInnovations = await ib.getAllInnovations(context, student.kNumber);
-                  Navigator.push(
+                  Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                           builder: (context) => InnovationsOverview(
@@ -66,7 +66,7 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
                     onPressed: () async {
                       var kNumber = await ib.getKNumberOfStudentAddress();
                       var userInnos = await ib.getInnovationsOfStudent(context,kNumber);
-                      Navigator.push(
+                      Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) => UserInnovations(
@@ -126,7 +126,7 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
               }
               var student = await ib.getStudentFromSC(context);
               var allInnovations = await ib.getAllInnovations(context, student.kNumber);
-              Navigator.push(
+              Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                       builder: (context) => InnovationsOverview(

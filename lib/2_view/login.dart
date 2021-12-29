@@ -173,7 +173,7 @@ class _LoginState extends State<Login> {
                                       var allInnovations = await ib
                                           .getAllInnovations(context, kNumber);
                                       Future.delayed(Duration.zero,(){
-                                        Navigator.push(
+                                        Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
@@ -195,7 +195,7 @@ class _LoginState extends State<Login> {
                                       var allInnovations = await ib
                                           .getAllInnovations(context, kNumber);
                                       Future.delayed(Duration.zero,(){
-                                        Navigator.push(
+                                        Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>

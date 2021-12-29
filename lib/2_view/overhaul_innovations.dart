@@ -70,7 +70,7 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                       var kNumber = await ib.getKNumberOfStudentAddress();
                       var studentInnovations =
                           await ib.getInnovationsOfStudent(context, kNumber);
-                      Navigator.push(
+                      Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) => UserInnovations(
@@ -95,7 +95,7 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                           context);
                       var studentInnovations =
                           await ib.getInnovationsOfStudent(context, kNumber);
-                      Navigator.push(
+                      Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) => UserInnovations(

@@ -68,7 +68,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                       var kNumber = await ib.getKNumberOfStudentAddress();
                       var innovationsFromStudent =
                           await ib.getInnovationsOfStudent(context, kNumber);
-                      Navigator.push(
+                      Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) => UserInnovations(
@@ -264,7 +264,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
 
   _openDestinationPage(BuildContext context, Innovation innovation) {
     Future.delayed(Duration.zero, () {
-      Navigator.push(
+      Navigator.pushReplacement(
           context,
           MaterialPageRoute(
               builder: (context) => ShowInnovation(innovation: innovation)));
