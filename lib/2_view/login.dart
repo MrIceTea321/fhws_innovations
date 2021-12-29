@@ -184,7 +184,7 @@ class _LoginState extends State<Login> {
                                                     innovations: allInnovations,
                                                   )));
                                     } else {
-                                      await ib.createStudentOnTheBlockchain(
+                                      await ib.initialRegistrationOfStudent(
                                           context,
                                           studentFromFhwsFetch.kNumber);
                                       var studentSc =

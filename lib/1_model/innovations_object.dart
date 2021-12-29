@@ -90,7 +90,8 @@ class InnovationsObject {
     return stud;
   }
 
-  Future<List<Innovation>> getInnovationsOfStudent(BuildContext context, String kNumber) async {
+  Future<List<Innovation>> getInnovationsOfStudent(
+      BuildContext context, String kNumber) async {
     smartContract.loadContract();
     List<dynamic> result = await smartContract.querySmartContractFunction(
         "getInnovationsOfStudent", [], ethClient);
@@ -116,7 +117,8 @@ class InnovationsObject {
     return innovationFromStudentList;
   }
 
-  Future<List<Innovation>> getAllInnovations(BuildContext context, String kNumber) async {
+  Future<List<Innovation>> getAllInnovations(
+      BuildContext context, String kNumber) async {
     smartContract.loadContract();
     List<dynamic> result = await smartContract.querySmartContractFunction(
         "getAllInnovations", [], ethClient);
@@ -141,28 +143,21 @@ class InnovationsObject {
     return allInnovationsList;
   }
 
-  // All functions of SmartContract
-  Future<String> createStudentOnTheBlockchain(
+  //All transaction function of SmartContract
+
+  Future<String> initialRegistrationOfStudent(
       BuildContext context, String kNumber) async {
-    var response =
-        await submitTransaction("createStudentOnTheBlockchain", [kNumber]);
-    //await checkIfStudentAlreadyRegistered(kNumber, context);
+    var response = await smartContract
+        .submitTransaction("initialRegistrationOfStudent", [kNumber]);
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return const RoundedAlert(
-            "Erfolgreich erstellt", "Student wurde auf BC erstellt");
+            "Erfolgreich erstellt", "Student wurde auf BC erstellt ");
       },
     );
-
+    log(response);
     return response;
-  }
-
-  //All transaction function of SmartContract
-
-  void initialRegistrationOfStudent(String kNumber) async {
-    var response = await smartContract
-        .submitTransaction("initialRegistrationOfStudent", [kNumber]);
   }
 
   void createInnovation(String title, String description, String kNumber,
@@ -219,52 +214,5 @@ class InnovationsObject {
         await smartContract.submitTransaction("unvote", [uniqueInnovationHash]);
     await checkIfStudentAlreadyRegistered(kNumber, context);
     log(response);
-  }
-
-  // void initialRegistrationOfStudent(BuildContext context) async {
-  //   var response = await smartContract
-  //       .submitTransaction("initialRegistrationOfStudent", ["k45466"]);
-  //   showAlertDialog(context, "Student auf der Blockchain erstellt", response);
-  // }
-
-  // void initialRegistrationOfStudent(BuildContext context) async {
-  //   var response = await smartContract
-  //       .submitTransaction("initialRegistrationOfStudent", ["k45466"]);
-  //   showAlertDialog(context, "Student auf der Blockchain erstellt", response);
-  // }
-
-  // Direct Conncetion with Private Key
-  // Future<String> submit(String functionName, List<dynamic> args) async {
-  //   EthPrivateKey credentials = EthPrivateKey.fromHex(
-  //       "9a5dc351dc38c057be0d8a8d4776358fffd1f7ade232e6bbaf14e6e821aaf340");
-  //   DeployedContract contract = await smartContract.loadContract();
-  //   final ethFunction = contract.function(functionName);
-  //   final result = await ethClient.sendTransaction(
-  //       credentials,
-  //       Transaction.callContract(
-  //           contract: contract, function: ethFunction, parameters: args),
-  //       chainId: null,
-  //       fetchChainIdFromNetworkId: true);
-  //   return result;
-  // }
-
-  Future<String> submitTransaction(
-      String functionName, List<dynamic> args) async {
-    final eth = window.ethereum;
-    if (eth == null) {
-      return "MetaMask is not available";
-    } else {
-      final credentials = await eth.requestAccount();
-      final client = Web3Client.custom(eth.asRpcService());
-      DeployedContract contract = await smartContract.loadContract();
-      final ethFunction = contract.function(functionName);
-      final result = await client.sendTransaction(
-          credentials,
-          Transaction.callContract(
-              contract: contract, function: ethFunction, parameters: args),
-          chainId: null,
-          fetchChainIdFromNetworkId: true);
-      return result;
-    }
   }
 }
