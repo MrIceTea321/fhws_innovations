@@ -8,7 +8,6 @@ import 'package:fhws_innovations/2_view/user_innovations.dart';
 import 'package:fhws_innovations/constants/text_constants.dart';
 import 'package:flutter/material.dart';
 
-
 import 'login.dart';
 
 class InnovationsOverview extends StatefulWidget {
@@ -21,8 +20,7 @@ class InnovationsOverview extends StatefulWidget {
       {Key? key,
       required this.student,
       required this.studentFirstName,
-      required this.innovations
-      })
+      required this.innovations})
       : super(key: key);
 
   @override
@@ -265,10 +263,12 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
   }
 
   _openDestinationPage(BuildContext context, Innovation innovation) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ShowInnovation(innovation: innovation)));
+    Future.delayed(Duration.zero, () {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ShowInnovation(innovation: innovation)));
+    });
   }
 
   Future<List<Innovation>> getAllInnovations() async {
