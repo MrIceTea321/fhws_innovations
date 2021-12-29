@@ -172,17 +172,20 @@ class _LoginState extends State<Login> {
                                           await ib.getStudentFromSC(context);
                                       var allInnovations = await ib
                                           .getAllInnovations(context, kNumber);
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  InnovationsOverview(
-                                                    student: studentSc,
-                                                    studentFirstName:
-                                                        studentFromFhwsFetch
-                                                            .firstName,
-                                                    innovations: allInnovations,
-                                                  )));
+                                      Future.delayed(Duration.zero,(){
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    InnovationsOverview(
+                                                      student: studentSc,
+                                                      studentFirstName:
+                                                      studentFromFhwsFetch
+                                                          .firstName,
+                                                      innovations: allInnovations,
+                                                    )));
+                                      });
+
                                     } else {
                                       await ib.initialRegistrationOfStudent(
                                           context,
@@ -191,17 +194,19 @@ class _LoginState extends State<Login> {
                                           await ib.getStudentFromSC(context);
                                       var allInnovations = await ib
                                           .getAllInnovations(context, kNumber);
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  InnovationsOverview(
-                                                    student: studentSc,
-                                                    studentFirstName:
-                                                        studentFromFhwsFetch
-                                                            .firstName,
-                                                    innovations: allInnovations,
-                                                  )));
+                                      Future.delayed(Duration.zero,(){
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    InnovationsOverview(
+                                                      student: studentSc,
+                                                      studentFirstName:
+                                                      studentFromFhwsFetch
+                                                          .firstName,
+                                                      innovations: allInnovations,
+                                                    )));
+                                      });
                                     }
                                   }
                                 }),

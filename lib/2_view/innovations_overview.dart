@@ -70,7 +70,6 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                       var kNumber = await ib.getKNumberOfStudentAddress();
                       var innovationsFromStudent =
                           await ib.getInnovationsOfStudent(context, kNumber);
-
                       Navigator.push(
                           context,
                           MaterialPageRoute(
