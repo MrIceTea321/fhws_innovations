@@ -180,7 +180,7 @@ class _LoginState extends State<Login> {
                                       var studentSc =
                                           await ib.getStudentFromSC();
                                       var allInnovations = await ib
-                                          .getAllInnovations(context, kNumber);
+                                          .getAllInnovations();
                                       Future.delayed(Duration.zero, () {
                                         Navigator.pushReplacement(
                                             context,
@@ -202,7 +202,7 @@ class _LoginState extends State<Login> {
                                       var studentSc =
                                           await ib.getStudentFromSC();
                                       var allInnovations = await ib
-                                          .getAllInnovations(context, kNumber);
+                                          .getAllInnovations();
                                       Future.delayed(Duration.zero, () {
                                         Navigator.pushReplacement(
                                             context,

@@ -45,8 +45,6 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: IconButton(
                 onPressed: () async {
-                  var student = await ib.getStudentFromSC();
-                  var allInnovations = await ib.getAllInnovations(context, student.kNumber);
                   Navigator.pop(context);
                 },
                 icon: const Icon(Icons.home)),
@@ -58,8 +56,7 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
                 const Text('Innovationen bearbeiten'),
                 IconButton(
                     onPressed: () async {
-                      var kNumber = await ib.getKNumberOfStudentAddress();
-                      var userInnos = await ib.getInnovationsOfStudent(context,kNumber);
+                      var userInnos = await ib.getInnovationsOfStudent();
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -119,7 +116,7 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
                 );
               }
               var student = await ib.getStudentFromSC();
-              var allInnovations = await ib.getAllInnovations(context, student.kNumber);
+              var allInnovations = await ib.getAllInnovations();
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(

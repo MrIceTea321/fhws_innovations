@@ -90,8 +90,7 @@ class InnovationsObject {
     return stud;
   }
 
-  Future<List<Innovation>> getInnovationsOfStudent(
-      BuildContext context, String kNumber) async {
+  Future<List<Innovation>> getInnovationsOfStudent() async {
     smartContract.loadContract();
     List<dynamic> result = await smartContract.querySmartContractFunction(
         "getInnovationsOfStudent", [], ethClient);
@@ -99,7 +98,7 @@ class InnovationsObject {
     int i = 0;
     innovationsOfStudent.forEach((innovationFromSC) {
       Innovation innovation = Innovation(
-        uniqueInnovationHash: innovationFromSC[0],
+        uniqueInnovationHash: Uint8List.fromList(innovationFromSC[0]),
         votingCount: innovationFromSC[1],
         creator: Student.fromSmartContract(
             innovationFromSC[2][0],
@@ -109,7 +108,6 @@ class InnovationsObject {
         title: innovationFromSC[3],
         description: innovationFromSC[4],
       );
-      print('innovationFromStudent: $innovation');
       innovationFromStudentList.insert(i, innovation);
       i++;
     });
@@ -117,8 +115,7 @@ class InnovationsObject {
     return innovationFromStudentList;
   }
 
-  Future<List<Innovation>> getAllInnovations(
-      BuildContext context, String kNumber) async {
+  Future<List<Innovation>> getAllInnovations() async {
     smartContract.loadContract();
     List<dynamic> result = await smartContract.querySmartContractFunction(
         "getAllInnovations", [], ethClient);
@@ -126,7 +123,7 @@ class InnovationsObject {
     int i = 0;
     innovationsListFromSC.forEach((innovationFromSC) {
       Innovation innovation = Innovation(
-        uniqueInnovationHash: innovationFromSC[0],
+        uniqueInnovationHash: Uint8List.fromList(innovationFromSC[0]),
         votingCount: innovationFromSC[1],
         creator: Student.fromSmartContract(
             innovationFromSC[2][0],

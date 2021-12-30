@@ -46,8 +46,7 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
             child: IconButton(
                 onPressed: () async {
                   var student = await ib.getStudentFromSC();
-                  var allInnovations =
-                      await ib.getAllInnovations(context, student.kNumber);
+                  var allInnovations = await ib.getAllInnovations();
 //TODO show which page FontWeight.bold
                   Navigator.push(
                       context,
@@ -69,7 +68,9 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                     onPressed: () async {
                       var kNumber = await ib.getKNumberOfStudentAddress();
                       var studentInnovations =
-                          await ib.getInnovationsOfStudent(context, kNumber);
+                          await ib.getInnovationsOfStudent();
+                      print('studentinnovations');
+                      print(studentInnovations);
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
@@ -94,7 +95,7 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                           kNumber,
                           context);
                       var studentInnovations =
-                          await ib.getInnovationsOfStudent(context, kNumber);
+                          await ib.getInnovationsOfStudent();
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -133,7 +134,7 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                   kNumber,
                   context);
               var student = await ib.getStudentFromSC();
-              var allInnovations = await ib.getAllInnovations(context, kNumber);
+              var allInnovations = await ib.getAllInnovations();
               Navigator.push(
                   context,
                   MaterialPageRoute(

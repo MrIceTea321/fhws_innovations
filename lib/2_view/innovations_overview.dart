@@ -66,10 +66,8 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
               children: [
                 IconButton(
                     onPressed: () async {
-                      var kNumber = await ib.getKNumberOfStudentAddress();
                       var innovationsFromStudent =
-                          await ib.getInnovationsOfStudent(context, kNumber);
-
+                          await ib.getInnovationsOfStudent();
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -195,12 +193,8 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
       required InnovationsObject ib}) {
     return Container(
       padding:
-          const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0, bottom: 8.0),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          primary: Colors.transparent, // background
-          onPrimary: Colors.transparent, // foreground
-        ),
+          const EdgeInsets.only(left: 8.0, top: 8.0, right: 8.0, bottom: 8.0),
+      child: TextButton(
         onPressed: () {
           Future.delayed(Duration.zero, () {
             Navigator.push(
@@ -230,13 +224,12 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                   IconButton(
                       onPressed: () async {
                         var kNumber = await ib.getKNumberOfStudentAddress();
-                        if (widget.student.votedInnovationHash ==
-                            innovationHash) {
-                          isVoted = true;
+                        Student student = await ib.getStudentFromSC();
+                        if (student.votedInnovationHash == innovationHash) {
+                          student.voted = true;
                         }
                         setState(() {
-                          widget.student.voted = !widget.student.voted;
-                          isVoted != isVoted;
+                          student.voted = !student.voted;
                           // set the voting count on the BC
                           if (isVoted) {
                             ib.vote(innovationHash, kNumber, context);
@@ -246,7 +239,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                         });
                         setState(() {});
                       },
-                      icon: isVoted
+                      icon: true
                           ? const Icon(Icons.star, color: fhwsGreen)
                           : const Icon(
                               Icons.star_border,
@@ -279,12 +272,9 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
     );
   }
 
-  _openDestinationPage(BuildContext context, Innovation innovation) {}
-
   Future<List<Innovation>> getAllInnovations() async {
     InnovationsObject object = InnovationsObject();
-    var kNumber = await object.getKNumberOfStudentAddress();
-    var stud = await object.getAllInnovations(context, kNumber);
+    var stud = await object.getAllInnovations();
     return stud;
   }
 }

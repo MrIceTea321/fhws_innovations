@@ -1,6 +1,5 @@
 import 'dart:typed_data';
-
-import 'package:fhws_innovations/1_model/innovations_object.dart';
+import'package:fhws_innovations/1_model/innovations_object.dart';
 import 'package:fhws_innovations/1_model/innovation.dart';
 import 'package:fhws_innovations/2_view/create_new_innovation.dart';
 import 'package:fhws_innovations/2_view/overhaul_innovations.dart';
@@ -46,9 +45,8 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
             child: IconButton(
                 onPressed: () async {
                   var student = await ib.getStudentFromSC();
-                  var allInnovations =
-                      await ib.getAllInnovations(context, student.kNumber);
-                  Navigator.pushReplacement(
+                  var allInnovations = await ib.getAllInnovations();
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => InnovationsOverview(
@@ -64,7 +62,8 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
             child: Row(
               children: [
                 const Text('Meine Innovationen'),
-                IconButton(onPressed: () {}, icon: const Icon(Icons.description)),
+                IconButton(
+                    onPressed: () {}, icon: const Icon(Icons.description)),
               ],
             ),
           ),
@@ -72,7 +71,7 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: IconButton(
                 onPressed: () {
-                  Navigator.pushReplacement(context,
+                  Navigator.push(context,
                       MaterialPageRoute(builder: (context) => const Login()));
                 },
                 icon: const Icon(Icons.logout)),
@@ -98,20 +97,20 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
                   physics: const AlwaysScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
                     return _buildFeaturedItem(
-                            title:
-                                widget.userInnovations.elementAt(index).title,
-                            description: widget.userInnovations
-                                .elementAt(index)
-                                .description
-                                .toString(),
-                            voteCount: widget.userInnovations
-                                .elementAt(index)
-                                .votingCount
-                                .toString(),
-                            innovationHash: widget.userInnovations
-                                .elementAt(index)
-                                .uniqueInnovationHash,
-                            isVoted: isVoted));
+                        title: widget.userInnovations.elementAt(index).title,
+                        innovation: widget.userInnovations.elementAt(index),
+                        description: widget.userInnovations
+                            .elementAt(index)
+                            .description
+                            .toString(),
+                        voteCount: widget.userInnovations
+                            .elementAt(index)
+                            .votingCount
+                            .toString(),
+                        innovationHash: widget.userInnovations
+                            .elementAt(index)
+                            .uniqueInnovationHash,
+                        isVoted: isVoted);
                   });
             },
           ),
@@ -155,62 +154,65 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
       {required String title,
       required String description,
       required String voteCount,
+      required Innovation innovation,
       required Uint8List innovationHash,
       required bool isVoted}) {
     return Container(
       padding:
           const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0, bottom: 8.0),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-        color: Colors.black.withOpacity(0.5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text(title,
-                style: const TextStyle(
-                  color: fhwsGreen,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                )),
-            Text(description,
-                style: const TextStyle(
-                  color: Colors.white,
-                )),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Anzahl an Stimmen: ',
-                    style: TextStyle(
-                      color: Colors.white,
-                    )),
-                Text(voteCount,
-                    style: const TextStyle(
-                      color: fhwsGreen,
-                      fontWeight: FontWeight.bold,
-                    )),
-              ],
-            ),
-          ],
+      child: TextButton(
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => OverhaulInnovation(
+                        studentFirstName: widget.studentFirstName,
+                        userInnovation: innovation,
+                      )));
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          color: Colors.black.withOpacity(0.5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(title,
+                  style: const TextStyle(
+                    color: fhwsGreen,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  )),
+              Text(description,
+                  style: const TextStyle(
+                    color: Colors.white,
+                  )),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Anzahl an Stimmen: ',
+                      style: TextStyle(
+                        color: Colors.white,
+                      )),
+                  Text(voteCount,
+                      style: const TextStyle(
+                        color: fhwsGreen,
+                        fontWeight: FontWeight.bold,
+                      )),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  _openDestinationPage(BuildContext context, Innovation innovation) async {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => OverhaulInnovation(
-                  studentFirstName: widget.studentFirstName,
-                  userInnovation: innovation,
-                )));
-  }
-
   Future<List<Innovation>> getUserInnovations() async {
     InnovationsObject object = InnovationsObject();
-    var kNumber = await object.getKNumberOfStudentAddress();
-    var stud = await object.getInnovationsOfStudent(context, kNumber);
+    var stud = await object.getInnovationsOfStudent();
+    print('stud innovations');
+    print(stud);
     return stud;
   }
 }
