@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:fhws_innovations/1_model/innovations_object.dart';
 import 'package:fhws_innovations/1_model/innovation.dart';
 import 'package:fhws_innovations/1_model/student_object.dart';
@@ -7,7 +6,6 @@ import 'package:fhws_innovations/2_view/show_innovation.dart';
 import 'package:fhws_innovations/2_view/user_innovations.dart';
 import 'package:fhws_innovations/constants/text_constants.dart';
 import 'package:flutter/material.dart';
-
 import 'login.dart';
 
 class InnovationsOverview extends StatefulWidget {
@@ -170,9 +168,9 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                             .elementAt(index)
                             .votingCount
                             .toString(),
-                        innovationHash: widget.innovations
+                        innovationHash: Uint8List.fromList(widget.innovations
                             .elementAt(index)
-                            .uniqueInnovationHash,
+                            .uniqueInnovationHash),
                         isVoted: isVoted,
                         ib: ib);
                   });
@@ -223,23 +221,23 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                   ),
                   IconButton(
                       onPressed: () async {
-                        var kNumber = await ib.getKNumberOfStudentAddress();
                         Student student = await ib.getStudentFromSC();
                         if (student.votedInnovationHash == innovationHash) {
                           student.voted = true;
+                          isVoted = true;
                         }
                         setState(() {
                           student.voted = !student.voted;
                           // set the voting count on the BC
-                          if (isVoted) {
-                            ib.vote(innovationHash, kNumber, context);
+                          if (!student.voted) {
+                            ib.vote(innovationHash);
                           } else {
-                            ib.unvote(innovationHash, kNumber, context);
+                            ib.unvote(innovationHash);
                           }
                         });
                         setState(() {});
                       },
-                      icon: true
+                      icon: isVoted
                           ? const Icon(Icons.star, color: fhwsGreen)
                           : const Icon(
                               Icons.star_border,

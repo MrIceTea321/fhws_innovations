@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web3/flutter_web3.dart';
 import 'package:provider/provider.dart';
+import '../1_model/innovation.dart';
 import '../constants/text_constants.dart';
 import 'innovations_overview.dart';
 
@@ -22,6 +23,7 @@ class _LoginState extends State<Login> {
   InnovationsObject ib = InnovationsObject();
   bool showPassword = true;
   bool isMetaMaskConnected = false;
+  String currentAddress = '';
 
   @override
   void initState() {
@@ -179,10 +181,10 @@ class _LoginState extends State<Login> {
                                     if (studentAlreadyRegistered) {
                                       var studentSc =
                                           await ib.getStudentFromSC();
-                                      var allInnovations = await ib
-                                          .getAllInnovations();
+                                      var allInnovations =
+                                          await ib.getAllInnovations();
                                       Future.delayed(Duration.zero, () {
-                                        Navigator.pushReplacement(
+                                        Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
@@ -201,10 +203,10 @@ class _LoginState extends State<Login> {
                                           studentFromFhwsFetch.kNumber);
                                       var studentSc =
                                           await ib.getStudentFromSC();
-                                      var allInnovations = await ib
-                                          .getAllInnovations();
+                                      var allInnovations =
+                                          await ib.getAllInnovations();
                                       Future.delayed(Duration.zero, () {
-                                        Navigator.pushReplacement(
+                                        Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
@@ -225,6 +227,7 @@ class _LoginState extends State<Login> {
                               child: Consumer<MetaMaskProvider>(
                                 builder: (context, provider, child) {
                                   late final String text;
+                                  currentAddress = provider.currentAddress;
                                   if (provider.isConnected &&
                                       provider.isInOperatingChain) {
                                     text = 'Verbunden';

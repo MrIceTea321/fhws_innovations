@@ -89,11 +89,8 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
               children: [
                 IconButton(
                     onPressed: () async {
-                      var kNumber = await ib.getKNumberOfStudentAddress();
                       ib.deleteInnovation(
-                          widget.userInnovation.uniqueInnovationHash,
-                          kNumber,
-                          context);
+                          widget.userInnovation.uniqueInnovationHash);
                       var studentInnovations =
                           await ib.getInnovationsOfStudent();
                       Navigator.push(
@@ -126,13 +123,10 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
           _overhaulInnovation(),
           TextButton(
             onPressed: () async {
-              var kNumber = await ib.getKNumberOfStudentAddress();
               ib.editInnovation(
                   widget.userInnovation.uniqueInnovationHash,
                   widget.userInnovation.title,
-                  widget.userInnovation.description,
-                  kNumber,
-                  context);
+                  widget.userInnovation.description);
               var student = await ib.getStudentFromSC();
               var allInnovations = await ib.getAllInnovations();
               Navigator.push(

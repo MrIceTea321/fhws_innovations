@@ -106,7 +106,7 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
                 );
               } else {
                 var student = await ib.getStudentFromSC();
-                ib.createInnovation(widget.title, widget.description,student.kNumber,context );
+                ib.createInnovation(widget.title, widget.description);
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
