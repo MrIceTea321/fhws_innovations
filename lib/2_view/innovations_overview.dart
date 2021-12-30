@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:fhws_innovations/1_model/innovations_object.dart';
 import 'package:fhws_innovations/1_model/innovation.dart';
 import 'package:fhws_innovations/1_model/student_object.dart';
@@ -7,7 +6,6 @@ import 'package:fhws_innovations/2_view/show_innovation.dart';
 import 'package:fhws_innovations/2_view/user_innovations.dart';
 import 'package:fhws_innovations/constants/text_constants.dart';
 import 'package:flutter/material.dart';
-
 import 'login.dart';
 
 class InnovationsOverview extends StatefulWidget {
@@ -170,9 +168,9 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                             .elementAt(index)
                             .votingCount
                             .toString(),
-                        innovationHash: widget.innovations
+                        innovationHash: Uint8List.fromList(widget.innovations
                             .elementAt(index)
-                            .uniqueInnovationHash,
+                            .uniqueInnovationHash),
                         isVoted: isVoted,
                         ib: ib);
                   });

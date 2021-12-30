@@ -157,16 +157,14 @@ class InnovationsObject {
     return response;
   }
 
-  void createInnovation(String title, String description, String kNumber,
-      BuildContext context) async {
+  void createInnovation(String title, String description) async {
     var response = await smartContract
         .submitTransaction("createInnovation", [title, description]);
     await checkIfstudentUsesInitialRegisteredAddress();
     log(response);
   }
 
-  void deleteInnovation(Uint8List uniqueInnovationHash, String kNumber,
-      BuildContext context) async {
+  void deleteInnovation(Uint8List uniqueInnovationHash) async {
     var response = await smartContract
         .submitTransaction("deleteInnovation", [uniqueInnovationHash]);
     await checkIfstudentUsesInitialRegisteredAddress();
@@ -174,7 +172,7 @@ class InnovationsObject {
   }
 
   void editInnovation(Uint8List uniqueInnovationHash, String title,
-      String description, String kNumber, BuildContext context) async {
+      String description) async {
     var response = await smartContract.submitTransaction(
         "editInnovation", [uniqueInnovationHash, title, description]);
     await checkIfstudentUsesInitialRegisteredAddress();
