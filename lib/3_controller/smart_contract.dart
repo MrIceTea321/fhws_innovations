@@ -31,8 +31,7 @@ class SmartContract {
     return result;
   }
 
-
-Future<String> submitTransaction(
+  Future<String> submitTransaction(
       String functionName, List<dynamic> args) async {
     final eth = window.ethereum;
     if (eth == null) {

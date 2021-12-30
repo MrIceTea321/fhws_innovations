@@ -1,4 +1,3 @@
-
 import 'package:fhws_innovations/1_model/innovations_object.dart';
 import 'package:fhws_innovations/2_view/user_innovations.dart';
 import 'package:fhws_innovations/constants/text_constants.dart';
@@ -14,10 +13,10 @@ class CreateNewInnovation extends StatefulWidget {
   String title = '';
   String description = '';
 
-  CreateNewInnovation(
-      {Key? key,
-      required this.studentFirstName,})
-      : super(key: key);
+  CreateNewInnovation({
+    Key? key,
+    required this.studentFirstName,
+  }) : super(key: key);
 
   @override
   _CreateNewInnovationOverviewState createState() =>

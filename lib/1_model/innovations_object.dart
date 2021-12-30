@@ -92,8 +92,10 @@ class InnovationsObject {
 
   Future<List<Innovation>> getInnovationsOfStudent() async {
     smartContract.loadContract();
+    final eth = window.ethereum;
+    final credentials = await eth?.requestAccount();
     List<dynamic> result = await smartContract.querySmartContractFunction(
-        "getInnovationsOfStudent", [], ethClient);
+        "getInnovationsOfStudent", [credentials?.address], ethClient);
     List<dynamic> innovationsOfStudent = result[0];
     int i = 0;
     innovationsOfStudent.forEach((innovationFromSC) {
@@ -171,8 +173,8 @@ class InnovationsObject {
     log(response);
   }
 
-  void editInnovation(Uint8List uniqueInnovationHash, String title,
-      String description) async {
+  void editInnovation(
+      Uint8List uniqueInnovationHash, String title, String description) async {
     var response = await smartContract.submitTransaction(
         "editInnovation", [uniqueInnovationHash, title, description]);
     await checkIfstudentUsesInitialRegisteredAddress();
