@@ -223,23 +223,23 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                   ),
                   IconButton(
                       onPressed: () async {
-                        var kNumber = await ib.getKNumberOfStudentAddress();
                         Student student = await ib.getStudentFromSC();
                         if (student.votedInnovationHash == innovationHash) {
                           student.voted = true;
+                          isVoted = true;
                         }
                         setState(() {
                           student.voted = !student.voted;
                           // set the voting count on the BC
-                          if (isVoted) {
-                            ib.vote(innovationHash, kNumber, context);
+                          if (!student.voted) {
+                            ib.vote(innovationHash);
                           } else {
-                            ib.unvote(innovationHash, kNumber, context);
+                            ib.unvote(innovationHash);
                           }
                         });
                         setState(() {});
                       },
-                      icon: true
+                      icon: isVoted
                           ? const Icon(Icons.star, color: fhwsGreen)
                           : const Icon(
                               Icons.star_border,

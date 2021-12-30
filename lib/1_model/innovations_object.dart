@@ -196,16 +196,14 @@ class InnovationsObject {
     }
   }
 
-  void vote(Uint8List uniqueInnovationHash, String kNumber,
-      BuildContext context) async {
+  void vote(Uint8List uniqueInnovationHash) async {
     var response =
         await smartContract.submitTransaction("vote", [uniqueInnovationHash]);
     await checkIfstudentUsesInitialRegisteredAddress();
     log(response);
   }
 
-  void unvote(Uint8List uniqueInnovationHash, String kNumber,
-      BuildContext context) async {
+  void unvote(Uint8List uniqueInnovationHash) async {
     var response =
         await smartContract.submitTransaction("unvote", [uniqueInnovationHash]);
     await checkIfstudentUsesInitialRegisteredAddress();
