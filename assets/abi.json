@@ -183,7 +183,13 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "studentAddress",
+				"type": "address"
+			}
+		],
 		"name": "getInnovationsOfStudent",
 		"outputs": [
 			{
