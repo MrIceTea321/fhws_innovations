@@ -21,6 +21,7 @@ class _LoginState extends State<Login> {
   String kNumber = '';
   InnovationsObject ib = InnovationsObject();
   bool showPassword = true;
+  bool isMetaMaskConnected = false;
 
   @override
   void initState() {
@@ -160,6 +161,14 @@ class _LoginState extends State<Login> {
                                             "Gib bitte dein Passwort an");
                                       },
                                     );
+                                  } else if (!isMetaMaskConnected) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return const RoundedAlert("Achtung",
+                                            "Stelle bitte eine Verbindung mit MetaMask her!");
+                                      },
+                                    );
                                   } else {
                                     var studentFromFhwsFetch =
                                         StudentFromFhwsFetch(
@@ -169,10 +178,10 @@ class _LoginState extends State<Login> {
                                         .studentAlreadyRegistered(kNumber);
                                     if (studentAlreadyRegistered) {
                                       var studentSc =
-                                          await ib.getStudentFromSC(context);
+                                          await ib.getStudentFromSC();
                                       var allInnovations = await ib
                                           .getAllInnovations(context, kNumber);
-                                      Future.delayed(Duration.zero,(){
+                                      Future.delayed(Duration.zero, () {
                                         Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
@@ -180,21 +189,21 @@ class _LoginState extends State<Login> {
                                                     InnovationsOverview(
                                                       student: studentSc,
                                                       studentFirstName:
-                                                      studentFromFhwsFetch
-                                                          .firstName,
-                                                      innovations: allInnovations,
+                                                          studentFromFhwsFetch
+                                                              .firstName,
+                                                      innovations:
+                                                          allInnovations,
                                                     )));
                                       });
-
                                     } else {
                                       await ib.initialRegistrationOfStudent(
                                           context,
                                           studentFromFhwsFetch.kNumber);
                                       var studentSc =
-                                          await ib.getStudentFromSC(context);
+                                          await ib.getStudentFromSC();
                                       var allInnovations = await ib
                                           .getAllInnovations(context, kNumber);
-                                      Future.delayed(Duration.zero,(){
+                                      Future.delayed(Duration.zero, () {
                                         Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
@@ -202,70 +211,80 @@ class _LoginState extends State<Login> {
                                                     InnovationsOverview(
                                                       student: studentSc,
                                                       studentFirstName:
-                                                      studentFromFhwsFetch
-                                                          .firstName,
-                                                      innovations: allInnovations,
+                                                          studentFromFhwsFetch
+                                                              .firstName,
+                                                      innovations:
+                                                          allInnovations,
                                                     )));
                                       });
                                     }
                                   }
                                 }),
-                            const SizedBox(height: 10.0),
+                            const SizedBox(height: 50.0),
+                            Center(
+                              child: Consumer<MetaMaskProvider>(
+                                builder: (context, provider, child) {
+                                  late final String text;
+                                  if (provider.isConnected &&
+                                      provider.isInOperatingChain) {
+                                    text = 'Verbunden';
+                                    isMetaMaskConnected = true;
+                                  } else if (provider.isConnected &&
+                                      !provider.isInOperatingChain) {
+                                    text =
+                                        'Falsche chain. Bitte verbinde dich mit ${MetaMaskProvider.operatingChain}';
+                                  } else if (provider.isEnabled) {
+                                    return Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Text('Hier klicken'),
+                                        const SizedBox(height: 8),
+                                        CupertinoButton(
+                                          onPressed: () => context
+                                              .read<MetaMaskProvider>()
+                                              .connect(),
+                                          color: Colors.white,
+                                          padding: const EdgeInsets.all(0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Image.network(
+                                                'https://i0.wp.com/kindalame.com/wp-content/uploads/2021/05/metamask-fox-wordmark-horizontal.png?fit=1549%2C480&ssl=1',
+                                                width: 300,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  } else {
+                                    text =
+                                        'Bitte benutze einen Browser der Web3 unterstützt.';
+                                  }
+
+                                  return ShaderMask(
+                                    shaderCallback: (bounds) =>
+                                        const LinearGradient(
+                                      colors: [
+                                        Colors.purple,
+                                        Colors.blue,
+                                        Colors.red
+                                      ],
+                                    ).createShader(bounds),
+                                    child: Text(
+                                      text,
+                                      textAlign: TextAlign.center,
+                                      style:
+                                          Theme.of(context).textTheme.headline5,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
                           ],
                         ),
                       )
                     ],
-                  ),
-                ),
-                //FIXME remove meta mask test before code goes live
-                Center(
-                  child: Consumer<MetaMaskProvider>(
-                    builder: (context, provider, child) {
-                      late final String text;
-                      if (provider.isConnected && provider.isInOperatingChain) {
-                        text = 'Connected';
-                      } else if (provider.isConnected &&
-                          !provider.isInOperatingChain) {
-                        text =
-                            'Wrong chain. Please connect to ${MetaMaskProvider.operatingChain}';
-                      } else if (provider.isEnabled) {
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Text('Click the button...'),
-                            const SizedBox(height: 8),
-                            CupertinoButton(
-                              onPressed: () =>
-                                  context.read<MetaMaskProvider>().connect(),
-                              color: Colors.white,
-                              padding: const EdgeInsets.all(0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Image.network(
-                                    'https://i0.wp.com/kindalame.com/wp-content/uploads/2021/05/metamask-fox-wordmark-horizontal.png?fit=1549%2C480&ssl=1',
-                                    width: 300,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        );
-                      } else {
-                        text = 'Please use a Web3 supported browser.';
-                      }
-
-                      return ShaderMask(
-                        shaderCallback: (bounds) => const LinearGradient(
-                          colors: [Colors.purple, Colors.blue, Colors.red],
-                        ).createShader(bounds),
-                        child: Text(
-                          text,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headline5,
-                        ),
-                      );
-                    },
                   ),
                 ),
               ],

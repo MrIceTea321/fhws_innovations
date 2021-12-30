@@ -45,10 +45,10 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: IconButton(
                 onPressed: () async {
-                  var student = await ib.getStudentFromSC(context);
+                  var student = await ib.getStudentFromSC();
                   var allInnovations =
                       await ib.getAllInnovations(context, student.kNumber);
-
+//TODO show which page FontWeight.bold
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -95,7 +95,7 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                           context);
                       var studentInnovations =
                           await ib.getInnovationsOfStudent(context, kNumber);
-                      Navigator.pushReplacement(
+                      Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => UserInnovations(
@@ -111,7 +111,7 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: IconButton(
                 onPressed: () {
-                  Navigator.pushReplacement(context,
+                  Navigator.push(context,
                       MaterialPageRoute(builder: (context) => const Login()));
                 },
                 icon: const Icon(Icons.logout)),
@@ -132,7 +132,7 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                   widget.userInnovation.description,
                   kNumber,
                   context);
-              var student = await ib.getStudentFromSC(context);
+              var student = await ib.getStudentFromSC();
               var allInnovations = await ib.getAllInnovations(context, kNumber);
               Navigator.push(
                   context,

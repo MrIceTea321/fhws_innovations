@@ -45,7 +45,7 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: IconButton(
                 onPressed: () async {
-                  var student = await ib.getStudentFromSC(context);
+                  var student = await ib.getStudentFromSC();
                   var allInnovations =
                       await ib.getAllInnovations(context, student.kNumber);
                   Navigator.pushReplacement(
@@ -97,10 +97,7 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
                   itemCount: widget.userInnovations.length,
                   physics: const AlwaysScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
-                    return GestureDetector(
-                        onTap: () => _openDestinationPage(
-                            context, widget.userInnovations.elementAt(index)),
-                        child: _buildFeaturedItem(
+                    return _buildFeaturedItem(
                             title:
                                 widget.userInnovations.elementAt(index).title,
                             description: widget.userInnovations

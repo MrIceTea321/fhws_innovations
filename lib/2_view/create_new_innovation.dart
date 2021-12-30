@@ -45,15 +45,9 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: IconButton(
                 onPressed: () async {
-                  var student = await ib.getStudentFromSC(context);
+                  var student = await ib.getStudentFromSC();
                   var allInnovations = await ib.getAllInnovations(context, student.kNumber);
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => InnovationsOverview(
-                              student: student,
-                              innovations: allInnovations,
-                              studentFirstName: widget.studentFirstName,)));
+                  Navigator.pop(context);
                 },
                 icon: const Icon(Icons.home)),
           ),
@@ -66,7 +60,7 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
                     onPressed: () async {
                       var kNumber = await ib.getKNumberOfStudentAddress();
                       var userInnos = await ib.getInnovationsOfStudent(context,kNumber);
-                      Navigator.pushReplacement(
+                      Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => UserInnovations(
@@ -114,7 +108,7 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
                   },
                 );
               } else {
-                var student = await ib.getStudentFromSC(context);
+                var student = await ib.getStudentFromSC();
                 ib.createInnovation(widget.title, widget.description,student.kNumber,context );
                 showDialog(
                   context: context,
@@ -124,7 +118,7 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
                   },
                 );
               }
-              var student = await ib.getStudentFromSC(context);
+              var student = await ib.getStudentFromSC();
               var allInnovations = await ib.getAllInnovations(context, student.kNumber);
               Navigator.pushReplacement(
                   context,

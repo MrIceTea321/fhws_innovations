@@ -30,6 +30,7 @@ class InnovationsOverview extends StatefulWidget {
 class _InnovationsOverviewState extends State<InnovationsOverview> {
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
   }
 
@@ -68,7 +69,8 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                       var kNumber = await ib.getKNumberOfStudentAddress();
                       var innovationsFromStudent =
                           await ib.getInnovationsOfStudent(context, kNumber);
-                      Navigator.pushReplacement(
+
+                      Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => UserInnovations(
@@ -84,7 +86,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: IconButton(
               onPressed: () {
-                Navigator.pushReplacement(context,
+                Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const Login()));
               },
               icon: const Icon(Icons.logout),
@@ -159,25 +161,22 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                   itemCount: widget.innovations.length,
                   physics: const AlwaysScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: _openDestinationPage(
-                          context, widget.innovations.elementAt(index)),
-                      child: _buildFeaturedItem(
-                          title: widget.innovations.elementAt(index).title,
-                          description: widget.innovations
-                              .elementAt(index)
-                              .description
-                              .toString(),
-                          voteCount: widget.innovations
-                              .elementAt(index)
-                              .votingCount
-                              .toString(),
-                          innovationHash: widget.innovations
-                              .elementAt(index)
-                              .uniqueInnovationHash,
-                          isVoted: isVoted,
-                          ib: ib),
-                    );
+                    return _buildFeaturedItem(
+                        title: widget.innovations.elementAt(index).title,
+                        description: widget.innovations
+                            .elementAt(index)
+                            .description
+                            .toString(),
+                        innovation: widget.innovations.elementAt(index),
+                        voteCount: widget.innovations
+                            .elementAt(index)
+                            .votingCount
+                            .toString(),
+                        innovationHash: widget.innovations
+                            .elementAt(index)
+                            .uniqueInnovationHash,
+                        isVoted: isVoted,
+                        ib: ib);
                   });
             },
           ),
@@ -192,84 +191,95 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
       required String voteCount,
       required Uint8List innovationHash,
       required bool isVoted,
+      required Innovation innovation,
       required InnovationsObject ib}) {
     return Container(
       padding:
           const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0, bottom: 8.0),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-        color: Colors.black.withOpacity(0.5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Row(
-              children: [
-                Text(title,
-                    style: const TextStyle(
-                      color: fhwsGreen,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                    )),
-                IconButton(
-                    onPressed: () async {
-                      var kNumber = await ib.getKNumberOfStudentAddress();
-                      if (widget.student.votedInnovationHash ==
-                          innovationHash) {
-                        isVoted = true;
-                      }
-                      setState(() {
-                        widget.student.voted = !widget.student.voted;
-                        isVoted != isVoted;
-                        // set the voting count on the BC
-                        if (isVoted) {
-                          ib.vote(innovationHash, kNumber, context);
-                        } else {
-                          ib.unvote(innovationHash, kNumber, context);
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Colors.transparent, // background
+          onPrimary: Colors.transparent, // foreground
+        ),
+        onPressed: () {
+          Future.delayed(Duration.zero, () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ShowInnovation(innovation: innovation)));
+          });
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          color: Colors.black.withOpacity(0.5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
+                children: [
+                  Center(
+                    child: Text(title,
+                        style: const TextStyle(
+                          color: fhwsGreen,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ),
+                  IconButton(
+                      onPressed: () async {
+                        var kNumber = await ib.getKNumberOfStudentAddress();
+                        if (widget.student.votedInnovationHash ==
+                            innovationHash) {
+                          isVoted = true;
                         }
-                      });
-                      setState(() {});
-                    },
-                    icon: isVoted
-                        ? const Icon(Icons.star, color: fhwsGreen)
-                        : const Icon(
-                            Icons.star_border,
-                            color: fhwsGreen,
-                          ))
-              ],
-            ),
-            Text(description,
-                style: const TextStyle(
-                  color: Colors.white,
-                )),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Anzahl an Stimmen: ',
-                    style: TextStyle(
-                      color: Colors.white,
-                    )),
-                Text(voteCount,
-                    style: const TextStyle(
-                      color: fhwsGreen,
-                      fontWeight: FontWeight.bold,
-                    )),
-              ],
-            ),
-          ],
+                        setState(() {
+                          widget.student.voted = !widget.student.voted;
+                          isVoted != isVoted;
+                          // set the voting count on the BC
+                          if (isVoted) {
+                            ib.vote(innovationHash, kNumber, context);
+                          } else {
+                            ib.unvote(innovationHash, kNumber, context);
+                          }
+                        });
+                        setState(() {});
+                      },
+                      icon: isVoted
+                          ? const Icon(Icons.star, color: fhwsGreen)
+                          : const Icon(
+                              Icons.star_border,
+                              color: fhwsGreen,
+                            ))
+                ],
+              ),
+              Text(description,
+                  style: const TextStyle(
+                    color: Colors.white,
+                  )),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Anzahl an Stimmen: ',
+                      style: TextStyle(
+                        color: Colors.white,
+                      )),
+                  Text(voteCount,
+                      style: const TextStyle(
+                        color: fhwsGreen,
+                        fontWeight: FontWeight.bold,
+                      )),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  _openDestinationPage(BuildContext context, Innovation innovation) {
-    Future.delayed(Duration.zero, () {
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ShowInnovation(innovation: innovation)));
-    });
-  }
+  _openDestinationPage(BuildContext context, Innovation innovation) {}
 
   Future<List<Innovation>> getAllInnovations() async {
     InnovationsObject object = InnovationsObject();

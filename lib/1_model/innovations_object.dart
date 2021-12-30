@@ -79,14 +79,14 @@ class InnovationsObject {
     return kNumberOfStudentAddress;
   }
 
-  Future<Student> getStudentFromSC(BuildContext context) async {
+  Future<Student> getStudentFromSC() async {
     smartContract.loadContract();
     List<dynamic> result = await smartContract.querySmartContractFunction(
         "getStudent", [], ethClient);
     dynamic student = result[0];
     var stud = Student.fromSmartContract(
         student[0], student[1], student[2], student[3]);
-    await checkIfStudentAlreadyRegistered(stud.kNumber, context);
+    await checkIfstudentUsesInitialRegisteredAddress();
     return stud;
   }
 
@@ -113,7 +113,7 @@ class InnovationsObject {
       innovationFromStudentList.insert(i, innovation);
       i++;
     });
-    await checkIfStudentAlreadyRegistered(kNumber, context);
+    await checkIfstudentUsesInitialRegisteredAddress();
     return innovationFromStudentList;
   }
 
@@ -139,7 +139,7 @@ class InnovationsObject {
       allInnovationsList.insert(i, innovation);
       i++;
     });
-    await checkIfStudentAlreadyRegistered(kNumber, context);
+    await checkIfstudentUsesInitialRegisteredAddress();
     return allInnovationsList;
   }
 
@@ -164,7 +164,7 @@ class InnovationsObject {
       BuildContext context) async {
     var response = await smartContract
         .submitTransaction("createInnovation", [title, description]);
-    await checkIfStudentAlreadyRegistered(kNumber, context);
+    await checkIfstudentUsesInitialRegisteredAddress();
     log(response);
   }
 
@@ -172,7 +172,7 @@ class InnovationsObject {
       BuildContext context) async {
     var response = await smartContract
         .submitTransaction("deleteInnovation", [uniqueInnovationHash]);
-    await checkIfStudentAlreadyRegistered(kNumber, context);
+    await checkIfstudentUsesInitialRegisteredAddress();
     log(response);
   }
 
@@ -180,23 +180,22 @@ class InnovationsObject {
       String description, String kNumber, BuildContext context) async {
     var response = await smartContract.submitTransaction(
         "editInnovation", [uniqueInnovationHash, title, description]);
-    await checkIfStudentAlreadyRegistered(kNumber, context);
+    await checkIfstudentUsesInitialRegisteredAddress();
     log(response);
   }
 
-  Future<void> checkIfStudentAlreadyRegistered(
-      String kNumber, BuildContext context) async {
-    var isTrue = await studentAlreadyRegistered(kNumber);
+  Future<void> checkIfstudentUsesInitialRegisteredAddress() async {
+    var isTrue = await studentUsesInitialRegisteredAddress();
     if (isTrue) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const Login()));
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return const RoundedAlert("️Achtung",
-              "Benutze bitte den selben MetaMask Account wie bei deinem ersten Log In️");
-        },
-      );
+      //Navigator.push(
+      //    context, MaterialPageRoute(builder: (context) => const Login()));
+      //showDialog(
+      //  context: context,
+      //  builder: (BuildContext context) {
+      //    return const RoundedAlert("️Achtung",
+      //        "Benutze bitte den selben MetaMask Account wie bei deinem ersten Log In️");
+      //  },
+      //);
     }
   }
 
@@ -204,7 +203,7 @@ class InnovationsObject {
       BuildContext context) async {
     var response =
         await smartContract.submitTransaction("vote", [uniqueInnovationHash]);
-    await checkIfStudentAlreadyRegistered(kNumber, context);
+    await checkIfstudentUsesInitialRegisteredAddress();
     log(response);
   }
 
@@ -212,7 +211,7 @@ class InnovationsObject {
       BuildContext context) async {
     var response =
         await smartContract.submitTransaction("unvote", [uniqueInnovationHash]);
-    await checkIfStudentAlreadyRegistered(kNumber, context);
+    await checkIfstudentUsesInitialRegisteredAddress();
     log(response);
   }
 }
