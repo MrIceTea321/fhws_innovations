@@ -86,7 +86,7 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
           SizedBox(height: size.height * 0.015),
           TextButton(
             onPressed: () async {
-              Navigator.pushReplacement(
+              Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => CreateNewInnovation(

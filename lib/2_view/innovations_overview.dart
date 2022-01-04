@@ -229,15 +229,18 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                           isVoted = true;
                         }
                         setState(() {
-                          student.voted = !student.voted;
                           // set the voting count on the BC
                           if (!student.voted) {
                             ib.vote(Uint8List.fromList(innovationHash));
                           } else {
                             ib.unvote(Uint8List.fromList(innovationHash));
                           }
+                          student.voted = !student.voted;
                         });
-                        setState(() {});
+                        Student studentAfterVote = await ib.getStudentFromSC();
+                        setState(() {
+                          isVoted = studentAfterVote.voted;
+                        });
                       },
                       icon: isVoted
                           ? const Icon(Icons.star, color: fhwsGreen)

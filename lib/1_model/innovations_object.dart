@@ -86,7 +86,7 @@ class InnovationsObject {
     dynamic student = result[0];
     var stud = Student.fromSmartContract(
         student[0], student[1], student[2], student[3]);
-    await checkIfstudentUsesInitialRegisteredAddress();
+    await checkIfStudentUsesInitialRegisteredAddress();
     return stud;
   }
 
@@ -113,7 +113,7 @@ class InnovationsObject {
       innovationFromStudentList.insert(i, innovation);
       i++;
     });
-    await checkIfstudentUsesInitialRegisteredAddress();
+    await checkIfStudentUsesInitialRegisteredAddress();
     return innovationFromStudentList;
   }
 
@@ -138,7 +138,7 @@ class InnovationsObject {
       allInnovationsList.insert(i, innovation);
       i++;
     });
-    await checkIfstudentUsesInitialRegisteredAddress();
+    await checkIfStudentUsesInitialRegisteredAddress();
     return allInnovationsList;
   }
 
@@ -162,14 +162,14 @@ class InnovationsObject {
   void createInnovation(String title, String description) async {
     var response = await smartContract
         .submitTransaction("createInnovation", [title, description]);
-    await checkIfstudentUsesInitialRegisteredAddress();
+    await checkIfStudentUsesInitialRegisteredAddress();
     log(response);
   }
 
   void deleteInnovation(Uint8List uniqueInnovationHash) async {
     var response = await smartContract
         .submitTransaction("deleteInnovation", [uniqueInnovationHash]);
-    await checkIfstudentUsesInitialRegisteredAddress();
+    await checkIfStudentUsesInitialRegisteredAddress();
     log(response);
   }
 
@@ -177,11 +177,11 @@ class InnovationsObject {
       Uint8List uniqueInnovationHash, String title, String description) async {
     var response = await smartContract.submitTransaction(
         "editInnovation", [uniqueInnovationHash, title, description]);
-    await checkIfstudentUsesInitialRegisteredAddress();
+    await checkIfStudentUsesInitialRegisteredAddress();
     log(response);
   }
-
-  Future<void> checkIfstudentUsesInitialRegisteredAddress() async {
+  //TODO use method as soon as everything is working
+  Future<void> checkIfStudentUsesInitialRegisteredAddress() async {
     var isTrue = await studentUsesInitialRegisteredAddress();
     if (isTrue) {
       //Navigator.push(
@@ -198,15 +198,15 @@ class InnovationsObject {
 
   void vote(Uint8List uniqueInnovationHash) async {
     var response =
-        await smartContract.submitTransaction("vote", [uniqueInnovationHash]);
-    await checkIfstudentUsesInitialRegisteredAddress();
+        await smartContract.submitTransaction("vote", [Uint8List.fromList(uniqueInnovationHash)]);
+    await checkIfStudentUsesInitialRegisteredAddress();
     log(response);
   }
 
   void unvote(Uint8List uniqueInnovationHash) async {
     var response =
-        await smartContract.submitTransaction("unvote", [uniqueInnovationHash]);
-    await checkIfstudentUsesInitialRegisteredAddress();
+        await smartContract.submitTransaction("unvote", [Uint8List.fromList(uniqueInnovationHash)]);
+    await checkIfStudentUsesInitialRegisteredAddress();
     log(response);
   }
 }
