@@ -175,7 +175,8 @@ class _LoginState extends State<Login> {
                                     var studentFromFhwsFetch =
                                         StudentFromFhwsFetch(
                                             kNumber, 'Test Name');
-                                    //await getStudentFetch(context, size);
+                                    //TODO use FHWS login fetch as soon as the fhws server are working again
+                                    //await getStudentFetch();
                                     var studentAlreadyRegistered = await ib
                                         .studentAlreadyRegistered(kNumber);
                                     if (studentAlreadyRegistered) {

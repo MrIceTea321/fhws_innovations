@@ -52,7 +52,9 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: Row(
               children: [
-                const Text('Innovationen bearbeiten'),
+                Text('Innovationen anlegen',
+                    style: TextStyle(
+                        color: Colors.black.withOpacity(0.7), fontSize: 18.0)),
                 IconButton(
                     onPressed: () async {
                       var userInnos = await ib.getInnovationsOfStudent();

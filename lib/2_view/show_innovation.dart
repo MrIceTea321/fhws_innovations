@@ -35,19 +35,26 @@ class _ShowInnovationOverviewState extends State<ShowInnovation> {
         actions: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
-            child: IconButton(
-                onPressed: () {
-                  Navigator.pop(
-                    context,
-                  );
-                },
-                icon: const Icon(Icons.home)),
+            child: Row(
+              children: [
+                Text('Detailansicht',
+                    style: TextStyle(
+                        color: Colors.black.withOpacity(0.7), fontSize: 18.0)),
+                IconButton(
+                    onPressed: () {
+                      Navigator.pop(
+                        context,
+                      );
+                    },
+                    icon: const Icon(Icons.home)),
+              ],
+            ),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: IconButton(
                 onPressed: () {
-                  Navigator.pushReplacement(context,
+                  Navigator.push(context,
                       MaterialPageRoute(builder: (context) => const Login()));
                 },
                 icon: const Icon(Icons.logout)),

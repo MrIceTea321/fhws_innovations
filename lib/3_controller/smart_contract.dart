@@ -10,7 +10,7 @@ import 'package:web3dart/web3dart.dart';
 
 class SmartContract {
   Future<DeployedContract> loadContract() async {
-    // Load Contract from the Abi
+    // Load Contract from the Api
     String abi = await rootBundle.loadString("abi.json");
 
     // Transform contract into an object

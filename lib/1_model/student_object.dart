@@ -18,7 +18,7 @@ class Student {
   Student();
   late String kNumber;
   late EthereumAddress studentAddress;
-  bool voted = false;
+  late bool voted;
   late Uint8List votedInnovationHash;
 
   Student.fromSmartContract(

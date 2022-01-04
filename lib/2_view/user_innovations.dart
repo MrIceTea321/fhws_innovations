@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import'package:fhws_innovations/1_model/innovations_object.dart';
+import 'package:fhws_innovations/1_model/innovations_object.dart';
 import 'package:fhws_innovations/1_model/innovation.dart';
 import 'package:fhws_innovations/2_view/create_new_innovation.dart';
 import 'package:fhws_innovations/2_view/overhaul_innovations.dart';
@@ -61,7 +61,9 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: Row(
               children: [
-                const Text('Meine Innovationen'),
+                Text('Meine Innovationen',
+                    style: TextStyle(
+                        color: Colors.black.withOpacity(0.7), fontSize: 18.0)),
                 IconButton(
                     onPressed: () {}, icon: const Icon(Icons.description)),
               ],
@@ -81,6 +83,38 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
       body: SingleChildScrollView(
           child: Column(
         children: <Widget>[
+          SizedBox(height: size.height * 0.015),
+          TextButton(
+            onPressed: () async {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CreateNewInnovation(
+                            studentFirstName: widget.studentFirstName,
+                          )));
+            },
+            child: Container(
+                height: 50,
+                width: size.width * 0.9,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  color: fhwsGreen,
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+                  child: Center(
+                    child: Text(
+                      'Neue Innovation anlegen',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      maxLines: 1,
+                    ),
+                  ),
+                )),
+          ),
           SizedBox(height: size.height * 0.015),
           FutureBuilder<List<Innovation>>(
             future: getUserInnovations(),
@@ -114,37 +148,6 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
                   });
             },
           ),
-          TextButton(
-            onPressed: () async {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CreateNewInnovation(
-                            studentFirstName: widget.studentFirstName,
-                          )));
-            },
-            child: Container(
-                height: 50,
-                width: size.width * 0.9,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                  color: fhwsGreen,
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                  child: Center(
-                    child: Text(
-                      'Neue Innovation anlegen',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      maxLines: 1,
-                    ),
-                  ),
-                )),
-          )
         ],
       )),
     );
@@ -211,8 +214,6 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
   Future<List<Innovation>> getUserInnovations() async {
     InnovationsObject object = InnovationsObject();
     var stud = await object.getInnovationsOfStudent();
-    print('stud innovations');
-    print(stud);
     return stud;
   }
 }

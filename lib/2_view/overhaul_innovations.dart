@@ -47,7 +47,6 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                 onPressed: () async {
                   var student = await ib.getStudentFromSC();
                   var allInnovations = await ib.getAllInnovations();
-//TODO show which page FontWeight.bold
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -63,14 +62,13 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: Row(
               children: [
-                const Text('Innovationen bearbeiten'),
+                Text('Innovationen bearbeiten',
+                    style: TextStyle(
+                        color: Colors.black.withOpacity(0.7), fontSize: 18.0)),
                 IconButton(
                     onPressed: () async {
-                      var kNumber = await ib.getKNumberOfStudentAddress();
                       var studentInnovations =
                           await ib.getInnovationsOfStudent();
-                      print('studentinnovations');
-                      print(studentInnovations);
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
@@ -89,17 +87,42 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
               children: [
                 IconButton(
                     onPressed: () async {
-                      ib.deleteInnovation(
-                          widget.userInnovation.uniqueInnovationHash);
-                      var studentInnovations =
-                          await ib.getInnovationsOfStudent();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => UserInnovations(
-                                    userInnovations: studentInnovations,
-                                    studentFirstName: widget.studentFirstName,
-                                  )));
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text(
+                                  'Willst du deine Innovation wirklich löschen?'),
+                              actions: <Widget>[
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('Nein', style: TextStyle(color:Colors.black),)),
+                                const Spacer(),
+                                TextButton(
+                                  onPressed: () async {
+                                    ib.deleteInnovation(widget
+                                        .userInnovation.uniqueInnovationHash);
+                                    var studentInnovations =
+                                        await ib.getInnovationsOfStudent();
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                UserInnovations(
+                                                  userInnovations:
+                                                      studentInnovations,
+                                                  studentFirstName:
+                                                      widget.studentFirstName,
+                                                )));
+                                  },
+                                  child: const Text('Löschen',
+                                      style: TextStyle(color: Colors.red)),
+                                )
+                              ],
+                            );
+                          });
                     },
                     icon: const Icon(Icons.delete)),
               ],

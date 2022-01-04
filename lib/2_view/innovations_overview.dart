@@ -26,9 +26,10 @@ class InnovationsOverview extends StatefulWidget {
 }
 
 class _InnovationsOverviewState extends State<InnovationsOverview> {
+
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
   }
 
@@ -53,7 +54,8 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: Row(
               children: [
-                const Text('Übersicht'),
+                 Text('Übersicht', style: TextStyle(
+                      color: Colors.black.withOpacity(0.7), fontSize: 18.0),),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.home)),
               ],
             ),
@@ -230,9 +232,9 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                           student.voted = !student.voted;
                           // set the voting count on the BC
                           if (!student.voted) {
-                            ib.vote(innovationHash);
+                            ib.vote(Uint8List.fromList(innovationHash));
                           } else {
-                            ib.unvote(innovationHash);
+                            ib.unvote(Uint8List.fromList(innovationHash));
                           }
                         });
                         setState(() {});

@@ -9,7 +9,6 @@ class Innovation {
   late String title;
   late String description;
 
-  // TODO change to unit8 list
 
   Innovation( {
     required this.uniqueInnovationHash,
