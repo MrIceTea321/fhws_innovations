@@ -81,8 +81,10 @@ class InnovationsObject {
 
   Future<Student> getStudentFromSC() async {
     smartContract.loadContract();
+    final eth = window.ethereum;
+    final credentials = await eth?.requestAccount();
     List<dynamic> result = await smartContract.querySmartContractFunction(
-        "getStudent", [], ethClient);
+        "getStudent", [credentials?.address], ethClient);
     dynamic student = result[0];
     var stud = Student.fromSmartContract(
         student[0], student[1], student[2], student[3]);
@@ -180,6 +182,7 @@ class InnovationsObject {
     await checkIfStudentUsesInitialRegisteredAddress();
     log(response);
   }
+
   //TODO use method as soon as everything is working
   Future<void> checkIfStudentUsesInitialRegisteredAddress() async {
     var isTrue = await studentUsesInitialRegisteredAddress();
@@ -197,15 +200,15 @@ class InnovationsObject {
   }
 
   void vote(Uint8List uniqueInnovationHash) async {
-    var response =
-        await smartContract.submitTransaction("vote", [Uint8List.fromList(uniqueInnovationHash)]);
+    var response = await smartContract
+        .submitTransaction("vote", [Uint8List.fromList(uniqueInnovationHash)]);
     await checkIfStudentUsesInitialRegisteredAddress();
     log(response);
   }
 
   void unvote(Uint8List uniqueInnovationHash) async {
-    var response =
-        await smartContract.submitTransaction("unvote", [Uint8List.fromList(uniqueInnovationHash)]);
+    var response = await smartContract.submitTransaction(
+        "unvote", [Uint8List.fromList(uniqueInnovationHash)]);
     await checkIfStudentUsesInitialRegisteredAddress();
     log(response);
   }
