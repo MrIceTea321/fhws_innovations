@@ -1,10 +1,7 @@
 import 'dart:typed_data';
-
 import 'package:fhws_innovations/1_model/innovation.dart';
 import 'package:fhws_innovations/constants/text_constants.dart';
 import 'package:flutter/material.dart';
-
-import '../1_model/innovations_object.dart';
 import 'login.dart';
 
 class ShowInnovation extends StatefulWidget {
@@ -19,7 +16,6 @@ class ShowInnovation extends StatefulWidget {
 class _ShowInnovationOverviewState extends State<ShowInnovation> {
   @override
   Widget build(BuildContext context) {
-    InnovationsObject ib = InnovationsObject();
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(

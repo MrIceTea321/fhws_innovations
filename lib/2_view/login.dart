@@ -4,9 +4,7 @@ import 'package:fhws_innovations/3_controller/metamask.dart';
 import 'package:fhws_innovations/constants/rounded_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_web3/flutter_web3.dart';
 import 'package:provider/provider.dart';
-import '../1_model/innovation.dart';
 import '../constants/text_constants.dart';
 import 'innovations_overview.dart';
 

@@ -2,10 +2,7 @@ import 'dart:html';
 
 import 'package:fhws_innovations/constants/text_constants.dart';
 import 'package:flutter/services.dart';
-import 'package:web3dart/contracts.dart';
-import 'package:web3dart/credentials.dart';
 import 'package:web3dart/browser.dart';
-import 'package:flutter_web3/ethereum.dart';
 import 'package:web3dart/web3dart.dart';
 
 class SmartContract {
