@@ -13,6 +13,7 @@ class InnovationsOverview extends StatefulWidget {
   final String studentFirstName;
   final List<Innovation> innovations;
   int voteCount = 0;
+  bool studentHasVoted = false;
 
   InnovationsOverview(
       {Key? key,
@@ -26,17 +27,15 @@ class InnovationsOverview extends StatefulWidget {
 }
 
 class _InnovationsOverviewState extends State<InnovationsOverview> {
-
   @override
   void initState() {
-
+    widget.student.voted = widget.studentHasVoted;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    bool isVoted = false;
     InnovationsObject ib = InnovationsObject();
 
     return Scaffold(
@@ -54,8 +53,11 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: Row(
               children: [
-                 Text('Übersicht', style: TextStyle(
-                      color: Colors.black.withOpacity(0.7), fontSize: 18.0),),
+                Text(
+                  'Übersicht',
+                  style: TextStyle(
+                      color: Colors.black.withOpacity(0.7), fontSize: 18.0),
+                ),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.home)),
               ],
             ),
@@ -122,7 +124,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                         'Du hast noch ',
                         style: TextStyle(color: Colors.white),
                       ),
-                      widget.student.voted
+                      widget.studentHasVoted
                           ? const Text(
                               '0',
                               style: TextStyle(
@@ -173,7 +175,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                         innovationHash: Uint8List.fromList(widget.innovations
                             .elementAt(index)
                             .uniqueInnovationHash),
-                        isVoted: isVoted,
+                        isVoted: widget.studentHasVoted,
                         ib: ib);
                   });
             },
@@ -224,6 +226,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                   IconButton(
                       onPressed: () async {
                         Student student = await ib.getStudentFromSC();
+                        print('student before vote: $student');
                         if (student.votedInnovationHash == innovationHash) {
                           student.voted = true;
                           isVoted = true;
@@ -232,17 +235,21 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                           // set the voting count on the BC
                           if (!student.voted) {
                             ib.vote(Uint8List.fromList(innovationHash));
+                            widget.studentHasVoted = true;
+                            print('vote');
                           } else {
                             ib.unvote(Uint8List.fromList(innovationHash));
+                            widget.studentHasVoted = false;
+                            print('unvote');
                           }
-                          student.voted = !student.voted;
                         });
                         Student studentAfterVote = await ib.getStudentFromSC();
+                        print('student after vote: $student');
                         setState(() {
-                          isVoted = studentAfterVote.voted;
+                          widget.studentHasVoted = studentAfterVote.voted;
                         });
                       },
-                      icon: isVoted
+                      icon: widget.studentHasVoted
                           ? const Icon(Icons.star, color: fhwsGreen)
                           : const Icon(
                               Icons.star_border,

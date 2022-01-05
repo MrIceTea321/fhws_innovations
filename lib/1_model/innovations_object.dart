@@ -4,14 +4,11 @@ import 'dart:typed_data';
 
 import 'package:fhws_innovations/1_model/student_object.dart';
 import 'package:fhws_innovations/constants/rounded_alert.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:web3dart/browser.dart';
 import 'package:http/http.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:fhws_innovations/3_controller/smart_contract.dart';
-
-import '../2_view/login.dart';
 import 'innovation.dart';
 
 class InnovationsObject {
@@ -84,8 +81,12 @@ class InnovationsObject {
     List<dynamic> result = await smartContract.querySmartContractFunction(
         "getStudent", [], ethClient);
     dynamic student = result[0];
+    print('student in getStudnetMethod: $student');
     var stud = Student.fromSmartContract(
-        student[0], student[1], student[2], student[3]);
+        student[0],
+        student[1],
+        student[2],
+        Uint8List.fromList(student[3]));
     await checkIfStudentUsesInitialRegisteredAddress();
     return stud;
   }
@@ -104,9 +105,9 @@ class InnovationsObject {
         votingCount: innovationFromSC[1],
         creator: Student.fromSmartContract(
             innovationFromSC[2][0],
-            innovationFromSC[2][1],
+           innovationFromSC[2][1],
             innovationFromSC[2][2],
-            innovationFromSC[2][3]),
+            Uint8List.fromList(innovationFromSC[2][3])),
         title: innovationFromSC[3],
         description: innovationFromSC[4],
       );
@@ -129,9 +130,9 @@ class InnovationsObject {
         votingCount: innovationFromSC[1],
         creator: Student.fromSmartContract(
             innovationFromSC[2][0],
-            innovationFromSC[2][1],
+           innovationFromSC[2][1],
             innovationFromSC[2][2],
-            innovationFromSC[2][3]),
+            Uint8List.fromList(innovationFromSC[2][3])),
         title: innovationFromSC[3],
         description: innovationFromSC[4],
       );
@@ -180,6 +181,7 @@ class InnovationsObject {
     await checkIfStudentUsesInitialRegisteredAddress();
     log(response);
   }
+
   //TODO use method as soon as everything is working
   Future<void> checkIfStudentUsesInitialRegisteredAddress() async {
     var isTrue = await studentUsesInitialRegisteredAddress();
@@ -197,15 +199,15 @@ class InnovationsObject {
   }
 
   void vote(Uint8List uniqueInnovationHash) async {
-    var response =
-        await smartContract.submitTransaction("vote", [Uint8List.fromList(uniqueInnovationHash)]);
+    var response = await smartContract
+        .submitTransaction("vote", [Uint8List.fromList(uniqueInnovationHash)]);
     await checkIfStudentUsesInitialRegisteredAddress();
     log(response);
   }
 
   void unvote(Uint8List uniqueInnovationHash) async {
-    var response =
-        await smartContract.submitTransaction("unvote", [Uint8List.fromList(uniqueInnovationHash)]);
+    var response = await smartContract.submitTransaction(
+        "unvote", [Uint8List.fromList(uniqueInnovationHash)]);
     await checkIfStudentUsesInitialRegisteredAddress();
     log(response);
   }

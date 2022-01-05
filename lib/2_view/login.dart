@@ -231,7 +231,7 @@ class _LoginState extends State<Login> {
                                   currentAddress = provider.currentAddress;
                                   if (provider.isConnected &&
                                       provider.isInOperatingChain) {
-                                    text = 'Verbunden';
+                                    text = 'Erfolgreich mit MetaMask verbunden';
                                     isMetaMaskConnected = true;
                                   } else if (provider.isConnected &&
                                       !provider.isInOperatingChain) {
