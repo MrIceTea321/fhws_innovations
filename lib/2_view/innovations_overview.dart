@@ -5,6 +5,7 @@ import 'package:fhws_innovations/1_model/student_object.dart';
 import 'package:fhws_innovations/2_view/show_innovation.dart';
 import 'package:fhws_innovations/2_view/user_innovations.dart';
 import 'package:fhws_innovations/constants/text_constants.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'login.dart';
 
@@ -13,6 +14,7 @@ class InnovationsOverview extends StatefulWidget {
   final String studentFirstName;
   final List<Innovation> innovations;
   int voteCount = 0;
+  bool isVoted = false;
   bool studentHasVoted = false;
 
   InnovationsOverview(
@@ -29,7 +31,13 @@ class InnovationsOverview extends StatefulWidget {
 class _InnovationsOverviewState extends State<InnovationsOverview> {
   @override
   void initState() {
-    widget.student.voted = widget.studentHasVoted;
+    widget.studentHasVoted = widget.student.voted;
+    widget.innovations.forEach((innovation) {
+      if ((listEquals(widget.student.votedInnovationHash,
+          innovation.uniqueInnovationHash))) {
+        innovation.isVoted = true;
+      }
+    });
     super.initState();
   }
 
@@ -162,21 +170,22 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                   physics: const AlwaysScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
                     return _buildFeaturedItem(
-                        title: widget.innovations.elementAt(index).title,
-                        description: widget.innovations
-                            .elementAt(index)
-                            .description
-                            .toString(),
-                        innovation: widget.innovations.elementAt(index),
-                        voteCount: widget.innovations
-                            .elementAt(index)
-                            .votingCount
-                            .toString(),
-                        innovationHash: Uint8List.fromList(widget.innovations
-                            .elementAt(index)
-                            .uniqueInnovationHash),
-                        isVoted: widget.studentHasVoted,
-                        ib: ib);
+                      title: widget.innovations.elementAt(index).title,
+                      description: widget.innovations
+                          .elementAt(index)
+                          .description
+                          .toString(),
+                      innovation: widget.innovations.elementAt(index),
+                      voteCount: widget.innovations
+                          .elementAt(index)
+                          .votingCount
+                          .toString(),
+                      innovationHash: Uint8List.fromList(widget.innovations
+                          .elementAt(index)
+                          .uniqueInnovationHash),
+                      ib: ib,
+                      student: widget.student,
+                    );
                   });
             },
           ),
@@ -189,10 +198,14 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
       {required String title,
       required String description,
       required String voteCount,
+      required Student student,
       required Uint8List innovationHash,
-      required bool isVoted,
       required Innovation innovation,
       required InnovationsObject ib}) {
+    if ((listEquals(
+        student.votedInnovationHash, innovation.uniqueInnovationHash))) {
+      innovation.isVoted = true;
+    }
     return Container(
       padding:
           const EdgeInsets.only(left: 8.0, top: 8.0, right: 8.0, bottom: 8.0),
@@ -226,30 +239,22 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                   IconButton(
                       onPressed: () async {
                         Student student = await ib.getStudentFromSC();
-                        print('student before vote: $student');
-                        if (student.votedInnovationHash == innovationHash) {
-                          student.voted = true;
-                          isVoted = true;
+                        if (student.voted == false) {
+                          ib.vote(Uint8List.fromList(innovationHash));
+                          widget.studentHasVoted = true;
+                        } else if (student.voted == true &&
+                            !(listEquals(student.votedInnovationHash,
+                                innovation.uniqueInnovationHash))) {
+                          Student student = await ib.getStudentFromSC();
+                          ib.unvote(student.votedInnovationHash);
+                          ib.vote(innovationHash);
+                        } else {
+                          ib.unvote(Uint8List.fromList(innovationHash));
+                          widget.studentHasVoted = false;
                         }
-                        setState(() {
-                          // set the voting count on the BC
-                          if (!student.voted) {
-                            ib.vote(Uint8List.fromList(innovationHash));
-                            widget.studentHasVoted = true;
-                            print('vote');
-                          } else {
-                            ib.unvote(Uint8List.fromList(innovationHash));
-                            widget.studentHasVoted = false;
-                            print('unvote');
-                          }
-                        });
-                        Student studentAfterVote = await ib.getStudentFromSC();
-                        print('student after vote: $student');
-                        setState(() {
-                          widget.studentHasVoted = studentAfterVote.voted;
-                        });
+                        setState(() {});
                       },
-                      icon: widget.studentHasVoted
+                      icon: innovation.isVoted
                           ? const Icon(Icons.star, color: fhwsGreen)
                           : const Icon(
                               Icons.star_border,

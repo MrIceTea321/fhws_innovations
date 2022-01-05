@@ -83,7 +83,6 @@ class InnovationsObject {
     List<dynamic> result = await smartContract.querySmartContractFunction(
         "getStudent", [credentials?.address], ethClient);
     dynamic student = result[0];
-    print('student in getStudnetMethod: $student');
     var stud = Student.fromSmartContract(
         student[0],
         student[1],
@@ -112,6 +111,7 @@ class InnovationsObject {
             Uint8List.fromList(innovationFromSC[2][3])),
         title: innovationFromSC[3],
         description: innovationFromSC[4],
+        isVoted: false,
       );
       innovationFromStudentList.insert(i, innovation);
       i++;
@@ -137,6 +137,7 @@ class InnovationsObject {
             Uint8List.fromList(innovationFromSC[2][3])),
         title: innovationFromSC[3],
         description: innovationFromSC[4],
+        isVoted: false
       );
       allInnovationsList.insert(i, innovation);
       i++;

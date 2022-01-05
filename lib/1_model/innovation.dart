@@ -8,6 +8,7 @@ class Innovation {
   final Student creator;
   late String title;
   late String description;
+  bool isVoted;
 
 
   Innovation( {
@@ -15,6 +16,7 @@ class Innovation {
     required this.votingCount,
     required this.creator,
     required this.title,
+    required this.isVoted,
     required this.description,
   });
 
