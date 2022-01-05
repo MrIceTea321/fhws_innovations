@@ -14,21 +14,20 @@
     This is a placeholder for base href that will be replaced by the value of
     the `--base-href` argument provided to `flutter build`.
   -->
-  <!--FOR PUBLISHING UNCOMMENT THIS LINE BELOW-->
-  <base href="https://fhws-innovations.web.app">
+  <base href="$FLUTTER_BASE_HREF">
 
- <!--FOR LOCAL TESTING UNCOMMENT THIS LINE BELOW-->
-    <!--<base href="/">-->
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
 
-     <meta charset="UTF-8">
-     <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-     <meta name="description" content="A new Flutter project.">
-
-     <!-- iOS meta tags & icons -->
+  <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="fhws_innovations">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
 
   <title>fhws_innovations</title>
   <link rel="manifest" href="manifest.json">
@@ -100,6 +99,27 @@
       // Service workers not supported. Just drop the <script> tag.
       loadMainDartJs();
     }
+  </script>
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-functions.js"></script>
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+       https://firebase.google.com/docs/web/setup#available-libraries -->
+
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyALxt69XYvnvbR_dcZwXPDFKY1N3oNylfM",
+      authDomain: "fhws-innovations.firebaseapp.com",
+      projectId: "fhws-innovations",
+      storageBucket: "fhws-innovations.appspot.com",
+      messagingSenderId: "278636343717",
+      appId: "1:278636343717:web:2bff87df8dd6534fde384c"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
   </script>
 </body>
 </html>
