@@ -78,8 +78,10 @@ class InnovationsObject {
 
   Future<Student> getStudentFromSC() async {
     smartContract.loadContract();
+    final eth = window.ethereum;
+    final credentials = await eth?.requestAccount();
     List<dynamic> result = await smartContract.querySmartContractFunction(
-        "getStudent", [], ethClient);
+        "getStudent", [credentials?.address], ethClient);
     dynamic student = result[0];
     print('student in getStudnetMethod: $student');
     var stud = Student.fromSmartContract(
