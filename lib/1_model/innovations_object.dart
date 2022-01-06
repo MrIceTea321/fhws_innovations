@@ -5,10 +5,12 @@ import 'dart:typed_data';
 import 'package:fhws_innovations/1_model/student_object.dart';
 import 'package:fhws_innovations/constants/rounded_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:web3dart/browser.dart';
 import 'package:http/http.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:fhws_innovations/3_controller/smart_contract.dart';
+import '../2_view/login.dart';
 import 'innovation.dart';
 
 class InnovationsObject {
@@ -84,10 +86,7 @@ class InnovationsObject {
         "getStudent", [credentials?.address], ethClient);
     dynamic student = result[0];
     var stud = Student.fromSmartContract(
-        student[0],
-        student[1],
-        student[2],
-        Uint8List.fromList(student[3]));
+        student[0], student[1], student[2], Uint8List.fromList(student[3]));
     await checkIfStudentUsesInitialRegisteredAddress();
     return stud;
   }
@@ -106,7 +105,7 @@ class InnovationsObject {
         votingCount: innovationFromSC[1],
         creator: Student.fromSmartContract(
             innovationFromSC[2][0],
-           innovationFromSC[2][1],
+            innovationFromSC[2][1],
             innovationFromSC[2][2],
             Uint8List.fromList(innovationFromSC[2][3])),
         title: innovationFromSC[3],
@@ -128,22 +127,30 @@ class InnovationsObject {
     int i = 0;
     innovationsListFromSC.forEach((innovationFromSC) {
       Innovation innovation = Innovation(
-        uniqueInnovationHash: Uint8List.fromList(innovationFromSC[0]),
-        votingCount: innovationFromSC[1],
-        creator: Student.fromSmartContract(
-            innovationFromSC[2][0],
-           innovationFromSC[2][1],
-            innovationFromSC[2][2],
-            Uint8List.fromList(innovationFromSC[2][3])),
-        title: innovationFromSC[3],
-        description: innovationFromSC[4],
-        isVoted: false
-      );
+          uniqueInnovationHash: Uint8List.fromList(innovationFromSC[0]),
+          votingCount: innovationFromSC[1],
+          creator: Student.fromSmartContract(
+              innovationFromSC[2][0],
+              innovationFromSC[2][1],
+              innovationFromSC[2][2],
+              Uint8List.fromList(innovationFromSC[2][3])),
+          title: innovationFromSC[3],
+          description: innovationFromSC[4],
+          isVoted: false);
       allInnovationsList.insert(i, innovation);
       i++;
     });
     await checkIfStudentUsesInitialRegisteredAddress();
     return allInnovationsList;
+  }
+
+  Future<void> checkIfStudentUsesInitialRegisteredAddress() async {
+    var isTrue = await studentUsesInitialRegisteredAddress();
+    //if (!isTrue) {
+    //  Get.offAll(const Login(
+    //    fromStudentCheck: true,
+    //  ));
+    //}
   }
 
   //All transaction function of SmartContract
@@ -159,6 +166,7 @@ class InnovationsObject {
             "Erfolgreich erstellt", "Student wurde auf BC erstellt ");
       },
     );
+    //TODO use transactionhash (response) for Etherscan fetch
     log(response);
     return response;
   }
@@ -167,6 +175,8 @@ class InnovationsObject {
     var response = await smartContract
         .submitTransaction("createInnovation", [title, description]);
     await checkIfStudentUsesInitialRegisteredAddress();
+    //TODO use transactionhash (response) for Etherscan fetch
+
     log(response);
   }
 
@@ -174,6 +184,8 @@ class InnovationsObject {
     var response = await smartContract
         .submitTransaction("deleteInnovation", [uniqueInnovationHash]);
     await checkIfStudentUsesInitialRegisteredAddress();
+    //TODO use transactionhash (response) for Etherscan fetch
+
     log(response);
   }
 
@@ -182,29 +194,17 @@ class InnovationsObject {
     var response = await smartContract.submitTransaction(
         "editInnovation", [uniqueInnovationHash, title, description]);
     await checkIfStudentUsesInitialRegisteredAddress();
-    log(response);
-  }
+    //TODO use transactionhash (response) for Etherscan fetch
 
-  //TODO use method as soon as everything is working
-  Future<void> checkIfStudentUsesInitialRegisteredAddress() async {
-    var isTrue = await studentUsesInitialRegisteredAddress();
-    if (isTrue) {
-      //Navigator.push(
-      //    context, MaterialPageRoute(builder: (context) => const Login()));
-      //showDialog(
-      //  context: context,
-      //  builder: (BuildContext context) {
-      //    return const RoundedAlert("️Achtung",
-      //        "Benutze bitte den selben MetaMask Account wie bei deinem ersten Log In️");
-      //  },
-      //);
-    }
+    log(response);
   }
 
   void vote(Uint8List uniqueInnovationHash) async {
     var response = await smartContract
         .submitTransaction("vote", [Uint8List.fromList(uniqueInnovationHash)]);
     await checkIfStudentUsesInitialRegisteredAddress();
+    //TODO use transactionhash (response) for Etherscan fetch
+
     log(response);
   }
 
@@ -212,6 +212,8 @@ class InnovationsObject {
     var response = await smartContract.submitTransaction(
         "unvote", [Uint8List.fromList(uniqueInnovationHash)]);
     await checkIfStudentUsesInitialRegisteredAddress();
+    //TODO use transactionhash (response) for Etherscan fetch
+
     log(response);
   }
 }

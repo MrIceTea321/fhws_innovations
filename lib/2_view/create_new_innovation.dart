@@ -75,7 +75,7 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
             child: IconButton(
                 onPressed: () {
                   Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => const Login()));
+                      MaterialPageRoute(builder: (context) => const Login(fromStudentCheck: false,)));
                 },
                 icon: const Icon(Icons.logout)),
           ),

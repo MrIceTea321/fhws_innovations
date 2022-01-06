@@ -74,7 +74,7 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
             child: IconButton(
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const Login()));
+                      MaterialPageRoute(builder: (context) => const Login(fromStudentCheck: false,)));
                 },
                 icon: const Icon(Icons.logout)),
           ),

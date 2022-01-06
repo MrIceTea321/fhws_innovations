@@ -9,7 +9,8 @@ import '../constants/text_constants.dart';
 import 'innovations_overview.dart';
 
 class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+  const Login({Key? key, required this.fromStudentCheck}) : super(key: key);
+  final bool fromStudentCheck;
 
   @override
   State<Login> createState() => _LoginState();
@@ -25,6 +26,15 @@ class _LoginState extends State<Login> {
 
   @override
   void initState() {
+    if(widget.fromStudentCheck){
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const RoundedAlert("️Achtung",
+              "Benutze bitte den selben MetaMask Account wie bei deinem ersten Log In️");
+        },
+      );
+    }
     super.initState();
   }
 
