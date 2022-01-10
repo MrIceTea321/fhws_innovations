@@ -204,7 +204,7 @@ class InnovationsObject {
         .submitTransaction("vote", [Uint8List.fromList(uniqueInnovationHash)]);
     await checkIfStudentUsesInitialRegisteredAddress();
     //TODO use transactionhash (response) for Etherscan fetch
-
+    print('Response $response');
     log(response);
   }
 

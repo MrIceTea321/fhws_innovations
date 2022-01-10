@@ -16,6 +16,7 @@ class StudentFromFhwsFetch {
 
 class Student {
   Student();
+
   late String kNumber;
   late EthereumAddress studentAddress;
   late bool voted;
@@ -29,6 +30,7 @@ class Student {
     String credentials = '$kNumber:$password';
     Codec<String, String> stringToBase64 = utf8.fuse(base64);
     String encoded = stringToBase64.encode(credentials);
+
     final response = await http.get(
       Uri.parse(fhwsApi),
       // Send authorization headers to the fhws backend.

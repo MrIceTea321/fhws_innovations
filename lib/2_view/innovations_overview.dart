@@ -70,6 +70,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
               ],
             ),
           ),
+
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: Row(
