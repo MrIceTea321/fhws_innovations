@@ -40,6 +40,14 @@ class InnovationsObject {
     return getWinnerOfInnovationProcess;
   }
 
+  Future<List> getContractOwner() async {
+    smartContract.loadContract();
+    List<dynamic> result = await smartContract.querySmartContractFunction(
+        "getContractOwner", [], ethClient);
+    List<dynamic> contractOwner = result[0];
+    return contractOwner;
+  }
+
   //transaction functions
   void endInnovationProcess() async {
     var response =
