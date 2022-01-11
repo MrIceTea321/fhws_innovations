@@ -52,12 +52,14 @@ class InnovationsObject {
   void endInnovationProcess() async {
     var response =
         await smartContract.submitTransaction("endInnovationProcess", []);
+    //TODO use transactionhash (response) for Etherscan fetch
     log(response);
   }
 
   void restartInnovationProcess() async {
     var response =
         await smartContract.submitTransaction("restartInnovationProcess", []);
+    //TODO use transactionhash (response) for Etherscan fetch
     log(response);
   }
 
