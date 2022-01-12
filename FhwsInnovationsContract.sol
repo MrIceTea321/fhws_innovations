@@ -52,18 +52,12 @@ contract FhwsInnovationsContract {
         _;
     }
 
-    modifier innovationProcessNotFinished{
-        require(!innovationProcessFinished, "The innovation process is finished.");
-        _;
-    }
-
     modifier innovationProcessIsFinished {
-        require(innovationProcessFinished, "The innovation process is not finished yet.");
+        require(innovationProcessFinished, "The innovation process is finished.");
         _;
     }
 
-    //onlyOwner
-    function endInnovationProcess() public  returns(Innovation[] memory)  {
+    function endInnovationProcess() public onlyOwner returns(Innovation[] memory)  {
         innovationProcessFinished = true;
         uint winningVoteCount = 0;
         for(uint i=0; i<innovations.length; i++){
@@ -79,8 +73,7 @@ contract FhwsInnovationsContract {
         return winner;
     }
 
-    // onlyOwner innovationProcessIsFinished
-    function getWinnerOfInnovationProcess() public view returns(Innovation[] memory) {
+    function getWinnerOfInnovationProcess() public innovationProcessIsFinished view returns(Innovation[] memory) {
         return winner;
     }
 
@@ -88,8 +81,7 @@ contract FhwsInnovationsContract {
         return owner;
     }
 
-    //onlyOwner innovationProcessIsFinished
-    function restartInnovationProcess() public  {
+    function restartInnovationProcess() public onlyOwner innovationProcessIsFinished {
         innovationProcessFinished = false;
         for(uint i = 0; i<kNumbers.length; i++) {
             delete kNumberAlreadyRegistred[kNumbers[i]];
