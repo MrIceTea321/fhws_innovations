@@ -105,7 +105,8 @@ class _ShowWinner extends State<ShowWinner> {
                 });
           },
         ),
-        widget.studentIsContractOwner
+            SizedBox(height: size.height * 0.03),
+            widget.studentIsContractOwner
             ? const SizedBox()
             : TextButton(
                 onPressed: () async {
