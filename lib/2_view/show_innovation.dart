@@ -50,8 +50,12 @@ class _ShowInnovationOverviewState extends State<ShowInnovation> {
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: IconButton(
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const Login(fromStudentCheck: false,)));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Login(
+                                fromStudentCheck: false,
+                              )));
                 },
                 icon: const Icon(Icons.logout)),
           ),

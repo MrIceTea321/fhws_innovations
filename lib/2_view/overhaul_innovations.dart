@@ -47,12 +47,22 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                 onPressed: () async {
                   var student = await ib.getStudentFromSC();
                   var allInnovations = await ib.getAllInnovations();
+                  var isInnovationsProcessFinished =
+                      await ib.innovationProcessFinished();
+                  var contractOwner = await ib.getContractOwner();
+                  bool isOwner = false;
+                  if (student.kNumber == contractOwner.kNumber) {
+                    isOwner = true;
+                  }
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => InnovationsOverview(
                                 student: student,
                                 innovations: allInnovations,
+                                isInnovationsProcessFinished:
+                                    isInnovationsProcessFinished,
+                                isSmartContractOwner: isOwner,
                                 studentFirstName: widget.studentFirstName,
                               )));
                 },
@@ -98,7 +108,10 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
-                                    child: const Text('Nein', style: TextStyle(color:Colors.black),)),
+                                    child: const Text(
+                                      'Nein',
+                                      style: TextStyle(color: Colors.black),
+                                    )),
                                 const Spacer(),
                                 TextButton(
                                   onPressed: () async {
@@ -132,8 +145,12 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: IconButton(
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const Login(fromStudentCheck: false,)));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Login(
+                                fromStudentCheck: false,
+                              )));
                 },
                 icon: const Icon(Icons.logout)),
           ),
@@ -152,12 +169,22 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                   widget.userInnovation.description);
               var student = await ib.getStudentFromSC();
               var allInnovations = await ib.getAllInnovations();
+              var isInnovationsProcessFinished =
+                  await ib.innovationProcessFinished();
+              var contractOwner = await ib.getContractOwner();
+              bool isOwner = false;
+              if (student.kNumber == contractOwner.kNumber) {
+                isOwner = true;
+              }
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => InnovationsOverview(
                             student: student,
+                            isInnovationsProcessFinished:
+                                isInnovationsProcessFinished,
                             innovations: allInnovations,
+                            isSmartContractOwner: isOwner,
                             studentFirstName: widget.studentFirstName,
                           )));
             },

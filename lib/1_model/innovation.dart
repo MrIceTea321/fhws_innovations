@@ -10,8 +10,7 @@ class Innovation {
   late String description;
   bool isVoted;
 
-
-  Innovation( {
+  Innovation({
     required this.uniqueInnovationHash,
     required this.votingCount,
     required this.creator,

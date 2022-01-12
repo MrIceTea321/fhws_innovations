@@ -7,12 +7,16 @@ import 'package:fhws_innovations/2_view/user_innovations.dart';
 import 'package:fhws_innovations/constants/text_constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import '../constants/rounded_alert.dart';
 import 'login.dart';
 
 class InnovationsOverview extends StatefulWidget {
   final Student student;
   final String studentFirstName;
   final List<Innovation> innovations;
+  final bool isInnovationsProcessFinished;
+  final bool isSmartContractOwner;
+
   int voteCount = 0;
   bool isVoted = false;
   bool studentHasVoted = false;
@@ -21,7 +25,9 @@ class InnovationsOverview extends StatefulWidget {
       {Key? key,
       required this.student,
       required this.studentFirstName,
-      required this.innovations})
+      required this.innovations,
+      required this.isInnovationsProcessFinished,
+      required this.isSmartContractOwner})
       : super(key: key);
 
   @override
@@ -70,7 +76,6 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
               ],
             ),
           ),
-
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: Row(
@@ -95,8 +100,12 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: IconButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Login(fromStudentCheck: false,)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const Login(
+                              fromStudentCheck: false,
+                            )));
               },
               icon: const Icon(Icons.logout),
             ),
@@ -106,6 +115,50 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
       body: SingleChildScrollView(
           child: Column(
         children: <Widget>[
+          SizedBox(height: size.height * 0.015),
+          widget.isInnovationsProcessFinished
+              ? const SizedBox()
+              : TextButton(
+                  onPressed: () async {
+                    ib.endInnovationProcess();
+                    bool isFinished = await ib.innovationProcessFinished();
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        if (!isFinished) {
+                          return const CircularProgressIndicator(
+                            color: fhwsGreen,
+                          );
+                        } else {
+                          return const RoundedAlert("Erfolgreich",
+                              "Die Abstimmung wurde erfolgreich beendet!");
+                        }
+                      },
+                    );
+                  },
+                  child: Container(
+                      height: 50,
+                      width: size.width * 0.9,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        color: fhwsGreen,
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 10),
+                        child: Center(
+                          child: Text(
+                            'Abstimmung beenden',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            maxLines: 1,
+                          ),
+                        ),
+                      )),
+                ),
           SizedBox(height: size.height * 0.015),
           Container(
             width: size.width - 30.0,

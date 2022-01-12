@@ -17,6 +17,7 @@ class InnovationsObject {
   SmartContract smartContract = SmartContract();
   List<Innovation> allInnovationsList = [];
   List<Innovation> innovationFromStudentList = [];
+  List<Innovation> winningInnovationsList = [];
 
   var ethClient = Web3Client(
       "https://rinkeby.infura.io/v3/dbd61902b58949348a3045a157d038ca",
@@ -32,20 +33,44 @@ class InnovationsObject {
     return innovationProcessFinished;
   }
 
-  Future<List> getWinnerOfInnovationProcess() async {
+  Future<List<Innovation>> getWinningInnovationsOfProcess() async {
     smartContract.loadContract();
+    final eth = window.ethereum;
+    final credentials = await eth?.requestAccount();
     List<dynamic> result = await smartContract.querySmartContractFunction(
-        "getWinnerOfInnovationProcess", [], ethClient);
-    List<dynamic> getWinnerOfInnovationProcess = result[0];
-    return getWinnerOfInnovationProcess;
+        "getWinnerOfInnovationProcess", [credentials?.address], ethClient);
+    List<dynamic> innovationsList = result[0];
+    int i = 0;
+    innovationsList.forEach((innovationFromSC) {
+      Innovation innovation = Innovation(
+        uniqueInnovationHash: Uint8List.fromList(innovationFromSC[0]),
+        votingCount: innovationFromSC[1],
+        creator: Student.fromSmartContract(
+            innovationFromSC[2][0],
+            innovationFromSC[2][1],
+            innovationFromSC[2][2],
+            Uint8List.fromList(innovationFromSC[2][3])),
+        title: innovationFromSC[3],
+        description: innovationFromSC[4],
+        isVoted: false,
+      );
+      winningInnovationsList.insert(i, innovation);
+      i++;
+    });
+    await checkIfStudentUsesInitialRegisteredAddress();
+    return winningInnovationsList;
   }
 
-  Future<List> getContractOwner() async {
+  Future<Student> getContractOwner() async {
     smartContract.loadContract();
+    final eth = window.ethereum;
+    final credentials = await eth?.requestAccount();
     List<dynamic> result = await smartContract.querySmartContractFunction(
-        "getContractOwner", [], ethClient);
-    List<dynamic> contractOwner = result[0];
-    return contractOwner;
+        "getContractOwner", [credentials?.address], ethClient);
+    var stud = Student.fromSmartContract(
+        result[0], result[1], result[2], Uint8List.fromList(result[3]));
+    await checkIfStudentUsesInitialRegisteredAddress();
+    return stud;
   }
 
   //transaction functions

@@ -1,10 +1,12 @@
 import 'package:fhws_innovations/1_model/innovations_object.dart';
 import 'package:fhws_innovations/1_model/student_object.dart';
+import 'package:fhws_innovations/2_view/show_winner.dart';
 import 'package:fhws_innovations/3_controller/metamask.dart';
 import 'package:fhws_innovations/constants/rounded_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../1_model/innovation.dart';
 import '../constants/text_constants.dart';
 import 'innovations_overview.dart';
 
@@ -26,7 +28,7 @@ class _LoginState extends State<Login> {
 
   @override
   void initState() {
-    if(widget.fromStudentCheck){
+    if (widget.fromStudentCheck) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -192,20 +194,57 @@ class _LoginState extends State<Login> {
                                           await ib.getStudentFromSC();
                                       var allInnovations =
                                           await ib.getAllInnovations();
-                                      Future.delayed(Duration.zero, () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    InnovationsOverview(
-                                                      student: studentSc,
-                                                      studentFirstName:
-                                                          studentFromFhwsFetch
-                                                              .firstName,
-                                                      innovations:
-                                                          allInnovations,
-                                                    )));
-                                      });
+                                      var isInnovationsProcessFinished =
+                                          await ib.innovationProcessFinished();
+                                      print('isInnovationsProcessFinished');
+                                      print(isInnovationsProcessFinished);
+                                      var smartContractOwner =
+                                          await ib.getContractOwner();
+                                      bool studentIsContractOwner = false;
+                                      if (studentSc.kNumber ==
+                                          smartContractOwner.kNumber) {
+                                        studentIsContractOwner = true;
+                                      }
+                                      if (!isInnovationsProcessFinished) {
+                                        Future.delayed(Duration.zero, () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      InnovationsOverview(
+                                                        student: studentSc,
+                                                        studentFirstName:
+                                                            studentFromFhwsFetch
+                                                                .firstName,
+                                                        isSmartContractOwner:
+                                                            studentIsContractOwner,
+                                                        innovations:
+                                                            allInnovations,
+                                                        isInnovationsProcessFinished:
+                                                            isInnovationsProcessFinished,
+                                                      )));
+                                        });
+                                      } else {
+                                        Future.delayed(Duration.zero, () async {
+                                          List<Innovation> winningInnovations =
+                                              await ib
+                                                  .getWinningInnovationsOfProcess();
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ShowWinner(
+                                                        smartContractOwner:
+                                                            smartContractOwner,
+                                                        studentFromLogin:
+                                                            studentSc,
+                                                        studentIsContractOwner:
+                                                            studentIsContractOwner,
+                                                        innovations:
+                                                            winningInnovations,
+                                                      )));
+                                        });
+                                      }
                                     } else {
                                       await ib.initialRegistrationOfStudent(
                                           context,
@@ -214,20 +253,58 @@ class _LoginState extends State<Login> {
                                           await ib.getStudentFromSC();
                                       var allInnovations =
                                           await ib.getAllInnovations();
-                                      Future.delayed(Duration.zero, () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    InnovationsOverview(
-                                                      student: studentSc,
-                                                      studentFirstName:
-                                                          studentFromFhwsFetch
-                                                              .firstName,
-                                                      innovations:
-                                                          allInnovations,
-                                                    )));
-                                      });
+                                      var isInnovationsProcessFinished =
+                                          await ib.innovationProcessFinished();
+
+                                      var smartContractOwner =
+                                          await ib.getContractOwner();
+                                      print('isInnovationsProcessFinished');
+                                      print(isInnovationsProcessFinished);
+                                      bool studentIsContractOwner = false;
+                                      if (studentSc.kNumber ==
+                                          smartContractOwner.kNumber) {
+                                        studentIsContractOwner = true;
+                                      }
+                                      if (!isInnovationsProcessFinished) {
+                                        Future.delayed(Duration.zero, () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      InnovationsOverview(
+                                                        student: studentSc,
+                                                        studentFirstName:
+                                                            studentFromFhwsFetch
+                                                                .firstName,
+                                                        isSmartContractOwner:
+                                                            studentIsContractOwner,
+                                                        innovations:
+                                                            allInnovations,
+                                                        isInnovationsProcessFinished:
+                                                            isInnovationsProcessFinished,
+                                                      )));
+                                        });
+                                      } else {
+                                        Future.delayed(Duration.zero, () async {
+                                          List<Innovation> winningInnovations =
+                                              await ib
+                                                  .getWinningInnovationsOfProcess();
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ShowWinner(
+                                                        smartContractOwner:
+                                                            smartContractOwner,
+                                                        studentFromLogin:
+                                                            studentSc,
+                                                        studentIsContractOwner:
+                                                            studentIsContractOwner,
+                                                        innovations:
+                                                            winningInnovations,
+                                                      )));
+                                        });
+                                      }
                                     }
                                   }
                                 }),
