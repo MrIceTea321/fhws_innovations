@@ -122,17 +122,12 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                   onPressed: () async {
                     ib.endInnovationProcess();
                     bool isFinished = await ib.innovationProcessFinished();
+                    //TODO get bool from etherscan
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        if (!isFinished) {
-                          return const CircularProgressIndicator(
-                            color: fhwsGreen,
-                          );
-                        } else {
                           return const RoundedAlert("Erfolgreich",
                               "Die Abstimmung wurde erfolgreich beendet!");
-                        }
                       },
                     );
                   },

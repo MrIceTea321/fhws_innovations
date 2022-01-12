@@ -50,7 +50,7 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
                       await ib.innovationProcessFinished();
                   var contractOwner = await ib.getContractOwner();
                   bool isOwner = false;
-                  if (student.kNumber == contractOwner.kNumber) {
+                  if (student.studentAddress == contractOwner) {
                     isOwner = true;
                   }
                   Navigator.push(

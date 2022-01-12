@@ -4,6 +4,7 @@ import 'package:fhws_innovations/1_model/innovation.dart';
 import 'package:fhws_innovations/1_model/innovations_object.dart';
 import 'package:fhws_innovations/constants/text_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:web3dart/credentials.dart';
 import '../1_model/student_object.dart';
 import '../constants/rounded_alert.dart';
 import 'login.dart';
@@ -12,7 +13,7 @@ class ShowWinner extends StatefulWidget {
   final List<Innovation> innovations;
   final bool studentIsContractOwner;
   final Student studentFromLogin;
-  final Student smartContractOwner;
+  final EthereumAddress smartContractOwner;
 
   const ShowWinner(
       {required this.innovations,
@@ -42,23 +43,6 @@ class _ShowWinner extends State<ShowWinner> {
         actions: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
-            child: Row(
-              children: [
-                Text('Detailansicht',
-                    style: TextStyle(
-                        color: Colors.black.withOpacity(0.7), fontSize: 18.0)),
-                IconButton(
-                    onPressed: () {
-                      Navigator.pop(
-                        context,
-                      );
-                    },
-                    icon: const Icon(Icons.home)),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: IconButton(
                 onPressed: () {
                   Navigator.push(
@@ -75,6 +59,52 @@ class _ShowWinner extends State<ShowWinner> {
       body: SingleChildScrollView(
           child: Column(children: <Widget>[
         SizedBox(height: size.height * 0.015),
+        Center(
+          child: Container(
+            width: size.width * 0.9,
+            height: 80,
+            child: Text(
+              'Herzlichen Glückwunsch! Der Gewinner der Abstimmungsperiode ist: ' +
+                  widget.smartContractOwner.toString(),
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: fhwsGreen, fontSize: 24.0),
+            ),
+          ),
+        ),
+        SizedBox(height: size.height * 0.015),
+
+        FutureBuilder<List<Innovation>>(
+          future: getAllWinningInnovations(),
+          builder: (context, AsyncSnapshot<List<Innovation>> snap) {
+            if (snap.data == null) {
+              return const Center(
+                  child: CircularProgressIndicator(
+                color: fhwsGreen,
+              ));
+            }
+            return ListView.builder(
+                shrinkWrap: true,
+                itemCount: widget.innovations.length,
+                physics: const AlwaysScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return _buildFeaturedItem(
+                    title: widget.innovations.elementAt(index).title,
+                    description: widget.innovations
+                        .elementAt(index)
+                        .description
+                        .toString(),
+                    creator: widget.innovations.elementAt(index).creator,
+                    voteCount: widget.innovations
+                        .elementAt(index)
+                        .votingCount
+                        .toString(),
+                    innovationHash: Uint8List.fromList(widget.innovations
+                        .elementAt(index)
+                        .uniqueInnovationHash),
+                  );
+                });
+          },
+        ),
         widget.studentIsContractOwner
             ? const SizedBox()
             : TextButton(
@@ -111,39 +141,7 @@ class _ShowWinner extends State<ShowWinner> {
                     )),
               ),
         SizedBox(height: size.height * 0.015),
-        FutureBuilder<List<Innovation>>(
-          future: getAllWinningInnovations(),
-          //TODO noch anpassen getAllWinningInnovations(),
-          builder: (context, AsyncSnapshot<List<Innovation>> snap) {
-            if (snap.data == null) {
-              return const Center(
-                  child: CircularProgressIndicator(
-                color: fhwsGreen,
-              ));
-            }
-            return ListView.builder(
-                shrinkWrap: true,
-                itemCount: widget.innovations.length,
-                physics: const AlwaysScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return _buildFeaturedItem(
-                    title: widget.innovations.elementAt(index).title,
-                    description: widget.innovations
-                        .elementAt(index)
-                        .description
-                        .toString(),
-                    creator: widget.innovations.elementAt(index).creator,
-                    voteCount: widget.innovations
-                        .elementAt(index)
-                        .votingCount
-                        .toString(),
-                    innovationHash: Uint8List.fromList(widget.innovations
-                        .elementAt(index)
-                        .uniqueInnovationHash),
-                  );
-                });
-          },
-        ),
+
         //});
       ])),
     );

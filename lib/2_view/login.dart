@@ -201,11 +201,12 @@ class _LoginState extends State<Login> {
                                       var smartContractOwner =
                                           await ib.getContractOwner();
                                       bool studentIsContractOwner = false;
-                                      if (studentSc.kNumber ==
-                                          smartContractOwner.kNumber) {
+                                      if (studentSc.studentAddress ==
+                                          smartContractOwner) {
                                         studentIsContractOwner = true;
                                       }
                                       if (!isInnovationsProcessFinished) {
+                                        print('ist im if für getWinning');
                                         Future.delayed(Duration.zero, () {
                                           Navigator.push(
                                               context,
@@ -225,6 +226,7 @@ class _LoginState extends State<Login> {
                                                       )));
                                         });
                                       } else {
+                                        print('ist im else für getWinning');
                                         Future.delayed(Duration.zero, () async {
                                           List<Innovation> winningInnovations =
                                               await ib
@@ -261,8 +263,8 @@ class _LoginState extends State<Login> {
                                       print('isInnovationsProcessFinished');
                                       print(isInnovationsProcessFinished);
                                       bool studentIsContractOwner = false;
-                                      if (studentSc.kNumber ==
-                                          smartContractOwner.kNumber) {
+                                      if (studentSc.studentAddress ==
+                                          smartContractOwner) {
                                         studentIsContractOwner = true;
                                       }
                                       if (!isInnovationsProcessFinished) {

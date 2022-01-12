@@ -51,7 +51,7 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                       await ib.innovationProcessFinished();
                   var contractOwner = await ib.getContractOwner();
                   bool isOwner = false;
-                  if (student.kNumber == contractOwner.kNumber) {
+                  if (student.studentAddress == contractOwner) {
                     isOwner = true;
                   }
                   Navigator.push(
@@ -173,7 +173,7 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                   await ib.innovationProcessFinished();
               var contractOwner = await ib.getContractOwner();
               bool isOwner = false;
-              if (student.kNumber == contractOwner.kNumber) {
+              if (student.studentAddress == contractOwner) {
                 isOwner = true;
               }
               Navigator.push(

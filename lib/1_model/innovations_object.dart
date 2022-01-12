@@ -35,10 +35,8 @@ class InnovationsObject {
 
   Future<List<Innovation>> getWinningInnovationsOfProcess() async {
     smartContract.loadContract();
-    final eth = window.ethereum;
-    final credentials = await eth?.requestAccount();
     List<dynamic> result = await smartContract.querySmartContractFunction(
-        "getWinnerOfInnovationProcess", [credentials?.address], ethClient);
+        "getWinnerOfInnovationProcess", [], ethClient);
     List<dynamic> innovationsList = result[0];
     int i = 0;
     innovationsList.forEach((innovationFromSC) {
@@ -61,16 +59,14 @@ class InnovationsObject {
     return winningInnovationsList;
   }
 
-  Future<Student> getContractOwner() async {
+  Future<EthereumAddress> getContractOwner() async {
     smartContract.loadContract();
     final eth = window.ethereum;
     final credentials = await eth?.requestAccount();
     List<dynamic> result = await smartContract.querySmartContractFunction(
-        "getContractOwner", [credentials?.address], ethClient);
-    var stud = Student.fromSmartContract(
-        result[0], result[1], result[2], Uint8List.fromList(result[3]));
-    await checkIfStudentUsesInitialRegisteredAddress();
-    return stud;
+        "getContractOwner", [], ethClient);
+    dynamic contractOwner = result[0];
+    return contractOwner;
   }
 
   //transaction functions
