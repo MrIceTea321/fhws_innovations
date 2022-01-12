@@ -62,7 +62,8 @@ contract FhwsInnovationsContract {
         _;
     }
 
-    function endInnovationProcess() public onlyOwner returns(Innovation[] memory)  {
+    //onlyOwner
+    function endInnovationProcess() public  returns(Innovation[] memory)  {
         innovationProcessFinished = true;
         uint winningVoteCount = 0;
         for(uint i=0; i<innovations.length; i++){
@@ -78,11 +79,17 @@ contract FhwsInnovationsContract {
         return winner;
     }
 
-    function getWinnerOfInnovationProcess() public onlyOwner innovationProcessIsFinished view returns(Innovation[] memory) {
+    // onlyOwner innovationProcessIsFinished
+    function getWinnerOfInnovationProcess() public view returns(Innovation[] memory) {
         return winner;
     }
 
-    function restartInnovationProcess() public onlyOwner {
+    function getContractOwner() public view returns(address) {
+        return owner;
+    }
+
+    //onlyOwner innovationProcessIsFinished
+    function restartInnovationProcess() public  {
         innovationProcessFinished = false;
         for(uint i = 0; i<kNumbers.length; i++) {
             delete kNumberAlreadyRegistred[kNumbers[i]];
@@ -125,13 +132,13 @@ contract FhwsInnovationsContract {
     }
 
     //return student object
-    function getStudent() public onylWithRegistredStudentAddress view returns(Student memory) {
-        return students[msg.sender];
+    function getStudent(address studentAddress) public onylWithRegistredStudentAddress view returns(Student memory) {
+        return students[studentAddress];
     }
 
     //return innovations of student 
-    function getInnovationsOfStudent() public onylWithRegistredStudentAddress view returns(Innovation[] memory){
-         return innovationsOfStudent[msg.sender];
+    function getInnovationsOfStudent(address studentAddress) public onylWithRegistredStudentAddress view returns(Innovation[] memory){
+         return innovationsOfStudent[studentAddress];
     }
 
     //return all innovations
@@ -145,7 +152,7 @@ contract FhwsInnovationsContract {
 
     function createInnovation(string memory _title, string memory _description) public onylWithRegistredStudentAddress { 
         bytes32 _uniqueInnovationHash = genereateUniqueHashForInnovation(_title, _description);
-        Innovation memory newInnovation = Innovation ({uniqueInnovationHash: _uniqueInnovationHash, votingCount: 0, creator: getStudent(), title: _title, description: _description});
+        Innovation memory newInnovation = Innovation ({uniqueInnovationHash: _uniqueInnovationHash, votingCount: 0, creator: getStudent(msg.sender), title: _title, description: _description});
         innovations.push(newInnovation);
         innovationsOfStudent[msg.sender].push(newInnovation);
         console.log("Innovation created");
