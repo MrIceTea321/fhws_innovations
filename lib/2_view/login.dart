@@ -226,7 +226,7 @@ class _LoginState extends State<Login> {
                                                         InnovationsOverview(
                                                           student: studentSc,
                                                           studentFirstName:
-                                                          studentFromFhwsFetch
+                                                              studentFromFhwsFetch
                                                                   .firstName,
                                                           isSmartContractOwner:
                                                               studentIsContractOwner,
@@ -260,7 +260,8 @@ class _LoginState extends State<Login> {
                                         }
                                       } else {
                                         await ib.initialRegistrationOfStudent(
-                                            context, studentFromFhwsFetch.kNumber);
+                                            context,
+                                            studentFromFhwsFetch.kNumber);
                                         var studentSc =
                                             await ib.getStudentFromSC();
                                         var allInnovations =
@@ -286,7 +287,7 @@ class _LoginState extends State<Login> {
                                                         InnovationsOverview(
                                                           student: studentSc,
                                                           studentFirstName:
-                                                          studentFromFhwsFetch
+                                                              studentFromFhwsFetch
                                                                   .firstName,
                                                           isSmartContractOwner:
                                                               studentIsContractOwner,

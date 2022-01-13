@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:fhws_innovations/1_model/innovation.dart';
 import 'package:fhws_innovations/constants/text_constants.dart';
 import 'package:flutter/material.dart';
+import '../constants/rounded_alert.dart';
 import 'login.dart';
 
 class ShowInnovation extends StatefulWidget {
@@ -18,61 +19,74 @@ class _ShowInnovationOverviewState extends State<ShowInnovation> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text(
-          'FHWS Innovations',
-          style: TextStyle(fontSize: 18.0, color: Colors.white),
-        ),
-        backgroundColor: fhwsGreen,
-        elevation: 0,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
-            child: Row(
-              children: [
-                Text('Detailansicht',
-                    style: TextStyle(
-                        color: Colors.black.withOpacity(0.7), fontSize: 18.0)),
-                IconButton(
-                    onPressed: () {
-                      Navigator.pop(
-                        context,
-                      );
-                    },
-                    icon: const Icon(Icons.home)),
-              ],
+    return WillPopScope(
+      onWillPop: () async {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const RoundedAlert("Achtung",
+                "Innerhalb der App kann nur durch die Icons der Applikation navigiert werden.");
+          },
+        );
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: const Text(
+            'FHWS Innovations',
+            style: TextStyle(fontSize: 18.0, color: Colors.white),
+          ),
+          backgroundColor: fhwsGreen,
+          elevation: 0,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+              child: Row(
+                children: [
+                  Text('Detailansicht',
+                      style: TextStyle(
+                          color: Colors.black.withOpacity(0.7),
+                          fontSize: 18.0)),
+                  IconButton(
+                      onPressed: () {
+                        Navigator.pop(
+                          context,
+                        );
+                      },
+                      icon: const Icon(Icons.home)),
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
-            child: IconButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const Login(
-                                fromStudentCheck: false,
-                              )));
-                },
-                icon: const Icon(Icons.logout)),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+              child: IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Login(
+                                  fromStudentCheck: false,
+                                )));
+                  },
+                  icon: const Icon(Icons.logout)),
+            ),
+          ],
+        ),
+        body: SingleChildScrollView(
+            child: Column(
+          children: <Widget>[
+            SizedBox(height: size.height * 0.015),
+            _buildFeaturedItem(
+                title: widget.innovation.title,
+                innovationHash: widget.innovation.uniqueInnovationHash,
+                voteCount: widget.innovation.votingCount.toString(),
+                description: widget.innovation.description),
+            //});
+          ],
+        )),
       ),
-      body: SingleChildScrollView(
-          child: Column(
-        children: <Widget>[
-          SizedBox(height: size.height * 0.015),
-          _buildFeaturedItem(
-              title: widget.innovation.title,
-              innovationHash: widget.innovation.uniqueInnovationHash,
-              voteCount: widget.innovation.votingCount.toString(),
-              description: widget.innovation.description),
-          //});
-        ],
-      )),
     );
   }
 

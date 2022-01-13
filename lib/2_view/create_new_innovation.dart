@@ -28,142 +28,155 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
     Size size = MediaQuery.of(context).size;
     InnovationsObject ib = InnovationsObject();
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text(
-          'FHWS Innovations',
-          style: TextStyle(fontSize: 18.0, color: Colors.white),
-        ),
-        backgroundColor: fhwsGreen,
-        elevation: 0,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
-            child: IconButton(
-                onPressed: () async {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(Icons.home)),
+    return WillPopScope(
+      onWillPop: () async {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const RoundedAlert("Achtung",
+                "Innerhalb der App kann nur durch die Icons der Applikation navigiert werden.");
+          },
+        );
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: const Text(
+            'FHWS Innovations',
+            style: TextStyle(fontSize: 18.0, color: Colors.white),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
-            child: Row(
-              children: [
-                Text('Innovationen anlegen',
-                    style: TextStyle(
-                        color: Colors.black.withOpacity(0.7), fontSize: 18.0)),
-                IconButton(
-                    onPressed: () async {
-                      var userInnos = await ib.getInnovationsOfStudent();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => UserInnovations(
-                                    userInnovations: userInnos,
-                                    studentFirstName: widget.studentFirstName,
-                                  )));
-                    },
-                    icon: const Icon(Icons.description)),
-              ],
+          backgroundColor: fhwsGreen,
+          elevation: 0,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+              child: IconButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.home)),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
-            child: IconButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const Login(
-                                fromStudentCheck: false,
-                              )));
-                },
-                icon: const Icon(Icons.logout)),
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-          child: Column(
-        children: <Widget>[
-          SizedBox(height: size.height * 0.015),
-          _createNewInnovation(ib),
-          //});
-          TextButton(
-            onPressed: () async {
-              if (widget.title.isEmpty) {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const RoundedAlert("Achtung",
-                        "Bitte gib einen Titel für deine Innovation an");
-                  },
-                );
-              } else if (widget.description.isEmpty) {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const RoundedAlert("Achtung",
-                        "Bitte gib eine Beschreibung für deine Innovation an");
-                  },
-                );
-              } else {
-                var student = await ib.getStudentFromSC();
-                ib.createInnovation(widget.title, widget.description);
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const RoundedAlert("Erfolgreich",
-                        "Deine Innovation wurde erfolgreich angelegt");
-                  },
-                );
-              }
-              var student = await ib.getStudentFromSC();
-              var allInnovations = await ib.getAllInnovations();
-              var isInnovationsProcessFinished =
-                  await ib.innovationProcessFinished();
-              var contractOwner = await ib.getContractOwner();
-              bool isOwner = false;
-              if (student.studentAddress == contractOwner) {
-                isOwner = true;
-              }
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => InnovationsOverview(
-                            student: student,
-                            innovations: allInnovations,
-                            isInnovationsProcessFinished:
-                                isInnovationsProcessFinished,
-                            studentFirstName: widget.studentFirstName,
-                            isSmartContractOwner: isOwner,
-                          )));
-            },
-            child: Container(
-                height: 50,
-                width: size.width * 0.9,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                  color: fhwsGreen,
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                  child: Center(
-                    child: Text(
-                      'Innovation anlegen',
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+              child: Row(
+                children: [
+                  Text('Innovationen anlegen',
                       style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      maxLines: 1,
-                    ),
+                          color: Colors.black.withOpacity(0.7),
+                          fontSize: 18.0)),
+                  IconButton(
+                      onPressed: () async {
+                        var userInnos = await ib.getInnovationsOfStudent();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => UserInnovations(
+                                      userInnovations: userInnos,
+                                      studentFirstName: widget.studentFirstName,
+                                    )));
+                      },
+                      icon: const Icon(Icons.description)),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+              child: IconButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Login(
+                                  fromStudentCheck: false,
+                                )));
+                  },
+                  icon: const Icon(Icons.logout)),
+            ),
+          ],
+        ),
+        body: SingleChildScrollView(
+            child: Column(
+          children: <Widget>[
+            SizedBox(height: size.height * 0.015),
+            _createNewInnovation(ib),
+            //});
+            TextButton(
+              onPressed: () async {
+                if (widget.title.isEmpty) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const RoundedAlert("Achtung",
+                          "Bitte gib einen Titel für deine Innovation an");
+                    },
+                  );
+                } else if (widget.description.isEmpty) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const RoundedAlert("Achtung",
+                          "Bitte gib eine Beschreibung für deine Innovation an");
+                    },
+                  );
+                } else {
+                  ib.createInnovation(widget.title, widget.description);
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const RoundedAlert("Erfolgreich",
+                          "Deine Innovation wurde erfolgreich angelegt");
+                    },
+                  );
+                }
+                var student = await ib.getStudentFromSC();
+                var allInnovations = await ib.getAllInnovations();
+                var isInnovationsProcessFinished =
+                    await ib.innovationProcessFinished();
+                var contractOwner = await ib.getContractOwner();
+                bool isOwner = false;
+                if (student.studentAddress == contractOwner) {
+                  isOwner = true;
+                }
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => InnovationsOverview(
+                              student: student,
+                              innovations: allInnovations,
+                              isInnovationsProcessFinished:
+                                  isInnovationsProcessFinished,
+                              studentFirstName: widget.studentFirstName,
+                              isSmartContractOwner: isOwner,
+                            )));
+              },
+              child: Container(
+                  height: 50,
+                  width: size.width * 0.9,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                    color: fhwsGreen,
                   ),
-                )),
-          )
-        ],
-      )),
+                  child: const Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+                    child: Center(
+                      child: Text(
+                        'Innovation anlegen',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        maxLines: 1,
+                      ),
+                    ),
+                  )),
+            )
+          ],
+        )),
+      ),
     );
   }
 

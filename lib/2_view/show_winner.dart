@@ -26,140 +26,145 @@ class ShowWinner extends StatefulWidget {
 
 class _ShowWinner extends State<ShowWinner> {
   @override
-  void initState() {
-    print('student is contract owner:');
-    print(widget.studentIsContractOwner);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     InnovationsObject ib = InnovationsObject();
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text(
-          'FHWS Innovations',
-          style: TextStyle(fontSize: 18.0, color: Colors.white),
-        ),
-        backgroundColor: fhwsGreen,
-        elevation: 0,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
-            child: IconButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const Login(
-                                fromStudentCheck: false,
-                              )));
-                },
-                icon: const Icon(Icons.logout)),
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-          child: Column(children: <Widget>[
-        SizedBox(height: size.height * 0.015),
-        Center(
-          child: SizedBox(
-            width: size.width * 0.9,
-            child: const Text(
-              '🎉 Herzlichen Glückwunsch! 🎉',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: fhwsGreen, fontSize: 24.0),
-            ),
-          ),
-        ),
-        SizedBox(height: size.height * 0.01),
-
-        Center(
-          child: SizedBox(
-            width: size.width * 0.9,
-            height: 80,
-            child: const Text(
-              'Der Abstimmungsprozess wurde beendet und die Innovation(en) mit den meisten Stimmen stehen fest!',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: fhwsGreen, fontSize: 24.0),
-            ),
-          ),
-        ),
-        SizedBox(height: size.height * 0.015),
-        FutureBuilder<List<Innovation>>(
-          future: getAllWinningInnovations(),
-          builder: (context, AsyncSnapshot<List<Innovation>> snap) {
-            if (snap.data == null) {
-              return const Center(
-                  child: CircularProgressIndicator(
-                color: fhwsGreen,
-              ));
-            }
-            return ListView.builder(
-                shrinkWrap: true,
-                itemCount: widget.innovations.length,
-                physics: const AlwaysScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return _buildFeaturedItem(
-                    title: widget.innovations.elementAt(index).title,
-                    description: widget.innovations
-                        .elementAt(index)
-                        .description
-                        .toString(),
-                    creator: widget.innovations.elementAt(index).creator,
-                    voteCount: widget.innovations
-                        .elementAt(index)
-                        .votingCount
-                        .toString(),
-                    innovationHash: Uint8List.fromList(widget.innovations
-                        .elementAt(index)
-                        .uniqueInnovationHash),
-                  );
-                });
+    return WillPopScope(
+      onWillPop: () async {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const RoundedAlert("Achtung",
+                "Innerhalb der App kann nur durch die Icons der Applikation navigiert werden.");
           },
+        );
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: const Text(
+            'FHWS Innovations',
+            style: TextStyle(fontSize: 18.0, color: Colors.white),
+          ),
+          backgroundColor: fhwsGreen,
+          elevation: 0,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+              child: IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Login(
+                                  fromStudentCheck: false,
+                                )));
+                  },
+                  icon: const Icon(Icons.logout)),
+            ),
+          ],
         ),
-        SizedBox(height: size.height * 0.03),
-        widget.studentIsContractOwner
-            ? TextButton(
-                onPressed: () async {
-                  ib.restartInnovationProcess();
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return const RoundedAlert("Erfolgreich",
-                            "Eine neue Abstimmungsperiode wurde eröffnet!");
-                      });
-                },
-                child: Container(
-                    height: 50,
-                    width: size.width * 0.9,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                      color: fhwsGreen,
-                    ),
-                    child: const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                      child: Center(
-                        child: Text(
-                          'Neue Abstimmungsperiode starten',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          maxLines: 1,
-                        ),
+        body: SingleChildScrollView(
+            child: Column(children: <Widget>[
+          SizedBox(height: size.height * 0.015),
+          Center(
+            child: SizedBox(
+              width: size.width * 0.9,
+              child: const Text(
+                '🎉 Herzlichen Glückwunsch! 🎉',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: fhwsGreen, fontSize: 24.0),
+              ),
+            ),
+          ),
+          SizedBox(height: size.height * 0.01),
+
+          Center(
+            child: SizedBox(
+              width: size.width * 0.9,
+              height: 80,
+              child: const Text(
+                'Der Abstimmungsprozess wurde beendet und die Innovation(en) mit den meisten Stimmen stehen fest!',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: fhwsGreen, fontSize: 24.0),
+              ),
+            ),
+          ),
+          SizedBox(height: size.height * 0.015),
+          FutureBuilder<List<Innovation>>(
+            future: getAllWinningInnovations(),
+            builder: (context, AsyncSnapshot<List<Innovation>> snap) {
+              if (snap.data == null) {
+                return const Center(
+                    child: CircularProgressIndicator(
+                  color: fhwsGreen,
+                ));
+              }
+              return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: widget.innovations.length,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return _buildFeaturedItem(
+                      title: widget.innovations.elementAt(index).title,
+                      description: widget.innovations
+                          .elementAt(index)
+                          .description
+                          .toString(),
+                      creator: widget.innovations.elementAt(index).creator,
+                      voteCount: widget.innovations
+                          .elementAt(index)
+                          .votingCount
+                          .toString(),
+                      innovationHash: Uint8List.fromList(widget.innovations
+                          .elementAt(index)
+                          .uniqueInnovationHash),
+                    );
+                  });
+            },
+          ),
+          SizedBox(height: size.height * 0.03),
+          widget.studentIsContractOwner
+              ? TextButton(
+                  onPressed: () async {
+                    ib.restartInnovationProcess();
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const RoundedAlert("Erfolgreich",
+                              "Eine neue Abstimmungsperiode wurde eröffnet!");
+                        });
+                  },
+                  child: Container(
+                      height: 50,
+                      width: size.width * 0.9,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        color: fhwsGreen,
                       ),
-                    )),
-              )
-            : const SizedBox(),
-        SizedBox(height: size.height * 0.015),
-        //});
-      ])),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 10),
+                        child: Center(
+                          child: Text(
+                            'Neue Abstimmungsperiode starten',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            maxLines: 1,
+                          ),
+                        ),
+                      )),
+                )
+              : const SizedBox(),
+          SizedBox(height: size.height * 0.015),
+          //});
+        ])),
+      ),
     );
   }
 
