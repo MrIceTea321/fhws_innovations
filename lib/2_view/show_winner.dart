@@ -27,6 +27,13 @@ class ShowWinner extends StatefulWidget {
 
 class _ShowWinner extends State<ShowWinner> {
   @override
+  void initState() {
+    print('student is contract owner:');
+    print(widget.studentIsContractOwner);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     InnovationsObject ib = InnovationsObject();
@@ -60,19 +67,17 @@ class _ShowWinner extends State<ShowWinner> {
           child: Column(children: <Widget>[
         SizedBox(height: size.height * 0.015),
         Center(
-          child: Container(
+          child: SizedBox(
             width: size.width * 0.9,
             height: 80,
-            child: Text(
-              'Herzlichen Glückwunsch! Der Gewinner der Abstimmungsperiode ist: ' +
-                  widget.smartContractOwner.toString(),
+            child: const Text(
+              'Der Abstimmungsprozess wurde beendet und die Innovation(en) mit den meisten Stimmen stehen fest!',
               textAlign: TextAlign.center,
-              style: const TextStyle(color: fhwsGreen, fontSize: 24.0),
+              style: TextStyle(color: fhwsGreen, fontSize: 24.0),
             ),
           ),
         ),
         SizedBox(height: size.height * 0.015),
-
         FutureBuilder<List<Innovation>>(
           future: getAllWinningInnovations(),
           builder: (context, AsyncSnapshot<List<Innovation>> snap) {
@@ -105,10 +110,9 @@ class _ShowWinner extends State<ShowWinner> {
                 });
           },
         ),
-            SizedBox(height: size.height * 0.03),
-            widget.studentIsContractOwner
-            ? const SizedBox()
-            : TextButton(
+        SizedBox(height: size.height * 0.03),
+        widget.studentIsContractOwner
+            ? TextButton(
                 onPressed: () async {
                   ib.restartInnovationProcess();
                   showDialog(
@@ -140,9 +144,9 @@ class _ShowWinner extends State<ShowWinner> {
                         ),
                       ),
                     )),
-              ),
+              )
+            : const SizedBox(),
         SizedBox(height: size.height * 0.015),
-
         //});
       ])),
     );

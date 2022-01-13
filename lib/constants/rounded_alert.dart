@@ -33,17 +33,20 @@ class RoundedAlert extends StatelessWidget {
                   children: <Widget>[
                     Text(title,
                         style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold,
-                            )),
+                          color: Colors.black,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                        )),
                     const SizedBox(height: 10.0),
                     Flexible(
-                      child: Text(text,
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 14.0,
-                              )),
+                      child: Text(
+                        text,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 14.0,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                     const SizedBox(height: 10.0),
                     Container(
@@ -56,10 +59,10 @@ class RoundedAlert extends StatelessWidget {
                       child: TextButton(
                         child: const Text("OK",
                             style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12.0,
-                                )),
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12.0,
+                            )),
                         onPressed: () {
                           Navigator.pop(context);
                         },

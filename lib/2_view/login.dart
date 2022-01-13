@@ -42,6 +42,9 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    bool isLoading = true;
+
     return ChangeNotifierProvider(
         create: (context) => MetaMaskProvider()..init(),
         builder: (context, snapshot) {
@@ -183,10 +186,7 @@ class _LoginState extends State<Login> {
                                     );
                                   } else {
                                     var studentFromFhwsFetch =
-                                        StudentFromFhwsFetch(
-                                            kNumber, 'Test Name');
-                                    //TODO use FHWS login fetch as soon as the fhws server are working again
-                                    //await getStudentFetch();
+                                        await getStudentFetch(context, size, isLoading);
                                     var studentAlreadyRegistered = await ib
                                         .studentAlreadyRegistered(kNumber);
                                     if (studentAlreadyRegistered) {
@@ -196,8 +196,7 @@ class _LoginState extends State<Login> {
                                           await ib.getAllInnovations();
                                       var isInnovationsProcessFinished =
                                           await ib.innovationProcessFinished();
-                                      print('isInnovationsProcessFinished');
-                                      print(isInnovationsProcessFinished);
+
                                       var smartContractOwner =
                                           await ib.getContractOwner();
                                       bool studentIsContractOwner = false;
@@ -206,7 +205,6 @@ class _LoginState extends State<Login> {
                                         studentIsContractOwner = true;
                                       }
                                       if (!isInnovationsProcessFinished) {
-                                        print('ist im if für getWinning');
                                         Future.delayed(Duration.zero, () {
                                           Navigator.push(
                                               context,
@@ -226,7 +224,6 @@ class _LoginState extends State<Login> {
                                                       )));
                                         });
                                       } else {
-                                        print('ist im else für getWinning');
                                         Future.delayed(Duration.zero, () async {
                                           List<Innovation> winningInnovations =
                                               await ib
@@ -260,8 +257,7 @@ class _LoginState extends State<Login> {
 
                                       var smartContractOwner =
                                           await ib.getContractOwner();
-                                      print('isInnovationsProcessFinished');
-                                      print(isInnovationsProcessFinished);
+
                                       bool studentIsContractOwner = false;
                                       if (studentSc.studentAddress ==
                                           smartContractOwner) {
@@ -385,9 +381,9 @@ class _LoginState extends State<Login> {
   }
 
   Future<StudentFromFhwsFetch> getStudentFetch(
-      BuildContext context, Size size) async {
-    bool isLoading = true;
+      BuildContext context, Size size, isLoading) async {
     try {
+      isLoading ?
       showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -440,8 +436,8 @@ class _LoginState extends State<Login> {
                                             fontSize: 12.0,
                                           )),
                                       onPressed: () {
-                                        //TODO fix onPressed close dialog
-                                        Navigator.pop(context);
+                                        isLoading = false;
+                                        Navigator.of(context, rootNavigator: true).pop();
                                       },
                                     ),
                             )
@@ -453,17 +449,18 @@ class _LoginState extends State<Login> {
                 ),
               ),
             );
-          });
-      //StudentFromFhwsFetch fetch =
-      //    await Student.fetchStudentInformation(kNumber, password);
+          }) : const SizedBox();
+      StudentFromFhwsFetch fetch =
+          await Student.fetchStudentInformation(kNumber, password);
       isLoading = false;
-      return StudentFromFhwsFetch(kNumber, 'Maximilian Test');
+      return fetch;
     } catch (e) {
+      Navigator.pop(context);
       throw Exception(showDialog(
         context: context,
         builder: (BuildContext context) {
           return const RoundedAlert("Achtung",
-              "Die Anmeldung schlug fehl! Überprüfue bitte deine Eingaben und deine Verbindung mit MetaMask");
+              "Die Anmeldung schlug fehl! Überprüfe bitte deine Eingaben!");
         },
       ));
     }
