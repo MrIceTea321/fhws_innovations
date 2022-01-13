@@ -314,7 +314,7 @@ class _LoginState extends State<Login> {
                                   currentAddress = provider.currentAddress;
                                   if (provider.isConnected &&
                                       provider.isInOperatingChain) {
-                                    text = 'Erfolgreich mit MetaMask verbunden';
+                                    text = 'Erfolgreich mit MetaMask verbunden ✅';
                                     isMetaMaskConnected = true;
                                   } else if (provider.isConnected &&
                                       !provider.isInOperatingChain) {
@@ -324,7 +324,7 @@ class _LoginState extends State<Login> {
                                     return Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        const Text('Hier klicken'),
+                                        const Text('🦊 Hier klicken 🦊'),
                                         const SizedBox(height: 8),
                                         CupertinoButton(
                                           onPressed: () => context

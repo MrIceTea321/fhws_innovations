@@ -69,6 +69,16 @@ class _ShowWinner extends State<ShowWinner> {
         Center(
           child: SizedBox(
             width: size.width * 0.9,
+            child: const Text(
+              '🎉 Herzlichen Glückwunsch! 🎉',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: fhwsGreen, fontSize: 24.0),
+            ),
+          ),
+        ),
+        Center(
+          child: SizedBox(
+            width: size.width * 0.9,
             height: 80,
             child: const Text(
               'Der Abstimmungsprozess wurde beendet und die Innovation(en) mit den meisten Stimmen stehen fest!',
