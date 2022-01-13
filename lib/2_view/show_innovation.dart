@@ -122,7 +122,7 @@ class _ShowInnovationOverviewState extends State<ShowInnovation> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Creator: ',
+                const Text('Innovation von: ',
                     style: TextStyle(
                       color: Colors.white,
                     )),

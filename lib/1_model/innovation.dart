@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:fhws_innovations/1_model/student_object.dart';
 
 class Innovation {

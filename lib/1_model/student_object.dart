@@ -1,10 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:http/http.dart' as http;
 import 'package:web3dart/credentials.dart';
-
 import '../constants/text_constants.dart';
 
 class StudentFromFhwsFetch {

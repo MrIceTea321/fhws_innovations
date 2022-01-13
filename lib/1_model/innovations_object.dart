@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'dart:html';
 import 'dart:typed_data';
-
 import 'package:fhws_innovations/1_model/student_object.dart';
 import 'package:fhws_innovations/constants/rounded_alert.dart';
 import 'package:flutter/material.dart';
@@ -61,8 +60,6 @@ class InnovationsObject {
 
   Future<EthereumAddress> getContractOwner() async {
     smartContract.loadContract();
-    final eth = window.ethereum;
-    final credentials = await eth?.requestAccount();
     List<dynamic> result = await smartContract.querySmartContractFunction(
         "getContractOwner", [], ethClient);
     dynamic contractOwner = result[0];
@@ -177,11 +174,11 @@ class InnovationsObject {
 
   Future<void> checkIfStudentUsesInitialRegisteredAddress() async {
     var isTrue = await studentUsesInitialRegisteredAddress();
-    //if (!isTrue) {
-    //  Get.offAll(const Login(
-    //    fromStudentCheck: true,
-    //  ));
-    //}
+    if (!isTrue) {
+      Get.offAll(const Login(
+        fromStudentCheck: true,
+      ));
+    }
   }
 
   //All transaction function of SmartContract

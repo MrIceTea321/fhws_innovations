@@ -2,7 +2,6 @@ import 'package:fhws_innovations/1_model/innovations_object.dart';
 import 'package:fhws_innovations/2_view/user_innovations.dart';
 import 'package:fhws_innovations/constants/text_constants.dart';
 import 'package:flutter/material.dart';
-
 import '../constants/rounded_alert.dart';
 import 'innovations_overview.dart';
 import 'login.dart';
@@ -137,7 +136,8 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
                             innovations: allInnovations,
                             isInnovationsProcessFinished:
                                 isInnovationsProcessFinished,
-                            studentFirstName: widget.studentFirstName, isSmartContractOwner: isOwner,
+                            studentFirstName: widget.studentFirstName,
+                            isSmartContractOwner: isOwner,
                           )));
             },
             child: Container(

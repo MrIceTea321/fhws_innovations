@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:typed_data';
 import 'package:fhws_innovations/1_model/innovation.dart';
 import 'package:fhws_innovations/1_model/innovations_object.dart';
@@ -76,6 +75,8 @@ class _ShowWinner extends State<ShowWinner> {
             ),
           ),
         ),
+        SizedBox(height: size.height * 0.01),
+
         Center(
           child: SizedBox(
             width: size.width * 0.9,
@@ -209,7 +210,7 @@ class _ShowWinner extends State<ShowWinner> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Creator: ',
+                const Text('Innovation von: ',
                     style: TextStyle(
                       color: Colors.white,
                     )),

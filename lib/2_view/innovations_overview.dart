@@ -126,8 +126,8 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                          return const RoundedAlert("Erfolgreich",
-                              "Die Abstimmung wurde erfolgreich beendet!");
+                        return const RoundedAlert("Erfolgreich",
+                            "Die Abstimmung wurde erfolgreich beendet!");
                       },
                     );
                   },

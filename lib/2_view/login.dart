@@ -185,123 +185,139 @@ class _LoginState extends State<Login> {
                                       },
                                     );
                                   } else {
-                                    var studentFromFhwsFetch =
-                                        await getStudentFetch(context, size, isLoading);
-                                    var studentAlreadyRegistered = await ib
-                                        .studentAlreadyRegistered(kNumber);
-                                    if (studentAlreadyRegistered) {
-                                      var studentSc =
-                                          await ib.getStudentFromSC();
-                                      var allInnovations =
-                                          await ib.getAllInnovations();
-                                      var isInnovationsProcessFinished =
-                                          await ib.innovationProcessFinished();
-
-                                      var smartContractOwner =
-                                          await ib.getContractOwner();
-                                      bool studentIsContractOwner = false;
-                                      if (studentSc.studentAddress ==
-                                          smartContractOwner) {
-                                        studentIsContractOwner = true;
-                                      }
-                                      if (!isInnovationsProcessFinished) {
-                                        Future.delayed(Duration.zero, () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      InnovationsOverview(
-                                                        student: studentSc,
-                                                        studentFirstName:
-                                                            studentFromFhwsFetch
-                                                                .firstName,
-                                                        isSmartContractOwner:
-                                                            studentIsContractOwner,
-                                                        innovations:
-                                                            allInnovations,
-                                                        isInnovationsProcessFinished:
-                                                            isInnovationsProcessFinished,
-                                                      )));
-                                        });
-                                      } else {
-                                        Future.delayed(Duration.zero, () async {
-                                          List<Innovation> winningInnovations =
-                                              await ib
-                                                  .getWinningInnovationsOfProcess();
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ShowWinner(
-                                                        smartContractOwner:
-                                                            smartContractOwner,
-                                                        studentFromLogin:
-                                                            studentSc,
-                                                        studentIsContractOwner:
-                                                            studentIsContractOwner,
-                                                        innovations:
-                                                            winningInnovations,
-                                                      )));
-                                        });
-                                      }
+                                    StudentFromFhwsFetch studentFromFhwsFetch =
+                                        await getStudentFetch(
+                                            context, size, isLoading);
+                                    if (studentFromFhwsFetch
+                                        .firstName.isEmpty) {
+                                      Navigator.pop(context);
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return const RoundedAlert("Achtung",
+                                              "Die Anmeldung schlug fehl! Überprüfe bitte deine Eingaben!");
+                                        },
+                                      );
                                     } else {
-                                      await ib.initialRegistrationOfStudent(
-                                          context,
-                                          studentFromFhwsFetch.kNumber);
-                                      var studentSc =
-                                          await ib.getStudentFromSC();
-                                      var allInnovations =
-                                          await ib.getAllInnovations();
-                                      var isInnovationsProcessFinished =
-                                          await ib.innovationProcessFinished();
+                                      var studentAlreadyRegistered = await ib
+                                          .studentAlreadyRegistered(kNumber);
+                                      if (studentAlreadyRegistered) {
+                                        var studentSc =
+                                            await ib.getStudentFromSC();
+                                        var allInnovations =
+                                            await ib.getAllInnovations();
+                                        var isInnovationsProcessFinished =
+                                            await ib
+                                                .innovationProcessFinished();
 
-                                      var smartContractOwner =
-                                          await ib.getContractOwner();
-
-                                      bool studentIsContractOwner = false;
-                                      if (studentSc.studentAddress ==
-                                          smartContractOwner) {
-                                        studentIsContractOwner = true;
-                                      }
-                                      if (!isInnovationsProcessFinished) {
-                                        Future.delayed(Duration.zero, () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      InnovationsOverview(
-                                                        student: studentSc,
-                                                        studentFirstName:
-                                                            studentFromFhwsFetch
-                                                                .firstName,
-                                                        isSmartContractOwner:
-                                                            studentIsContractOwner,
-                                                        innovations:
-                                                            allInnovations,
-                                                        isInnovationsProcessFinished:
-                                                            isInnovationsProcessFinished,
-                                                      )));
-                                        });
+                                        var smartContractOwner =
+                                            await ib.getContractOwner();
+                                        bool studentIsContractOwner = false;
+                                        if (studentSc.studentAddress ==
+                                            smartContractOwner) {
+                                          studentIsContractOwner = true;
+                                        }
+                                        if (!isInnovationsProcessFinished) {
+                                          Future.delayed(Duration.zero, () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        InnovationsOverview(
+                                                          student: studentSc,
+                                                          studentFirstName:
+                                                          studentFromFhwsFetch
+                                                                  .firstName,
+                                                          isSmartContractOwner:
+                                                              studentIsContractOwner,
+                                                          innovations:
+                                                              allInnovations,
+                                                          isInnovationsProcessFinished:
+                                                              isInnovationsProcessFinished,
+                                                        )));
+                                          });
+                                        } else {
+                                          Future.delayed(Duration.zero,
+                                              () async {
+                                            List<Innovation>
+                                                winningInnovations = await ib
+                                                    .getWinningInnovationsOfProcess();
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ShowWinner(
+                                                          smartContractOwner:
+                                                              smartContractOwner,
+                                                          studentFromLogin:
+                                                              studentSc,
+                                                          studentIsContractOwner:
+                                                              studentIsContractOwner,
+                                                          innovations:
+                                                              winningInnovations,
+                                                        )));
+                                          });
+                                        }
                                       } else {
-                                        Future.delayed(Duration.zero, () async {
-                                          List<Innovation> winningInnovations =
-                                              await ib
-                                                  .getWinningInnovationsOfProcess();
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ShowWinner(
-                                                        smartContractOwner:
-                                                            smartContractOwner,
-                                                        studentFromLogin:
-                                                            studentSc,
-                                                        studentIsContractOwner:
-                                                            studentIsContractOwner,
-                                                        innovations:
-                                                            winningInnovations,
-                                                      )));
-                                        });
+                                        await ib.initialRegistrationOfStudent(
+                                            context, studentFromFhwsFetch.kNumber);
+                                        var studentSc =
+                                            await ib.getStudentFromSC();
+                                        var allInnovations =
+                                            await ib.getAllInnovations();
+                                        var isInnovationsProcessFinished =
+                                            await ib
+                                                .innovationProcessFinished();
+
+                                        var smartContractOwner =
+                                            await ib.getContractOwner();
+
+                                        bool studentIsContractOwner = false;
+                                        if (studentSc.studentAddress ==
+                                            smartContractOwner) {
+                                          studentIsContractOwner = true;
+                                        }
+                                        if (!isInnovationsProcessFinished) {
+                                          Future.delayed(Duration.zero, () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        InnovationsOverview(
+                                                          student: studentSc,
+                                                          studentFirstName:
+                                                          studentFromFhwsFetch
+                                                                  .firstName,
+                                                          isSmartContractOwner:
+                                                              studentIsContractOwner,
+                                                          innovations:
+                                                              allInnovations,
+                                                          isInnovationsProcessFinished:
+                                                              isInnovationsProcessFinished,
+                                                        )));
+                                          });
+                                        } else {
+                                          Future.delayed(Duration.zero,
+                                              () async {
+                                            List<Innovation>
+                                                winningInnovations = await ib
+                                                    .getWinningInnovationsOfProcess();
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ShowWinner(
+                                                          smartContractOwner:
+                                                              smartContractOwner,
+                                                          studentFromLogin:
+                                                              studentSc,
+                                                          studentIsContractOwner:
+                                                              studentIsContractOwner,
+                                                          innovations:
+                                                              winningInnovations,
+                                                        )));
+                                          });
+                                        }
                                       }
                                     }
                                   }
@@ -314,7 +330,8 @@ class _LoginState extends State<Login> {
                                   currentAddress = provider.currentAddress;
                                   if (provider.isConnected &&
                                       provider.isInOperatingChain) {
-                                    text = 'Erfolgreich mit MetaMask verbunden ✅';
+                                    text =
+                                        'Erfolgreich mit MetaMask verbunden ✅';
                                     isMetaMaskConnected = true;
                                   } else if (provider.isConnected &&
                                       !provider.isInOperatingChain) {
@@ -383,86 +400,83 @@ class _LoginState extends State<Login> {
   Future<StudentFromFhwsFetch> getStudentFetch(
       BuildContext context, Size size, isLoading) async {
     try {
-      isLoading ?
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return Center(
-              child: Dialog(
-                backgroundColor: Colors.transparent,
-                child: Container(
-                  padding: const EdgeInsets.only(right: 16.0),
-                  width: size.width * 0.9,
-                  height: size.height * 0.2,
-                  decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.8),
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          bottomLeft: Radius.circular(15),
-                          topRight: Radius.circular(15),
-                          bottomRight: Radius.circular(15))),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            const Text('Fetch wird ausgeführt',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            const SizedBox(height: 20.0),
-                            Container(
-                              height: 40,
-                              width: 70,
-                              decoration: BoxDecoration(
-                                color:
-                                    isLoading ? Colors.transparent : fhwsGreen,
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(20.0)),
-                              ),
-                              child: isLoading
-                                  ? const CircularProgressIndicator(
-                                      color: fhwsGreen,
-                                    )
-                                  : TextButton(
-                                      child: const Text("OK",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 12.0,
-                                          )),
-                                      onPressed: () {
-                                        isLoading = false;
-                                        Navigator.of(context, rootNavigator: true).pop();
-                                      },
-                                    ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
+      isLoading
+          ? showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return Center(
+                  child: Dialog(
+                    backgroundColor: Colors.transparent,
+                    child: Container(
+                      padding: const EdgeInsets.only(right: 16.0),
+                      width: size.width * 0.9,
+                      height: size.height * 0.2,
+                      decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.8),
+                          borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              bottomLeft: Radius.circular(15),
+                              topRight: Radius.circular(15),
+                              bottomRight: Radius.circular(15))),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                const Text('Fetch wird ausgeführt',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                                const SizedBox(height: 20.0),
+                                Container(
+                                  height: 40,
+                                  width: 70,
+                                  decoration: BoxDecoration(
+                                    color: isLoading
+                                        ? Colors.transparent
+                                        : fhwsGreen,
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(20.0)),
+                                  ),
+                                  child: isLoading
+                                      ? const CircularProgressIndicator(
+                                          color: fhwsGreen,
+                                        )
+                                      : TextButton(
+                                          child: const Text("OK",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 12.0,
+                                              )),
+                                          onPressed: () {
+                                            isLoading = false;
+                                            Navigator.of(context,
+                                                    rootNavigator: true)
+                                                .pop();
+                                          },
+                                        ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            );
-          }) : const SizedBox();
+                );
+              })
+          : const SizedBox();
       StudentFromFhwsFetch fetch =
           await Student.fetchStudentInformation(kNumber, password);
       isLoading = false;
       return fetch;
-    } catch (e) {
-      Navigator.pop(context);
-      throw Exception(showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return const RoundedAlert("Achtung",
-              "Die Anmeldung schlug fehl! Überprüfe bitte deine Eingaben!");
-        },
-      ));
+    } on Exception {
+      return StudentFromFhwsFetch('', '');
     }
   }
 }
