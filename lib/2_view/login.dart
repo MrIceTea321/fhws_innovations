@@ -73,12 +73,13 @@ class _LoginState extends State<Login> {
                     children: [
                       const SizedBox(height: 40.0),
                       Text(
-                        "Willkommen zu FHWS Innovations",
+                        "⚡️ Willkommen zu FHWS Innovations ⚡️",
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.headline3!.copyWith(
                               color: Colors.white,
                             ),
                       ),
+                      const SizedBox(height: 20.0),
                       const Text(
                         "Melde dich mit deinem studentischen Account an",
                         textAlign: TextAlign.center,
@@ -87,7 +88,7 @@ class _LoginState extends State<Login> {
                           fontSize: 18.0,
                         ),
                       ),
-                      const SizedBox(height: 30.0),
+                      const SizedBox(height: 20.0),
                       Card(
                         margin: const EdgeInsets.all(32.0),
                         shape: RoundedRectangleBorder(
