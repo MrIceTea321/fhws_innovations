@@ -44,6 +44,10 @@ class SmartContract {
               contract: contract, function: ethFunction, parameters: args),
           chainId: null,
           fetchChainIdFromNetworkId: true);
+      // TODO: Schleife die den Status der ausgeführten Transaktion abfrägt.
+      // Falls Transaktion gescheitert ist --> Fehler werfen
+      // Transaktion erfolgreich --> Schleife kann beendet werden
+      // Transaktion pendet --> neuer Schleifendurchgang
       return result;
     }
   }

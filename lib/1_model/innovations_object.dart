@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:html';
 import 'dart:typed_data';
@@ -11,16 +12,45 @@ import 'package:web3dart/web3dart.dart';
 import 'package:fhws_innovations/3_controller/smart_contract.dart';
 import '../2_view/login.dart';
 import 'innovation.dart';
+import 'package:http/http.dart' as http;
+import '../constants/text_constants.dart';
 
 class InnovationsObject {
   SmartContract smartContract = SmartContract();
   List<Innovation> allInnovationsList = [];
   List<Innovation> innovationFromStudentList = [];
   List<Innovation> winningInnovationsList = [];
-
   var ethClient = Web3Client(
       "https://rinkeby.infura.io/v3/dbd61902b58949348a3045a157d038ca",
       Client());
+
+  void getStatusOfTransaction(String transactionHash) async {
+    bool transactionGetsProcessed = false;
+    while (!transactionGetsProcessed) {
+      final response = await http.get(Uri.parse(
+          'https://api.etherscan.io/api?module=transaction&action=getstatus&txhash=' +
+              transactionHash +
+              '&apikey=' +
+              etherscanToken));
+      if (response.statusCode == 200) {
+        // If the server did return a 200 OK response,
+        // then parse the JSON.
+        Map<String, dynamic> etherScanFetch = jsonDecode(response.body);
+        if ('${etherScanFetch['result']['isError']}' == "1") {
+          // Throw Exception if there was an error in the transaction
+          throw Exception('Transaction failed!');
+        } else if (('${etherScanFetch['result']['isError']}' == "0") &&
+            ('${etherScanFetch['status']}' == "1")) {
+          // Transaction gets processed fine.
+          transactionGetsProcessed = true;
+        }
+      } else {
+        // If the server did not return a 200 OK response,
+        // then throw an exception.
+        throw Exception('Transaction failed!');
+      }
+    }
+  }
 
   //All SmartContract Owner functions
   //call functions
@@ -70,14 +100,14 @@ class InnovationsObject {
   void endInnovationProcess() async {
     var response =
         await smartContract.submitTransaction("endInnovationProcess", []);
-    //TODO use transactionhash (response) for Etherscan fetch
+    getStatusOfTransaction(response);
     log(response);
   }
 
   void restartInnovationProcess() async {
     var response =
         await smartContract.submitTransaction("restartInnovationProcess", []);
-    //TODO use transactionhash (response) for Etherscan fetch
+    getStatusOfTransaction(response);
     log(response);
   }
 
@@ -194,7 +224,7 @@ class InnovationsObject {
             "Erfolgreich erstellt", "Student wurde auf BC erstellt ");
       },
     );
-    //TODO use transactionhash (response) for Etherscan fetch
+    getStatusOfTransaction(response);
     log(response);
     return response;
   }
@@ -203,8 +233,7 @@ class InnovationsObject {
     var response = await smartContract
         .submitTransaction("createInnovation", [title, description]);
     await checkIfStudentUsesInitialRegisteredAddress();
-    //TODO use transactionhash (response) for Etherscan fetch
-
+    getStatusOfTransaction(response);
     log(response);
   }
 
@@ -212,8 +241,7 @@ class InnovationsObject {
     var response = await smartContract
         .submitTransaction("deleteInnovation", [uniqueInnovationHash]);
     await checkIfStudentUsesInitialRegisteredAddress();
-    //TODO use transactionhash (response) for Etherscan fetch
-
+    getStatusOfTransaction(response);
     log(response);
   }
 
@@ -222,8 +250,7 @@ class InnovationsObject {
     var response = await smartContract.submitTransaction(
         "editInnovation", [uniqueInnovationHash, title, description]);
     await checkIfStudentUsesInitialRegisteredAddress();
-    //TODO use transactionhash (response) for Etherscan fetch
-
+    getStatusOfTransaction(response);
     log(response);
   }
 
@@ -231,8 +258,7 @@ class InnovationsObject {
     var response = await smartContract
         .submitTransaction("vote", [Uint8List.fromList(uniqueInnovationHash)]);
     await checkIfStudentUsesInitialRegisteredAddress();
-    //TODO use transactionhash (response) for Etherscan fetch
-    print('Response $response');
+    getStatusOfTransaction(response);
     log(response);
   }
 
@@ -240,8 +266,7 @@ class InnovationsObject {
     var response = await smartContract.submitTransaction(
         "unvote", [Uint8List.fromList(uniqueInnovationHash)]);
     await checkIfStudentUsesInitialRegisteredAddress();
-    //TODO use transactionhash (response) for Etherscan fetch
-
+    getStatusOfTransaction(response);
     log(response);
   }
 }
