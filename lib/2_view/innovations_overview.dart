@@ -246,6 +246,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                             .uniqueInnovationHash),
                         ib: ib,
                         student: widget.student,
+                        size: size,
                       );
                     });
               },
@@ -263,7 +264,8 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
       required Student student,
       required Uint8List innovationHash,
       required Innovation innovation,
-      required InnovationsObject ib}) {
+      required InnovationsObject ib,
+      required Size size}) {
     if ((listEquals(
         student.votedInnovationHash, innovation.uniqueInnovationHash))) {
       innovation.isVoted = true;
@@ -302,16 +304,18 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                       onPressed: () async {
                         Student student = await ib.getStudentFromSC();
                         if (student.voted == false) {
-                          ib.vote(Uint8List.fromList(innovationHash));
+                          ib.vote(Uint8List.fromList(innovationHash), context,
+                              size);
                           widget.studentHasVoted = true;
                         } else if (student.voted == true &&
                             !(listEquals(student.votedInnovationHash,
                                 innovation.uniqueInnovationHash))) {
                           Student student = await ib.getStudentFromSC();
-                          ib.unvote(student.votedInnovationHash);
-                          ib.vote(innovationHash);
+                          ib.unvote(student.votedInnovationHash, context, size);
+                          ib.vote(innovationHash, context, size);
                         } else {
-                          ib.unvote(Uint8List.fromList(innovationHash));
+                          ib.unvote(Uint8List.fromList(innovationHash), context,
+                              size);
                           widget.studentHasVoted = false;
                         }
                         setState(() {});

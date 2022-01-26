@@ -24,7 +24,7 @@ class InnovationsObject {
       "https://rinkeby.infura.io/v3/dbd61902b58949348a3045a157d038ca",
       Client());
 
-  void getStatusOfTransaction(String transactionHash) async {
+  /*void getStatusOfTransaction(String transactionHash) async {
     bool transactionGetsProcessed = false;
     while (!transactionGetsProcessed) {
       final response = await http.get(Uri.parse(
@@ -50,7 +50,7 @@ class InnovationsObject {
         throw Exception('Transaction failed!');
       }
     }
-  }
+  }*/
 
   //All SmartContract Owner functions
   //call functions
@@ -100,14 +100,14 @@ class InnovationsObject {
   void endInnovationProcess() async {
     var response =
         await smartContract.submitTransaction("endInnovationProcess", []);
-    getStatusOfTransaction(response);
+    //getStatusOfTransaction(response);
     log(response);
   }
 
   void restartInnovationProcess() async {
     var response =
         await smartContract.submitTransaction("restartInnovationProcess", []);
-    getStatusOfTransaction(response);
+    //getStatusOfTransaction(response);
     log(response);
   }
 
@@ -224,7 +224,7 @@ class InnovationsObject {
             "Erfolgreich erstellt", "Student wurde auf BC erstellt ");
       },
     );
-    getStatusOfTransaction(response);
+    //getStatusOfTransaction(response);
     log(response);
     return response;
   }
@@ -233,7 +233,7 @@ class InnovationsObject {
     var response = await smartContract
         .submitTransaction("createInnovation", [title, description]);
     await checkIfStudentUsesInitialRegisteredAddress();
-    getStatusOfTransaction(response);
+    //getStatusOfTransaction(response);
     log(response);
   }
 
@@ -241,7 +241,7 @@ class InnovationsObject {
     var response = await smartContract
         .submitTransaction("deleteInnovation", [uniqueInnovationHash]);
     await checkIfStudentUsesInitialRegisteredAddress();
-    getStatusOfTransaction(response);
+    //getStatusOfTransaction(response);
     log(response);
   }
 
@@ -250,23 +250,116 @@ class InnovationsObject {
     var response = await smartContract.submitTransaction(
         "editInnovation", [uniqueInnovationHash, title, description]);
     await checkIfStudentUsesInitialRegisteredAddress();
-    getStatusOfTransaction(response);
+    //getStatusOfTransaction(response);
     log(response);
   }
 
-  void vote(Uint8List uniqueInnovationHash) async {
+  void vote(
+      Uint8List uniqueInnovationHash, BuildContext context, Size size) async {
     var response = await smartContract
         .submitTransaction("vote", [Uint8List.fromList(uniqueInnovationHash)]);
     await checkIfStudentUsesInitialRegisteredAddress();
-    getStatusOfTransaction(response);
+    checkTransactionReceipt(response, context, size);
+
     log(response);
   }
 
-  void unvote(Uint8List uniqueInnovationHash) async {
+  void unvote(
+      Uint8List uniqueInnovationHash, BuildContext context, Size size) async {
     var response = await smartContract.submitTransaction(
         "unvote", [Uint8List.fromList(uniqueInnovationHash)]);
     await checkIfStudentUsesInitialRegisteredAddress();
-    getStatusOfTransaction(response);
+    checkTransactionReceipt(response, context, size);
     log(response);
+  }
+
+  Future<void> checkTransactionReceipt(
+      String response, BuildContext context, Size size) async {
+    TransactionReceipt? finalTransCall;
+    bool isStatus = false;
+    print('isStatus beofre call: $isStatus');
+    try {
+      Future.delayed(const Duration(seconds: 20), () async {
+        finalTransCall = await ethClient.getTransactionReceipt(response);
+        if (finalTransCall?.status == true) {
+          isStatus = true;
+        } else {
+          isStatus = false;
+        }
+        Navigator.of(context, rootNavigator: true).pop();
+      });
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Center(
+              child: Dialog(
+                backgroundColor: Colors.transparent,
+                child: Container(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  width: size.width * 0.9,
+                  height: size.height * 0.2,
+                  decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.8),
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          bottomLeft: Radius.circular(15),
+                          topRight: Radius.circular(15),
+                          bottomRight: Radius.circular(15))),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            const Text('Fetch wird ausgeführt',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                            const SizedBox(height: 20.0),
+                            Container(
+                              height: 40,
+                              width: 70,
+                              decoration: BoxDecoration(
+                                color:
+                                    isStatus ? Colors.transparent : fhwsGreen,
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(20.0)),
+                              ),
+                              child: isStatus
+                                  ? const CircularProgressIndicator(
+                                      color: fhwsGreen,
+                                    )
+                                  : TextButton(
+                                      child: const Text("OK",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12.0,
+                                          )),
+                                      onPressed: () {
+                                        isStatus = false;
+                                        Navigator.of(context,
+                                                rootNavigator: true)
+                                            .pop();
+                                      },
+                                    ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            );
+          });
+
+      print('isStatus after call: $isStatus');
+    } catch (e) {
+      throw Exception('test');
+    }
   }
 }
