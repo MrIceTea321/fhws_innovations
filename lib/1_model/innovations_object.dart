@@ -275,91 +275,203 @@ class InnovationsObject {
 
   Future<void> checkTransactionReceipt(
       String response, BuildContext context, Size size) async {
-    TransactionReceipt? finalTransCall;
-    bool isStatus = false;
-    print('isStatus beofre call: $isStatus');
-    try {
-      Future.delayed(const Duration(seconds: 20), () async {
-        finalTransCall = await ethClient.getTransactionReceipt(response);
-        if (finalTransCall?.status == true) {
+    var finalTrancCall;
+    var isStatus = false;
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Center(
+            child: Dialog(
+              backgroundColor: Colors.transparent,
+              child: Container(
+                padding: const EdgeInsets.only(right: 16.0),
+                width: size.width * 0.9,
+                height: size.height * 0.2,
+                decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.8),
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        bottomLeft: Radius.circular(15),
+                        topRight: Radius.circular(15),
+                        bottomRight: Radius.circular(15))),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          const Text('Transaktion pendet',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                              )),
+                          const SizedBox(height: 20.0),
+                          Container(
+                              height: 40,
+                              width: 70,
+                              decoration: const BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
+                              ),
+                              child: const CircularProgressIndicator(
+                                color: fhwsGreen,
+                              ))
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+    print('isStatus before: $isStatus');
+    await Future.delayed(const Duration(seconds: 20), () async {
+        finalTrancCall = await ethClient.getTransactionReceipt(response);
+        if (finalTrancCall.status == true) {
           isStatus = true;
         } else {
           isStatus = false;
         }
         Navigator.of(context, rootNavigator: true).pop();
-      });
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return Center(
-              child: Dialog(
-                backgroundColor: Colors.transparent,
-                child: Container(
-                  padding: const EdgeInsets.only(right: 16.0),
-                  width: size.width * 0.9,
-                  height: size.height * 0.2,
-                  decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.8),
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          bottomLeft: Radius.circular(15),
-                          topRight: Radius.circular(15),
-                          bottomRight: Radius.circular(15))),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            const Text('Fetch wird ausgeführt',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            const SizedBox(height: 20.0),
-                            Container(
-                              height: 40,
-                              width: 70,
-                              decoration: BoxDecoration(
-                                color:
-                                    isStatus ? Colors.transparent : fhwsGreen,
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(20.0)),
-                              ),
-                              child: isStatus
-                                  ? const CircularProgressIndicator(
-                                      color: fhwsGreen,
-                                    )
-                                  : TextButton(
-                                      child: const Text("OK",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 12.0,
-                                          )),
-                                      onPressed: () {
-                                        isStatus = false;
-                                        Navigator.of(context,
-                                                rootNavigator: true)
-                                            .pop();
-                                      },
-                                    ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
+    });
+    print('isStatus aftger: $isStatus');
+
+    isStatus
+        ? showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return Center(
+                child: Dialog(
+                  backgroundColor: Colors.transparent,
+                  child: Container(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    width: size.width * 0.9,
+                    height: size.height * 0.2,
+                    decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.8),
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            bottomLeft: Radius.circular(15),
+                            topRight: Radius.circular(15),
+                            bottomRight: Radius.circular(15))),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              const Text('Transaktion erfolgreich',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                              const SizedBox(height: 20.0),
+                              Container(
+                                  height: 40,
+                                  width: 70,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.transparent,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20.0)),
+                                  ),
+                                  child: TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context, rootNavigator: true)
+                                          .pop();
+                                    },
+                                    child: Container(
+                                        height: 40,
+                                        width: 70,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.transparent,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20.0)),
+                                        ),
+                                        child: const Text('Ok',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 18.0))),
+                                  ))
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
-          });
-
-      print('isStatus after call: $isStatus');
-    } catch (e) {
-      throw Exception('test');
-    }
+              );
+            })
+        : showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return Center(
+                child: Dialog(
+                  backgroundColor: Colors.transparent,
+                  child: Container(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    width: size.width * 0.9,
+                    height: size.height * 0.2,
+                    decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.8),
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            bottomLeft: Radius.circular(15),
+                            topRight: Radius.circular(15),
+                            bottomRight: Radius.circular(15))),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              const Text('Transaktion nicht erfolgreich',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                              const SizedBox(height: 20.0),
+                              Container(
+                                  height: 40,
+                                  width: 70,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.transparent,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20.0)),
+                                  ),
+                                  child: TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context, rootNavigator: true)
+                                          .pop();
+                                    },
+                                    child: Container(
+                                        height: 40,
+                                        width: 70,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.transparent,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20.0)),
+                                        ),
+                                        child: const Text('Ok',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 18.0))),
+                                  ))
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            });
   }
 }
