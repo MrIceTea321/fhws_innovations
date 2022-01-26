@@ -250,7 +250,6 @@ class InnovationsObject {
     var response = await smartContract.submitTransaction(
         "editInnovation", [uniqueInnovationHash, title, description]);
     await checkIfStudentUsesInitialRegisteredAddress();
-    //getStatusOfTransaction(response);
     log(response);
   }
 
@@ -260,7 +259,6 @@ class InnovationsObject {
         .submitTransaction("vote", [Uint8List.fromList(uniqueInnovationHash)]);
     await checkIfStudentUsesInitialRegisteredAddress();
     checkTransactionReceipt(response, context, size);
-
     log(response);
   }
 
@@ -314,7 +312,7 @@ class InnovationsObject {
                               decoration: const BoxDecoration(
                                 color: Colors.transparent,
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
+                                    BorderRadius.all(Radius.circular(20.0)),
                               ),
                               child: const CircularProgressIndicator(
                                 color: fhwsGreen,
@@ -328,18 +326,15 @@ class InnovationsObject {
             ),
           );
         });
-    print('isStatus before: $isStatus');
     await Future.delayed(const Duration(seconds: 20), () async {
-        finalTrancCall = await ethClient.getTransactionReceipt(response);
-        if (finalTrancCall.status == true) {
-          isStatus = true;
-        } else {
-          isStatus = false;
-        }
-        Navigator.of(context, rootNavigator: true).pop();
+      finalTrancCall = await ethClient.getTransactionReceipt(response);
+      if (finalTrancCall.status == true) {
+        isStatus = true;
+      } else {
+        isStatus = false;
+      }
+      Navigator.of(context, rootNavigator: true).pop();
     });
-    print('isStatus aftger: $isStatus');
-
     isStatus
         ? showDialog(
             context: context,
