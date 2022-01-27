@@ -22,6 +22,7 @@ class InnovationsOverview extends StatefulWidget {
   bool studentHasVoted = false;
 
   InnovationsOverview(
+      //TODO get innovations over method in screen not overgiven by every screen
       {Key? key,
       required this.student,
       required this.studentFirstName,
