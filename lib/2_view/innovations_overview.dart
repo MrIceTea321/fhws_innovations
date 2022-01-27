@@ -131,7 +131,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                 ? const SizedBox()
                 : TextButton(
                     onPressed: () async {
-                      ib.endInnovationProcess();
+                      ib.endInnovationProcess(context, size);
                       bool isFinished = await ib.innovationProcessFinished();
                       //TODO get bool from etherscan
                       showDialog(

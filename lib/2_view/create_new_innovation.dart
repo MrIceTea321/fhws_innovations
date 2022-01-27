@@ -121,7 +121,8 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
                     },
                   );
                 } else {
-                  ib.createInnovation(widget.title, widget.description);
+                  ib.createInnovation(
+                      widget.title, widget.description, context, size);
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
