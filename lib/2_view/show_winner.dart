@@ -129,7 +129,7 @@ class _ShowWinner extends State<ShowWinner> {
           widget.studentIsContractOwner
               ? TextButton(
                   onPressed: () async {
-                    ib.restartInnovationProcess();
+                    ib.restartInnovationProcess(context, size);
                     showDialog(
                         context: context,
                         builder: (BuildContext context) {

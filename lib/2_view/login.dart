@@ -262,7 +262,8 @@ class _LoginState extends State<Login> {
                                       } else {
                                         await ib.initialRegistrationOfStudent(
                                             context,
-                                            studentFromFhwsFetch.kNumber);
+                                            studentFromFhwsFetch.kNumber,
+                                            size);
                                         var studentSc =
                                             await ib.getStudentFromSC();
                                         var allInnovations =

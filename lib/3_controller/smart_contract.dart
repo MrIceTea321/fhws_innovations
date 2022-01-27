@@ -1,11 +1,16 @@
 import 'dart:html';
-
+import 'package:web3dart/browser.dart';
+import 'package:http/http.dart';
+import 'package:web3dart/web3dart.dart';
+import '../constants/text_constants.dart';
 import 'package:fhws_innovations/constants/text_constants.dart';
 import 'package:flutter/services.dart';
-import 'package:web3dart/browser.dart';
-import 'package:web3dart/web3dart.dart';
 
 class SmartContract {
+  var ethClient = Web3Client(
+      "https://rinkeby.infura.io/v3/dbd61902b58949348a3045a157d038ca",
+      Client());
+
   Future<DeployedContract> loadContract() async {
     // Load Contract from the Api
     String abi = await rootBundle.loadString("abi.json");
@@ -44,6 +49,13 @@ class SmartContract {
               contract: contract, function: ethFunction, parameters: args),
           chainId: null,
           fetchChainIdFromNetworkId: true);
+      TransactionReceipt? transactionReceipt =
+          await ethClient.getTransactionReceipt(result);
+
+      // TODO: Schleife die den Status der ausgeführten Transaktion abfrägt.
+      // Falls Transaktion gescheitert ist --> Fehler werfen
+      // Transaktion erfolgreich --> Schleife kann beendet werden
+      // Transaktion pendet --> neuer Schleifendurchgang
       return result;
     }
   }

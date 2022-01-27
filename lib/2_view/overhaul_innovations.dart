@@ -127,8 +127,11 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                                   const Spacer(),
                                   TextButton(
                                     onPressed: () async {
-                                      ib.deleteInnovation(widget
-                                          .userInnovation.uniqueInnovationHash);
+                                      ib.deleteInnovation(
+                                          widget.userInnovation
+                                              .uniqueInnovationHash,
+                                          context,
+                                          size);
                                       var studentInnovations =
                                           await ib.getInnovationsOfStudent();
                                       Navigator.push(
@@ -178,7 +181,9 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                 ib.editInnovation(
                     widget.userInnovation.uniqueInnovationHash,
                     widget.userInnovation.title,
-                    widget.userInnovation.description);
+                    widget.userInnovation.description,
+                    context,
+                    size);
                 var student = await ib.getStudentFromSC();
                 var allInnovations = await ib.getAllInnovations();
                 var isInnovationsProcessFinished =
