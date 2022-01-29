@@ -23,8 +23,8 @@ class SmartContract {
   }
 
   // Enter function name of smart contract method - optional are the arguments
-  Future<List<dynamic>> querySmartContractFunction(String functionName,
-      List<dynamic> args, Web3Client ethClient) async {
+  Future<List<dynamic>> querySmartContractFunction(
+      String functionName, List<dynamic> args, Web3Client ethClient) async {
     final contract = await loadContract();
     final ethFunction = contract.function(functionName);
     final result = await ethClient.call(
@@ -33,8 +33,8 @@ class SmartContract {
     return result;
   }
 
-  Future<String> submitTransaction(String functionName,
-      List<dynamic> args) async {
+  Future<String> submitTransaction(
+      String functionName, List<dynamic> args) async {
     final eth = window.ethereum;
     if (eth == null) {
       return "MetaMask is not available";
@@ -49,13 +49,6 @@ class SmartContract {
               contract: contract, function: ethFunction, parameters: args),
           chainId: null,
           fetchChainIdFromNetworkId: true);
-      TransactionReceipt? transactionReceipt =
-      await ethClient.getTransactionReceipt(result);
-
-      // TODO: Schleife die den Status der ausgeführten Transaktion abfrägt.
-      // Falls Transaktion gescheitert ist --> Fehler werfen
-      // Transaktion erfolgreich --> Schleife kann beendet werden
-      // Transaktion pendet --> neuer Schleifendurchgang
       return result;
     }
   }

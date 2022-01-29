@@ -17,9 +17,7 @@ class ShowInnovation extends StatefulWidget {
 class _ShowInnovationOverviewState extends State<ShowInnovation> {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
 
     return WillPopScope(
       onWillPop: () async {
@@ -68,10 +66,9 @@ class _ShowInnovationOverviewState extends State<ShowInnovation> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                            const Login(
-                              fromStudentCheck: false,
-                            )));
+                            builder: (context) => const Login(
+                                  fromStudentCheck: false,
+                                )));
                   },
                   icon: const Icon(Icons.logout)),
             ),
@@ -79,26 +76,27 @@ class _ShowInnovationOverviewState extends State<ShowInnovation> {
         ),
         body: SingleChildScrollView(
             child: Column(
-              children: <Widget>[
-                SizedBox(height: size.height * 0.015),
-                _buildFeaturedItem(
-                    title: widget.innovation.title,
-                    innovationHash: widget.innovation.uniqueInnovationHash,
-                    voteCount: widget.innovation.votingCount.toString(),
-                    description: widget.innovation.description),
-              ],
-            )),
+          children: <Widget>[
+            SizedBox(height: size.height * 0.015),
+            _buildFeaturedItem(
+                title: widget.innovation.title,
+                innovationHash: widget.innovation.uniqueInnovationHash,
+                voteCount: widget.innovation.votingCount.toString(),
+                description: widget.innovation.description),
+          ],
+        )),
       ),
     );
   }
 
-  Container _buildFeaturedItem({required String title,
-    required String description,
-    required String voteCount,
-    required Uint8List innovationHash}) {
+  Container _buildFeaturedItem(
+      {required String title,
+      required String description,
+      required String voteCount,
+      required Uint8List innovationHash}) {
     return Container(
       padding:
-      const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0, bottom: 8.0),
+          const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0, bottom: 8.0),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         color: Colors.black.withOpacity(0.5),

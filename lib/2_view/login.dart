@@ -42,15 +42,11 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     bool isLoading = true;
 
     return ChangeNotifierProvider(
-        create: (context) =>
-        MetaMaskProvider()
-          ..init(),
+        create: (context) => MetaMaskProvider()..init(),
         builder: (context, snapshot) {
           return Scaffold(
             body: Stack(
@@ -79,13 +75,9 @@ class _LoginState extends State<Login> {
                       Text(
                         "⚡️ Willkommen zu FHWS Innovations ⚡️",
                         textAlign: TextAlign.center,
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .headline3!
-                            .copyWith(
-                          color: Colors.white,
-                        ),
+                        style: Theme.of(context).textTheme.headline3!.copyWith(
+                              color: Colors.white,
+                            ),
                       ),
                       const SizedBox(height: 20.0),
                       const Text(
@@ -112,13 +104,12 @@ class _LoginState extends State<Login> {
                             Text(
                               "Anmelden",
                               textAlign: TextAlign.center,
-                              style: Theme
-                                  .of(context)
+                              style: Theme.of(context)
                                   .textTheme
                                   .headline5!
                                   .copyWith(
-                                color: fhwsGreen,
-                              ),
+                                    color: fhwsGreen,
+                                  ),
                             ),
                             const SizedBox(height: 40.0),
                             TextField(
@@ -151,11 +142,11 @@ class _LoginState extends State<Login> {
                                   },
                                   icon: showPassword
                                       ? const Icon(
-                                    Icons.visibility_off_outlined,
-                                    color: fhwsGreen,
-                                  )
+                                          Icons.visibility_off_outlined,
+                                          color: fhwsGreen,
+                                        )
                                       : const Icon(Icons.visibility_outlined,
-                                      color: fhwsGreen),
+                                          color: fhwsGreen),
                                 ),
                                 labelText: "Passwort eingeben",
                               ),
@@ -196,8 +187,8 @@ class _LoginState extends State<Login> {
                                     );
                                   } else {
                                     StudentFromFhwsFetch studentFromFhwsFetch =
-                                    await getStudentFetch(
-                                        context, size, isLoading);
+                                        await getStudentFetch(
+                                            context, size, isLoading);
                                     if (studentFromFhwsFetch
                                         .firstName.isEmpty) {
                                       Navigator.pop(context);
@@ -213,15 +204,15 @@ class _LoginState extends State<Login> {
                                           .studentAlreadyRegistered(kNumber);
                                       if (studentAlreadyRegistered) {
                                         var studentSc =
-                                        await ib.getStudentFromSC();
+                                            await ib.getStudentFromSC();
                                         var allInnovations =
-                                        await ib.getAllInnovations();
+                                            await ib.getAllInnovations();
                                         var isInnovationsProcessFinished =
-                                        await ib
-                                            .innovationProcessFinished();
+                                            await ib
+                                                .innovationProcessFinished();
 
                                         var smartContractOwner =
-                                        await ib.getContractOwner();
+                                            await ib.getContractOwner();
                                         bool studentIsContractOwner = false;
                                         if (studentSc.studentAddress ==
                                             smartContractOwner) {
@@ -236,37 +227,37 @@ class _LoginState extends State<Login> {
                                                         InnovationsOverview(
                                                           student: studentSc,
                                                           studentFirstName:
-                                                          studentFromFhwsFetch
-                                                              .firstName,
+                                                              studentFromFhwsFetch
+                                                                  .firstName,
                                                           isSmartContractOwner:
-                                                          studentIsContractOwner,
+                                                              studentIsContractOwner,
                                                           innovations:
-                                                          allInnovations,
+                                                              allInnovations,
                                                           isInnovationsProcessFinished:
-                                                          isInnovationsProcessFinished,
+                                                              isInnovationsProcessFinished,
                                                         )));
                                           });
                                         } else {
                                           Future.delayed(Duration.zero,
-                                                  () async {
-                                                List<Innovation>
+                                              () async {
+                                            List<Innovation>
                                                 winningInnovations = await ib
                                                     .getWinningInnovationsOfProcess();
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            ShowWinner(
-                                                              smartContractOwner:
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ShowWinner(
+                                                          smartContractOwner:
                                                               smartContractOwner,
-                                                              studentFromLogin:
+                                                          studentFromLogin:
                                                               studentSc,
-                                                              studentIsContractOwner:
+                                                          studentIsContractOwner:
                                                               studentIsContractOwner,
-                                                              innovations:
+                                                          innovations:
                                                               winningInnovations,
-                                                            )));
-                                              });
+                                                        )));
+                                          });
                                         }
                                       } else {
                                         await ib.initialRegistrationOfStudent(
@@ -274,15 +265,15 @@ class _LoginState extends State<Login> {
                                             studentFromFhwsFetch.kNumber,
                                             size);
                                         var studentSc =
-                                        await ib.getStudentFromSC();
+                                            await ib.getStudentFromSC();
                                         var allInnovations =
-                                        await ib.getAllInnovations();
+                                            await ib.getAllInnovations();
                                         var isInnovationsProcessFinished =
-                                        await ib
-                                            .innovationProcessFinished();
+                                            await ib
+                                                .innovationProcessFinished();
 
                                         var smartContractOwner =
-                                        await ib.getContractOwner();
+                                            await ib.getContractOwner();
 
                                         bool studentIsContractOwner = false;
                                         if (studentSc.studentAddress ==
@@ -298,37 +289,37 @@ class _LoginState extends State<Login> {
                                                         InnovationsOverview(
                                                           student: studentSc,
                                                           studentFirstName:
-                                                          studentFromFhwsFetch
-                                                              .firstName,
+                                                              studentFromFhwsFetch
+                                                                  .firstName,
                                                           isSmartContractOwner:
-                                                          studentIsContractOwner,
+                                                              studentIsContractOwner,
                                                           innovations:
-                                                          allInnovations,
+                                                              allInnovations,
                                                           isInnovationsProcessFinished:
-                                                          isInnovationsProcessFinished,
+                                                              isInnovationsProcessFinished,
                                                         )));
                                           });
                                         } else {
                                           Future.delayed(Duration.zero,
-                                                  () async {
-                                                List<Innovation>
+                                              () async {
+                                            List<Innovation>
                                                 winningInnovations = await ib
                                                     .getWinningInnovationsOfProcess();
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            ShowWinner(
-                                                              smartContractOwner:
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ShowWinner(
+                                                          smartContractOwner:
                                                               smartContractOwner,
-                                                              studentFromLogin:
+                                                          studentFromLogin:
                                                               studentSc,
-                                                              studentIsContractOwner:
+                                                          studentIsContractOwner:
                                                               studentIsContractOwner,
-                                                              innovations:
+                                                          innovations:
                                                               winningInnovations,
-                                                            )));
-                                              });
+                                                        )));
+                                          });
                                         }
                                       }
                                     }
@@ -343,13 +334,12 @@ class _LoginState extends State<Login> {
                                   if (provider.isConnected &&
                                       provider.isInOperatingChain) {
                                     text =
-                                    'Erfolgreich mit MetaMask verbunden ✅';
+                                        'Erfolgreich mit MetaMask verbunden ✅';
                                     isMetaMaskConnected = true;
                                   } else if (provider.isConnected &&
                                       !provider.isInOperatingChain) {
                                     text =
-                                    'Falsche chain. Bitte verbinde dich mit ${MetaMaskProvider
-                                        .operatingChain}';
+                                        'Falsche chain. Bitte verbinde dich mit ${MetaMaskProvider.operatingChain}';
                                   } else if (provider.isEnabled) {
                                     return Column(
                                       mainAxisSize: MainAxisSize.min,
@@ -357,10 +347,9 @@ class _LoginState extends State<Login> {
                                         const Text('🦊 Hier klicken 🦊'),
                                         const SizedBox(height: 8),
                                         CupertinoButton(
-                                          onPressed: () =>
-                                              context
-                                                  .read<MetaMaskProvider>()
-                                                  .connect(),
+                                          onPressed: () => context
+                                              .read<MetaMaskProvider>()
+                                              .connect(),
                                           color: Colors.white,
                                           padding: const EdgeInsets.all(0),
                                           child: Row(
@@ -377,26 +366,23 @@ class _LoginState extends State<Login> {
                                     );
                                   } else {
                                     text =
-                                    'Bitte benutze einen Browser der Web3 unterstützt.';
+                                        'Bitte benutze einen Browser der Web3 unterstützt.';
                                   }
 
                                   return ShaderMask(
                                     shaderCallback: (bounds) =>
                                         const LinearGradient(
-                                          colors: [
-                                            Colors.purple,
-                                            Colors.blue,
-                                            Colors.red
-                                          ],
-                                        ).createShader(bounds),
+                                      colors: [
+                                        Colors.purple,
+                                        Colors.blue,
+                                        Colors.red
+                                      ],
+                                    ).createShader(bounds),
                                     child: Text(
                                       text,
                                       textAlign: TextAlign.center,
                                       style:
-                                      Theme
-                                          .of(context)
-                                          .textTheme
-                                          .headline5,
+                                          Theme.of(context).textTheme.headline5,
                                     ),
                                   );
                                 },
@@ -414,82 +400,82 @@ class _LoginState extends State<Login> {
         });
   }
 
-  Future<StudentFromFhwsFetch> getStudentFetch(BuildContext context, Size size,
-      isLoading) async {
+  Future<StudentFromFhwsFetch> getStudentFetch(
+      BuildContext context, Size size, isLoading) async {
     try {
       isLoading
           ? showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return Center(
-              child: Dialog(
-                backgroundColor: Colors.transparent,
-                child: Container(
-                  padding: const EdgeInsets.only(right: 16.0),
-                  width: size.width * 0.9,
-                  height: size.height * 0.2,
-                  decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.8),
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          bottomLeft: Radius.circular(15),
-                          topRight: Radius.circular(15),
-                          bottomRight: Radius.circular(15))),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            const Text('Login wird durchgeführt',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            const SizedBox(height: 20.0),
-                            Container(
-                              height: 40,
-                              width: 70,
-                              decoration: BoxDecoration(
-                                color: isLoading
-                                    ? Colors.transparent
-                                    : fhwsGreen,
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(20.0)),
-                              ),
-                              child: isLoading
-                                  ? const CircularProgressIndicator(
-                                color: fhwsGreen,
-                              )
-                                  : TextButton(
-                                child: const Text("OK",
+              context: context,
+              builder: (BuildContext context) {
+                return Center(
+                  child: Dialog(
+                    backgroundColor: Colors.transparent,
+                    child: Container(
+                      padding: const EdgeInsets.only(right: 16.0),
+                      width: size.width * 0.9,
+                      height: size.height * 0.2,
+                      decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.8),
+                          borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              bottomLeft: Radius.circular(15),
+                              topRight: Radius.circular(15),
+                              bottomRight: Radius.circular(15))),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                const Text('Login wird durchgeführt',
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: Colors.black,
+                                      fontSize: 18.0,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 12.0,
                                     )),
-                                onPressed: () {
-                                  isLoading = false;
-                                  Navigator.of(context,
-                                      rootNavigator: true)
-                                      .pop();
-                                },
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
+                                const SizedBox(height: 20.0),
+                                Container(
+                                  height: 40,
+                                  width: 70,
+                                  decoration: BoxDecoration(
+                                    color: isLoading
+                                        ? Colors.transparent
+                                        : fhwsGreen,
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(20.0)),
+                                  ),
+                                  child: isLoading
+                                      ? const CircularProgressIndicator(
+                                          color: fhwsGreen,
+                                        )
+                                      : TextButton(
+                                          child: const Text("OK",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 12.0,
+                                              )),
+                                          onPressed: () {
+                                            isLoading = false;
+                                            Navigator.of(context,
+                                                    rootNavigator: true)
+                                                .pop();
+                                          },
+                                        ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            );
-          })
+                );
+              })
           : const SizedBox();
       StudentFromFhwsFetch fetch =
-      await Student.fetchStudentInformation(kNumber, password);
+          await Student.fetchStudentInformation(kNumber, password);
       isLoading = false;
       return fetch;
     } on Exception {

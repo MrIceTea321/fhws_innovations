@@ -50,6 +50,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
   @override
   void dispose() {
     widget.innovations.clear();
+    widget.voteCount = 0;
     super.dispose();
   }
 
@@ -140,45 +141,82 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
               child: Column(
                 children: <Widget>[
                   SizedBox(height: size.height * 0.015),
-                  widget.isInnovationsProcessFinished
-                      ? const SizedBox()
-                      : TextButton(
-                          onPressed: () async {
-                            ib.endInnovationProcess(context, size);
-                            bool isFinished =
-                                await ib.innovationProcessFinished();
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return const RoundedAlert("Erfolgreich",
-                                    "Die Abstimmung wurde erfolgreich beendet!");
-                              },
-                            );
-                          },
-                          child: Container(
-                              height: 50,
-                              width: size.width * 0.9,
-                              decoration: const BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(32.0)),
-                                color: fhwsGreen,
-                              ),
-                              child: const Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 20.0, vertical: 10),
-                                child: Center(
-                                  child: Text(
-                                    'Abstimmung beenden',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    maxLines: 1,
-                                  ),
+                  SizedBox(
+                    child: widget.isSmartContractOwner
+                      ?  SizedBox(
+                    child: widget.isInnovationsProcessFinished ?  TextButton(
+                      onPressed: () async {
+                        ib.endInnovationProcess(context, size);
+                        ib.restartInnovationProcess(context, size);
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const RoundedAlert("Erfolgreich",
+                                "Die Abstimmung wird neu gestartet!");
+                          }
+                        );
+                      },
+                      child: Container(
+                          height: 50,
+                          width: size.width * 0.9,
+                          decoration: const BoxDecoration(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(32.0)),
+                            color: fhwsGreen,
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20.0, vertical: 10),
+                            child: Center(
+                              child: Text(
+                                'Abstimmung neu starten',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
                                 ),
-                              )),
-                        ),
+                                maxLines: 1,
+                              ),
+                            ),
+                          )),
+                    )
+                        :TextButton(
+                      onPressed: () async {
+                        ib.endInnovationProcess(context, size);
+                        await ib.innovationProcessFinished();
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const RoundedAlert("Erfolgreich",
+                                "Die Abstimmung wurde erfolgreich beendet!");
+                          },
+                        );
+                      },
+                      child: Container(
+                          height: 50,
+                          width: size.width * 0.9,
+                          decoration: const BoxDecoration(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(32.0)),
+                            color: fhwsGreen,
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20.0, vertical: 10),
+                            child: Center(
+                              child: Text(
+                                'Abstimmung beenden',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                maxLines: 1,
+                              ),
+                            ),
+                          )),
+                    ),
+                  ):const SizedBox()),
                   SizedBox(height: size.height * 0.015),
                   Container(
                     width: size.width - 30.0,

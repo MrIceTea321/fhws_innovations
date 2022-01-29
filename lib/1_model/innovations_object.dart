@@ -69,14 +69,14 @@ class InnovationsObject {
   //transaction functions
   void endInnovationProcess(BuildContext context, Size size) async {
     var response =
-    await smartContract.submitTransaction("endInnovationProcess", []);
+        await smartContract.submitTransaction("endInnovationProcess", []);
     checkTransactionReceipt(response, context, size);
     log(response);
   }
 
   void restartInnovationProcess(BuildContext context, Size size) async {
     var response =
-    await smartContract.submitTransaction("restartInnovationProcess", []);
+        await smartContract.submitTransaction("restartInnovationProcess", []);
     checkTransactionReceipt(response, context, size);
     log(response);
   }
@@ -183,8 +183,8 @@ class InnovationsObject {
 
   //All transaction function of SmartContract
 
-  Future<String> initialRegistrationOfStudent(BuildContext context,
-      String kNumber, Size size) async {
+  Future<String> initialRegistrationOfStudent(
+      BuildContext context, String kNumber, Size size) async {
     var response = await smartContract
         .submitTransaction("initialRegistrationOfStudent", [kNumber]);
     showDialog(
@@ -199,8 +199,8 @@ class InnovationsObject {
     return response;
   }
 
-  void createInnovation(String title, String description, BuildContext context,
-      Size size) async {
+  void createInnovation(
+      String title, String description, BuildContext context, Size size) async {
     var response = await smartContract
         .submitTransaction("createInnovation", [title, description]);
     await checkIfStudentUsesInitialRegisteredAddress();
@@ -208,8 +208,8 @@ class InnovationsObject {
     log(response);
   }
 
-  void deleteInnovation(Uint8List uniqueInnovationHash, BuildContext context,
-      Size size) async {
+  void deleteInnovation(
+      Uint8List uniqueInnovationHash, BuildContext context, Size size) async {
     var response = await smartContract
         .submitTransaction("deleteInnovation", [uniqueInnovationHash]);
     await checkIfStudentUsesInitialRegisteredAddress();
@@ -226,8 +226,8 @@ class InnovationsObject {
     log(response);
   }
 
-  void vote(Uint8List uniqueInnovationHash, BuildContext context,
-      Size size) async {
+  void vote(
+      Uint8List uniqueInnovationHash, BuildContext context, Size size) async {
     var response = await smartContract
         .submitTransaction("vote", [Uint8List.fromList(uniqueInnovationHash)]);
     await checkIfStudentUsesInitialRegisteredAddress();
@@ -235,8 +235,8 @@ class InnovationsObject {
     log(response);
   }
 
-  void unvote(Uint8List uniqueInnovationHash, BuildContext context,
-      Size size) async {
+  void unvote(
+      Uint8List uniqueInnovationHash, BuildContext context, Size size) async {
     var response = await smartContract.submitTransaction(
         "unvote", [Uint8List.fromList(uniqueInnovationHash)]);
     await checkIfStudentUsesInitialRegisteredAddress();
@@ -244,8 +244,8 @@ class InnovationsObject {
     log(response);
   }
 
-  Future<void> checkTransactionReceipt(String response, BuildContext context,
-      Size size) async {
+  Future<void> checkTransactionReceipt(
+      String response, BuildContext context, Size size) async {
     var isStatus = false;
     showDialog(
         context: context,
@@ -284,7 +284,7 @@ class InnovationsObject {
                               decoration: const BoxDecoration(
                                 color: Colors.transparent,
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
+                                    BorderRadius.all(Radius.circular(20.0)),
                               ),
                               child: const CircularProgressIndicator(
                                 color: fhwsGreen,
@@ -300,16 +300,10 @@ class InnovationsObject {
         });
 
     var transactionReceipt;
-    print('before while looP');
-    print(isStatus);
     while (transactionReceipt?.status == null) {
       transactionReceipt = await ethClient.getTransactionReceipt(response);
-      print(' ***** in loop *****');
     }
-    print('after while looP');
-    print(isStatus);
-    print('transaction Status');
-    print(transactionReceipt);
+
     if (transactionReceipt.status == true) {
       isStatus = true;
       Navigator.of(context, rootNavigator: true).pop();
@@ -317,8 +311,6 @@ class InnovationsObject {
       isStatus = false;
       Navigator.of(context, rootNavigator: true).pop();
     }
-    print('after if/else before last dialog');
-    print(isStatus);
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -341,32 +333,31 @@ class InnovationsObject {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          isStatus ?
-                          const Text(
-                              'Transaktion erfolgreich',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                              )) : const Text('Transaktion nicht erfolgreich',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                              )),
+                          isStatus
+                              ? const Text('Transaktion erfolgreich',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                  ))
+                              : const Text('Transaktion nicht erfolgreich',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                  )),
                           const SizedBox(height: 20.0),
                           Container(
                               height: 40,
                               width: 70,
                               decoration: const BoxDecoration(
                                 color: Colors.transparent,
-                                borderRadius: BorderRadius.all(
-                                    Radius.circular(20.0)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0)),
                               ),
                               child: TextButton(
                                 onPressed: () {
-                                  Navigator.of(context,
-                                      rootNavigator: true)
+                                  Navigator.of(context, rootNavigator: true)
                                       .pop();
                                 },
                                 child: Container(
@@ -384,9 +375,7 @@ class InnovationsObject {
                               ))
                         ],
                       ),
-                    )
-                )
-            ),
+                    ))),
           );
         });
   }

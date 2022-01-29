@@ -9,9 +9,7 @@ class RoundedAlert extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     return Center(
       child: Dialog(
         backgroundColor: Colors.transparent,
