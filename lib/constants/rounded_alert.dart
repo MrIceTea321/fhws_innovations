@@ -9,7 +9,9 @@ class RoundedAlert extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
     return Center(
       child: Dialog(
         backgroundColor: Colors.transparent,
@@ -31,7 +33,7 @@ class RoundedAlert extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Text('❗️ ' + title + '❗️',
+                    Text('❗️ ' + title + ' ❗️',
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 16.0,

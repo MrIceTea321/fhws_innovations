@@ -25,7 +25,9 @@ class CreateNewInnovation extends StatefulWidget {
 class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
     InnovationsObject ib = InnovationsObject();
 
     return WillPopScope(
@@ -72,7 +74,8 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => UserInnovations(
+                                builder: (context) =>
+                                    UserInnovations(
                                       userInnovations: userInnos,
                                       studentFirstName: widget.studentFirstName,
                                     )));
@@ -88,9 +91,10 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const Login(
-                                  fromStudentCheck: false,
-                                )));
+                            builder: (context) =>
+                            const Login(
+                              fromStudentCheck: false,
+                            )));
                   },
                   icon: const Icon(Icons.logout)),
             ),
@@ -98,85 +102,79 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
         ),
         body: SingleChildScrollView(
             child: Column(
-          children: <Widget>[
-            SizedBox(height: size.height * 0.015),
-            _createNewInnovation(ib),
-            //});
-            TextButton(
-              onPressed: () async {
-                if (widget.title.isEmpty) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return const RoundedAlert("Achtung",
-                          "Bitte gib einen Titel für deine Innovation an");
-                    },
-                  );
-                } else if (widget.description.isEmpty) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return const RoundedAlert("Achtung",
-                          "Bitte gib eine Beschreibung für deine Innovation an");
-                    },
-                  );
-                } else {
-                  ib.createInnovation(
-                      widget.title, widget.description, context, size);
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return const RoundedAlert("Erfolgreich",
-                          "Deine Innovation wurde erfolgreich angelegt");
-                    },
-                  );
-                }
-                var student = await ib.getStudentFromSC();
-                var allInnovations = await ib.getAllInnovations();
-                var isInnovationsProcessFinished =
+              children: <Widget>[
+                SizedBox(height: size.height * 0.015),
+                _createNewInnovation(ib),
+                //});
+                TextButton(
+                  onPressed: () async {
+                    if (widget.title.isEmpty) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const RoundedAlert("Achtung",
+                              "Bitte gib einen Titel für deine Innovation an");
+                        },
+                      );
+                    } else if (widget.description.isEmpty) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const RoundedAlert("Achtung",
+                              "Bitte gib eine Beschreibung für deine Innovation an");
+                        },
+                      );
+                    } else {
+                      ib.createInnovation(
+                          widget.title, widget.description, context, size);
+                    }
+                    var student = await ib.getStudentFromSC();
+                    var allInnovations = await ib.getAllInnovations();
+                    var isInnovationsProcessFinished =
                     await ib.innovationProcessFinished();
-                var contractOwner = await ib.getContractOwner();
-                bool isOwner = false;
-                if (student.studentAddress == contractOwner) {
-                  isOwner = true;
-                }
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => InnovationsOverview(
-                              student: student,
-                              innovations: allInnovations,
-                              isInnovationsProcessFinished:
+                    var contractOwner = await ib.getContractOwner();
+                    bool isOwner = false;
+                    if (student.studentAddress == contractOwner) {
+                      isOwner = true;
+                    }
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                InnovationsOverview(
+                                  student: student,
+                                  innovations: allInnovations,
+                                  isInnovationsProcessFinished:
                                   isInnovationsProcessFinished,
-                              studentFirstName: widget.studentFirstName,
-                              isSmartContractOwner: isOwner,
-                            )));
-              },
-              child: Container(
-                  height: 50,
-                  width: size.width * 0.9,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                    color: fhwsGreen,
-                  ),
-                  child: const Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                    child: Center(
-                      child: Text(
-                        'Innovation anlegen',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        maxLines: 1,
+                                  studentFirstName: widget.studentFirstName,
+                                  isSmartContractOwner: isOwner,
+                                )));
+                  },
+                  child: Container(
+                      height: 50,
+                      width: size.width * 0.9,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        color: fhwsGreen,
                       ),
-                    ),
-                  )),
-            )
-          ],
-        )),
+                      child: const Padding(
+                        padding:
+                        EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+                        child: Center(
+                          child: Text(
+                            'Innovation anlegen',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            maxLines: 1,
+                          ),
+                        ),
+                      )),
+                )
+              ],
+            )),
       ),
     );
   }
@@ -184,7 +182,7 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
   Container _createNewInnovation(InnovationsObject ib) {
     return Container(
       padding:
-          const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0, bottom: 8.0),
+      const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0, bottom: 8.0),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         color: Colors.black.withOpacity(0.5),
@@ -203,7 +201,7 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
                 fillColor: Colors.white,
                 hintText: 'Titel eingeben',
                 contentPadding:
-                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(0.0)),
                 ),
@@ -230,7 +228,7 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
                 fillColor: Colors.white,
                 hintText: 'Beschreibung eingeben',
                 contentPadding:
-                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(0.0)),
                 ),

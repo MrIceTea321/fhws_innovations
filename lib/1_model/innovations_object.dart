@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:html';
 import 'dart:typed_data';
@@ -12,7 +11,6 @@ import 'package:web3dart/web3dart.dart';
 import 'package:fhws_innovations/3_controller/smart_contract.dart';
 import '../2_view/login.dart';
 import 'innovation.dart';
-import 'package:http/http.dart' as http;
 import '../constants/text_constants.dart';
 
 class InnovationsObject {
@@ -71,14 +69,14 @@ class InnovationsObject {
   //transaction functions
   void endInnovationProcess(BuildContext context, Size size) async {
     var response =
-        await smartContract.submitTransaction("endInnovationProcess", []);
+    await smartContract.submitTransaction("endInnovationProcess", []);
     checkTransactionReceipt(response, context, size);
     log(response);
   }
 
   void restartInnovationProcess(BuildContext context, Size size) async {
     var response =
-        await smartContract.submitTransaction("restartInnovationProcess", []);
+    await smartContract.submitTransaction("restartInnovationProcess", []);
     checkTransactionReceipt(response, context, size);
     log(response);
   }
@@ -185,8 +183,8 @@ class InnovationsObject {
 
   //All transaction function of SmartContract
 
-  Future<String> initialRegistrationOfStudent(
-      BuildContext context, String kNumber, Size size) async {
+  Future<String> initialRegistrationOfStudent(BuildContext context,
+      String kNumber, Size size) async {
     var response = await smartContract
         .submitTransaction("initialRegistrationOfStudent", [kNumber]);
     showDialog(
@@ -201,8 +199,8 @@ class InnovationsObject {
     return response;
   }
 
-  void createInnovation(
-      String title, String description, BuildContext context, Size size) async {
+  void createInnovation(String title, String description, BuildContext context,
+      Size size) async {
     var response = await smartContract
         .submitTransaction("createInnovation", [title, description]);
     await checkIfStudentUsesInitialRegisteredAddress();
@@ -210,8 +208,8 @@ class InnovationsObject {
     log(response);
   }
 
-  void deleteInnovation(
-      Uint8List uniqueInnovationHash, BuildContext context, Size size) async {
+  void deleteInnovation(Uint8List uniqueInnovationHash, BuildContext context,
+      Size size) async {
     var response = await smartContract
         .submitTransaction("deleteInnovation", [uniqueInnovationHash]);
     await checkIfStudentUsesInitialRegisteredAddress();
@@ -228,8 +226,8 @@ class InnovationsObject {
     log(response);
   }
 
-  void vote(
-      Uint8List uniqueInnovationHash, BuildContext context, Size size) async {
+  void vote(Uint8List uniqueInnovationHash, BuildContext context,
+      Size size) async {
     var response = await smartContract
         .submitTransaction("vote", [Uint8List.fromList(uniqueInnovationHash)]);
     await checkIfStudentUsesInitialRegisteredAddress();
@@ -237,8 +235,8 @@ class InnovationsObject {
     log(response);
   }
 
-  void unvote(
-      Uint8List uniqueInnovationHash, BuildContext context, Size size) async {
+  void unvote(Uint8List uniqueInnovationHash, BuildContext context,
+      Size size) async {
     var response = await smartContract.submitTransaction(
         "unvote", [Uint8List.fromList(uniqueInnovationHash)]);
     await checkIfStudentUsesInitialRegisteredAddress();
@@ -246,9 +244,8 @@ class InnovationsObject {
     log(response);
   }
 
-  Future<void> checkTransactionReceipt(
-      String response, BuildContext context, Size size) async {
-    TransactionReceipt? transactionReceipt;
+  Future<void> checkTransactionReceipt(String response, BuildContext context,
+      Size size) async {
     var isStatus = false;
     showDialog(
         context: context,
@@ -287,7 +284,7 @@ class InnovationsObject {
                               decoration: const BoxDecoration(
                                 color: Colors.transparent,
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(20.0)),
+                                BorderRadius.all(Radius.circular(20.0)),
                               ),
                               child: const CircularProgressIndicator(
                                 color: fhwsGreen,
@@ -301,48 +298,69 @@ class InnovationsObject {
             ),
           );
         });
-    await Future.delayed(const Duration(seconds: 20), () async {
+
+    var transactionReceipt;
+    while (transactionReceipt?.status == null) {
       transactionReceipt = await ethClient.getTransactionReceipt(response);
-      if (transactionReceipt?.status == true) {
-        isStatus = true;
-      } else {
-        isStatus = false;
-      }
+    }
+    if (transactionReceipt.status == true) {
+      isStatus = true;
       Navigator.of(context, rootNavigator: true).pop();
-    });
+    } else {
+      isStatus = false;
+      Navigator.of(context, rootNavigator: true).pop();
+    }
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return Center(
             child: Dialog(
-              backgroundColor: Colors.transparent,
-              child: Container(
-                padding: const EdgeInsets.only(right: 16.0),
-                width: size.width * 0.9,
-                height: size.height * 0.2,
-                decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.8),
-                    borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        bottomLeft: Radius.circular(15),
-                        topRight: Radius.circular(15),
-                        bottomRight: Radius.circular(15))),
-                child: Row(
-                  children: <Widget>[
-                    isStatus
-                        ? Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                const Text('Transaktion erfolgreich',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.bold,
-                                    )),
-                                const SizedBox(height: 20.0),
-                                Container(
+                backgroundColor: Colors.transparent,
+                child: Container(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    width: size.width * 0.9,
+                    height: size.height * 0.2,
+                    decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.8),
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            bottomLeft: Radius.circular(15),
+                            topRight: Radius.circular(15),
+                            bottomRight: Radius.circular(15))),
+                    child: Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          isStatus ?
+                          const Text(
+                              'Transaktion erfolgreich',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                              )) : const Text('Transaktion nicht erfolgreich',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                              )),
+                          const SizedBox(height: 20.0),
+                          Container(
+                              height: 40,
+                              width: 70,
+                              decoration: const BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(20.0)),
+                              ),
+                              child: TextButton(
+                                onPressed: () {
+                                  Navigator.of(context,
+                                      rootNavigator: true)
+                                      .pop();
+                                },
+                                child: Container(
                                     height: 40,
                                     width: 70,
                                     decoration: const BoxDecoration(
@@ -350,73 +368,15 @@ class InnovationsObject {
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(20.0)),
                                     ),
-                                    child: TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context,
-                                                rootNavigator: true)
-                                            .pop();
-                                      },
-                                      child: Container(
-                                          height: 40,
-                                          width: 70,
-                                          decoration: const BoxDecoration(
-                                            color: Colors.transparent,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20.0)),
-                                          ),
-                                          child: const Text('Ok',
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 18.0))),
-                                    ))
-                              ],
-                            ),
-                          )
-                        : Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                const Text('Transaktion nicht erfolgreich',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.bold,
-                                    )),
-                                const SizedBox(height: 20.0),
-                                Container(
-                                    height: 40,
-                                    width: 70,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(20.0)),
-                                    ),
-                                    child: TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context,
-                                                rootNavigator: true)
-                                            .pop();
-                                      },
-                                      child: Container(
-                                          height: 40,
-                                          width: 70,
-                                          decoration: const BoxDecoration(
-                                            color: Colors.transparent,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20.0)),
-                                          ),
-                                          child: const Text('Ok',
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 18.0))),
-                                    ))
-                              ],
-                            ),
-                          )
-                  ],
-                ),
-              ),
+                                    child: const Text('Ok',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 18.0))),
+                              ))
+                        ],
+                      ),
+                    )
+                )
             ),
           );
         });

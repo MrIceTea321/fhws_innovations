@@ -28,7 +28,9 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
   @override
   Widget build(BuildContext context) {
     InnovationsObject ib = InnovationsObject();
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
 
     return WillPopScope(
       onWillPop: () async {
@@ -59,7 +61,7 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                     var student = await ib.getStudentFromSC();
                     var allInnovations = await ib.getAllInnovations();
                     var isInnovationsProcessFinished =
-                        await ib.innovationProcessFinished();
+                    await ib.innovationProcessFinished();
                     var contractOwner = await ib.getContractOwner();
                     bool isOwner = false;
                     if (student.studentAddress == contractOwner) {
@@ -68,11 +70,12 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => InnovationsOverview(
+                            builder: (context) =>
+                                InnovationsOverview(
                                   student: student,
                                   innovations: allInnovations,
                                   isInnovationsProcessFinished:
-                                      isInnovationsProcessFinished,
+                                  isInnovationsProcessFinished,
                                   isSmartContractOwner: isOwner,
                                   studentFirstName: widget.studentFirstName,
                                 )));
@@ -90,11 +93,12 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                   IconButton(
                       onPressed: () async {
                         var studentInnovations =
-                            await ib.getInnovationsOfStudent();
+                        await ib.getInnovationsOfStudent();
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => UserInnovations(
+                                builder: (context) =>
+                                    UserInnovations(
                                       userInnovations: studentInnovations,
                                       studentFirstName: widget.studentFirstName,
                                     )));
@@ -133,17 +137,19 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                                           context,
                                           size);
                                       var studentInnovations =
-                                          await ib.getInnovationsOfStudent();
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  UserInnovations(
-                                                    userInnovations:
-                                                        studentInnovations,
-                                                    studentFirstName:
-                                                        widget.studentFirstName,
-                                                  )));
+                                      await ib.getInnovationsOfStudent();
+                                      Future.delayed(Duration(seconds: 20), () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    UserInnovations(
+                                                      userInnovations:
+                                                      studentInnovations,
+                                                      studentFirstName: widget
+                                                          .studentFirstName,
+                                                    )));
+                                      });
                                     },
                                     child: const Text('Löschen',
                                         style: TextStyle(color: Colors.red)),
@@ -163,9 +169,10 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const Login(
-                                  fromStudentCheck: false,
-                                )));
+                            builder: (context) =>
+                            const Login(
+                              fromStudentCheck: false,
+                            )));
                   },
                   icon: const Icon(Icons.logout)),
             ),
@@ -173,63 +180,64 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
         ),
         body: SingleChildScrollView(
             child: Column(
-          children: <Widget>[
-            SizedBox(height: size.height * 0.015),
-            _overhaulInnovation(),
-            TextButton(
-              onPressed: () async {
-                ib.editInnovation(
-                    widget.userInnovation.uniqueInnovationHash,
-                    widget.userInnovation.title,
-                    widget.userInnovation.description,
-                    context,
-                    size);
-                var student = await ib.getStudentFromSC();
-                var allInnovations = await ib.getAllInnovations();
-                var isInnovationsProcessFinished =
+              children: <Widget>[
+                SizedBox(height: size.height * 0.015),
+                _overhaulInnovation(),
+                TextButton(
+                  onPressed: () async {
+                    ib.editInnovation(
+                        widget.userInnovation.uniqueInnovationHash,
+                        widget.userInnovation.title,
+                        widget.userInnovation.description,
+                        context,
+                        size);
+                    var student = await ib.getStudentFromSC();
+                    var allInnovations = await ib.getAllInnovations();
+                    var isInnovationsProcessFinished =
                     await ib.innovationProcessFinished();
-                var contractOwner = await ib.getContractOwner();
-                bool isOwner = false;
-                if (student.studentAddress == contractOwner) {
-                  isOwner = true;
-                }
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => InnovationsOverview(
-                              student: student,
-                              isInnovationsProcessFinished:
+                    var contractOwner = await ib.getContractOwner();
+                    bool isOwner = false;
+                    if (student.studentAddress == contractOwner) {
+                      isOwner = true;
+                    }
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                InnovationsOverview(
+                                  student: student,
+                                  isInnovationsProcessFinished:
                                   isInnovationsProcessFinished,
-                              innovations: allInnovations,
-                              isSmartContractOwner: isOwner,
-                              studentFirstName: widget.studentFirstName,
-                            )));
-              },
-              child: Container(
-                  height: 50,
-                  width: size.width * 0.9,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                    color: fhwsGreen,
-                  ),
-                  child: const Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                    child: Center(
-                      child: Text(
-                        'Eingaben Speichern',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        maxLines: 1,
+                                  innovations: allInnovations,
+                                  isSmartContractOwner: isOwner,
+                                  studentFirstName: widget.studentFirstName,
+                                )));
+                  },
+                  child: Container(
+                      height: 50,
+                      width: size.width * 0.9,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        color: fhwsGreen,
                       ),
-                    ),
-                  )),
-            )
-          ],
-        )),
+                      child: const Padding(
+                        padding:
+                        EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+                        child: Center(
+                          child: Text(
+                            'Eingaben Speichern',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            maxLines: 1,
+                          ),
+                        ),
+                      )),
+                )
+              ],
+            )),
       ),
     );
   }
@@ -237,7 +245,7 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
   Container _overhaulInnovation() {
     return Container(
       padding:
-          const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0, bottom: 8.0),
+      const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0, bottom: 8.0),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         color: Colors.black.withOpacity(0.5),
