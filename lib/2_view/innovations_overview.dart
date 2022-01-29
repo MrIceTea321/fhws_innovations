@@ -21,12 +21,13 @@ class InnovationsOverview extends StatefulWidget {
   bool isVoted = false;
   bool studentHasVoted = false;
 
-  InnovationsOverview({Key? key,
-    required this.student,
-    required this.studentFirstName,
-    required this.innovations,
-    required this.isInnovationsProcessFinished,
-    required this.isSmartContractOwner})
+  InnovationsOverview(
+      {Key? key,
+      required this.student,
+      required this.studentFirstName,
+      required this.innovations,
+      required this.isInnovationsProcessFinished,
+      required this.isSmartContractOwner})
       : super(key: key);
 
   @override
@@ -54,9 +55,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     InnovationsObject ib = InnovationsObject();
     return RefreshIndicator(
       color: fhwsGreen,
@@ -105,15 +104,14 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                     IconButton(
                         onPressed: () async {
                           var innovationsFromStudent =
-                          await ib.getInnovationsOfStudent();
+                              await ib.getInnovationsOfStudent();
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      UserInnovations(
+                                  builder: (context) => UserInnovations(
                                         userInnovations: innovationsFromStudent,
                                         studentFirstName:
-                                        widget.studentFirstName,
+                                            widget.studentFirstName,
                                       )));
                         },
                         icon: const Icon(Icons.description)),
@@ -127,10 +125,9 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                            const Login(
-                              fromStudentCheck: false,
-                            )));
+                            builder: (context) => const Login(
+                                  fromStudentCheck: false,
+                                )));
                   },
                   icon: const Icon(Icons.logout),
                 ),
@@ -146,42 +143,42 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                   widget.isInnovationsProcessFinished
                       ? const SizedBox()
                       : TextButton(
-                    onPressed: () async {
-                      ib.endInnovationProcess(context, size);
-                      bool isFinished =
-                      await ib.innovationProcessFinished();
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return const RoundedAlert("Erfolgreich",
-                              "Die Abstimmung wurde erfolgreich beendet!");
-                        },
-                      );
-                    },
-                    child: Container(
-                        height: 50,
-                        width: size.width * 0.9,
-                        decoration: const BoxDecoration(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(32.0)),
-                          color: fhwsGreen,
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20.0, vertical: 10),
-                          child: Center(
-                            child: Text(
-                              'Abstimmung beenden',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
+                          onPressed: () async {
+                            ib.endInnovationProcess(context, size);
+                            bool isFinished =
+                                await ib.innovationProcessFinished();
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const RoundedAlert("Erfolgreich",
+                                    "Die Abstimmung wurde erfolgreich beendet!");
+                              },
+                            );
+                          },
+                          child: Container(
+                              height: 50,
+                              width: size.width * 0.9,
+                              decoration: const BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(32.0)),
+                                color: fhwsGreen,
                               ),
-                              maxLines: 1,
-                            ),
-                          ),
-                        )),
-                  ),
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20.0, vertical: 10),
+                                child: Center(
+                                  child: Text(
+                                    'Abstimmung beenden',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    maxLines: 1,
+                                  ),
+                                ),
+                              )),
+                        ),
                   SizedBox(height: size.height * 0.015),
                   Container(
                     width: size.width - 30.0,
@@ -212,17 +209,17 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                               ),
                               widget.studentHasVoted
                                   ? const Text(
-                                '0',
-                                style: TextStyle(
-                                    color: fhwsGreen,
-                                    fontWeight: FontWeight.bold),
-                              )
+                                      '0',
+                                      style: TextStyle(
+                                          color: fhwsGreen,
+                                          fontWeight: FontWeight.bold),
+                                    )
                                   : const Text(
-                                '1',
-                                style: TextStyle(
-                                    color: fhwsGreen,
-                                    fontWeight: FontWeight.bold),
-                              ),
+                                      '1',
+                                      style: TextStyle(
+                                          color: fhwsGreen,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                               const Text(
                                 ' verbleibende Stimmen',
                                 style: TextStyle(color: Colors.white),
@@ -239,8 +236,8 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                       if (snap.data == null) {
                         return const Center(
                             child: CircularProgressIndicator(
-                              color: fhwsGreen,
-                            ));
+                          color: fhwsGreen,
+                        ));
                       }
                       return ListView.builder(
                           shrinkWrap: true,
@@ -248,9 +245,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                           physics: const BouncingScrollPhysics(),
                           itemBuilder: (context, index) {
                             return _buildFeaturedItem(
-                              title: widget.innovations
-                                  .elementAt(index)
-                                  .title,
+                              title: widget.innovations.elementAt(index).title,
                               description: widget.innovations
                                   .elementAt(index)
                                   .description
@@ -278,21 +273,22 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
     );
   }
 
-  Container _buildFeaturedItem({required String title,
-    required String description,
-    required String voteCount,
-    required Student student,
-    required Uint8List innovationHash,
-    required Innovation innovation,
-    required InnovationsObject ib,
-    required Size size}) {
+  Container _buildFeaturedItem(
+      {required String title,
+      required String description,
+      required String voteCount,
+      required Student student,
+      required Uint8List innovationHash,
+      required Innovation innovation,
+      required InnovationsObject ib,
+      required Size size}) {
     if ((listEquals(
         student.votedInnovationHash, innovation.uniqueInnovationHash))) {
       innovation.isVoted = true;
     }
     return Container(
       padding:
-      const EdgeInsets.only(left: 8.0, top: 8.0, right: 8.0, bottom: 8.0),
+          const EdgeInsets.only(left: 8.0, top: 8.0, right: 8.0, bottom: 8.0),
       child: TextButton(
         onPressed: () {
           Future.delayed(Duration.zero, () {
@@ -323,34 +319,31 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                   IconButton(
                       onPressed: () async {
                         Student student = await ib.getStudentFromSC();
-                        Future.delayed(const Duration(seconds: 20), () async {
-                          if (student.voted == false) {
-                            ib.vote(Uint8List.fromList(innovationHash), context,
-                                size);
-                            widget.studentHasVoted = true;
-                          } else if (student.voted == true &&
-                              !(listEquals(student.votedInnovationHash,
-                                  innovation.uniqueInnovationHash))) {
-                            Student student = await ib.getStudentFromSC();
-                            // first unvote than vote if student has voted for another innovation and wants to vote for another one
-                            ib.unvote(
-                                student.votedInnovationHash, context, size);
-                            ib.vote(innovationHash, context, size);
-                          } else {
-                            ib.unvote(Uint8List.fromList(innovationHash),
-                                context, size);
-                            widget.studentHasVoted = false;
-                          }
-                        });
+                        if (student.voted == false) {
+                          ib.vote(Uint8List.fromList(innovationHash), context,
+                              size);
+                          widget.studentHasVoted = true;
+                        } else if (student.voted == true &&
+                            !(listEquals(student.votedInnovationHash,
+                                innovation.uniqueInnovationHash))) {
+                          Student student = await ib.getStudentFromSC();
+                          // first unvote than vote if student has voted for another innovation and wants to vote for another one
+                          ib.unvote(student.votedInnovationHash, context, size);
+                          ib.vote(innovationHash, context, size);
+                        } else {
+                          ib.unvote(Uint8List.fromList(innovationHash), context,
+                              size);
+                          widget.studentHasVoted = false;
+                        }
 
                         setState(() {});
                       },
                       icon: innovation.isVoted
                           ? const Icon(Icons.star, color: fhwsGreen)
                           : const Icon(
-                        Icons.star_border,
-                        color: fhwsGreen,
-                      ))
+                              Icons.star_border,
+                              color: fhwsGreen,
+                            ))
                 ],
               ),
               Text(description,

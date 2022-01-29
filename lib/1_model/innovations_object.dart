@@ -300,9 +300,16 @@ class InnovationsObject {
         });
 
     var transactionReceipt;
+    print('before while looP');
+    print(isStatus);
     while (transactionReceipt?.status == null) {
       transactionReceipt = await ethClient.getTransactionReceipt(response);
+      print(' ***** in loop *****');
     }
+    print('after while looP');
+    print(isStatus);
+    print('transaction Status');
+    print(transactionReceipt);
     if (transactionReceipt.status == true) {
       isStatus = true;
       Navigator.of(context, rootNavigator: true).pop();
@@ -310,6 +317,8 @@ class InnovationsObject {
       isStatus = false;
       Navigator.of(context, rootNavigator: true).pop();
     }
+    print('after if/else before last dialog');
+    print(isStatus);
     showDialog(
         context: context,
         builder: (BuildContext context) {
