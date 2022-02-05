@@ -187,13 +187,6 @@ class InnovationsObject {
       BuildContext context, String kNumber, Size size) async {
     var response = await smartContract
         .submitTransaction("initialRegistrationOfStudent", [kNumber]);
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return const RoundedAlert(
-            "Erfolgreich erstellt", "Student wurde auf BC erstellt ");
-      },
-    );
     checkTransactionReceipt(response, context, size);
     log(response);
     return response;
