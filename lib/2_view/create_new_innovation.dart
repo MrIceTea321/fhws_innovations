@@ -1,4 +1,5 @@
 import 'package:fhws_innovations/1_model/innovations_object.dart';
+import 'package:fhws_innovations/2_view/innovations_overview.dart';
 import 'package:fhws_innovations/2_view/user_innovations.dart';
 import 'package:fhws_innovations/constants/text_constants.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +54,24 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
               padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
               child: IconButton(
                   onPressed: () async {
-                    Navigator.pop(context);
+                    var student = await ib.getStudentFromSC();
+                    var innos = await ib.getAllInnovations();
+                    var isFinished = await ib.innovationProcessFinished();
+                    var owner = await ib.getContractOwner();
+                    bool isOwner = false;
+                    if (owner == student.studentAddress) {
+                      isOwner = true;
+                    }
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => InnovationsOverview(
+                                  student: student,
+                                  studentFirstName: widget.studentFirstName,
+                                  innovations: innos,
+                                  isInnovationsProcessFinished: isFinished,
+                                  isSmartContractOwner: isOwner,
+                                )));
                   },
                   icon: const Icon(Icons.home)),
             ),
@@ -122,15 +140,24 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
                 } else {
                   ib.createInnovation(
                       widget.title, widget.description, context, size);
-                }
-                var student = await ib.getStudentFromSC();
-                var allInnovations = await ib.getAllInnovations();
-                var isInnovationsProcessFinished =
-                    await ib.innovationProcessFinished();
-                var contractOwner = await ib.getContractOwner();
-                bool isOwner = false;
-                if (student.studentAddress == contractOwner) {
-                  isOwner = true;
+                  var student = await ib.getStudentFromSC();
+                  var innos = await ib.getAllInnovations();
+                  var isFinished = await ib.innovationProcessFinished();
+                  var owner = await ib.getContractOwner();
+                  bool isOwner = false;
+                  if (owner == student.studentAddress) {
+                    isOwner = true;
+                  }
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => InnovationsOverview(
+                                student: student,
+                                studentFirstName: widget.studentFirstName,
+                                innovations: innos,
+                                isInnovationsProcessFinished: isFinished,
+                                isSmartContractOwner: isOwner,
+                              )));
                 }
               },
               child: Container(

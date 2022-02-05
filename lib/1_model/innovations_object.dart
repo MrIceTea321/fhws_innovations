@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'dart:html';
 import 'dart:typed_data';
 import 'package:fhws_innovations/1_model/student_object.dart';
-import 'package:fhws_innovations/constants/rounded_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:web3dart/browser.dart';
@@ -219,22 +218,24 @@ class InnovationsObject {
     log(response);
   }
 
-  void vote(
+  Future<bool> vote(
       Uint8List uniqueInnovationHash, BuildContext context, Size size) async {
     var response = await smartContract
         .submitTransaction("vote", [Uint8List.fromList(uniqueInnovationHash)]);
     await checkIfStudentUsesInitialRegisteredAddress();
     checkTransactionReceipt(response, context, size);
     log(response);
+    return true;
   }
 
-  void unvote(
+  Future<bool> unvote(
       Uint8List uniqueInnovationHash, BuildContext context, Size size) async {
     var response = await smartContract.submitTransaction(
         "unvote", [Uint8List.fromList(uniqueInnovationHash)]);
     await checkIfStudentUsesInitialRegisteredAddress();
     checkTransactionReceipt(response, context, size);
     log(response);
+    return false;
   }
 
   Future<void> checkTransactionReceipt(
@@ -327,13 +328,13 @@ class InnovationsObject {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           isStatus
-                              ? const Text('Transaktion erfolgreich',
+                              ? const Text('Transaktion erfolgreich ✅',
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.bold,
                                   ))
-                              : const Text('Transaktion nicht erfolgreich',
+                              : const Text('Transaktion nicht erfolgreich ❌',
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 18.0,
@@ -348,23 +349,17 @@ class InnovationsObject {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(20.0)),
                               ),
-                              child: TextButton(
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.all(16.0),
+                                  primary: fhwsGreen, // background
+                                  onPrimary: Colors.white,
+                                ),
                                 onPressed: () {
-                                  Navigator.of(context, rootNavigator: true)
-                                      .pop();
+                                  Navigator.pop(context);
                                 },
-                                child: Container(
-                                    height: 40,
-                                    width: 70,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(20.0)),
-                                    ),
-                                    child: const Text('Ok ✅',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 18.0))),
+                                child: const Text("Ok",
+                                    style: TextStyle(color: Colors.white)),
                               ))
                         ],
                       ),

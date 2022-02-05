@@ -132,6 +132,7 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                                               .uniqueInnovationHash,
                                           context,
                                           size);
+                                      Navigator.pop(context);
                                     },
                                     child: const Text('Löschen',
                                         style: TextStyle(color: Colors.red)),
@@ -172,6 +173,24 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                     widget.userInnovation.description,
                     context,
                     size);
+                var student = await ib.getStudentFromSC();
+                var innos = await ib.getAllInnovations();
+                var isFinished = await ib.innovationProcessFinished();
+                var owner = await ib.getContractOwner();
+                bool isOwner = false;
+                if (owner == student.studentAddress) {
+                  isOwner = true;
+                }
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => InnovationsOverview(
+                              student: student,
+                              studentFirstName: widget.studentFirstName,
+                              innovations: innos,
+                              isInnovationsProcessFinished: isFinished,
+                              isSmartContractOwner: isOwner,
+                            )));
               },
               child: Container(
                   height: 50,

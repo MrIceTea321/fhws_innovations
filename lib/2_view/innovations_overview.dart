@@ -142,81 +142,85 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                 children: <Widget>[
                   SizedBox(height: size.height * 0.015),
                   SizedBox(
-                    child: widget.isSmartContractOwner
-                      ?  SizedBox(
-                    child: widget.isInnovationsProcessFinished ?  TextButton(
-                      onPressed: () async {
-                        ib.endInnovationProcess(context, size);
-                        ib.restartInnovationProcess(context, size);
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return const RoundedAlert("Erfolgreich",
-                                "Die Abstimmung wird neu gestartet!");
-                          }
-                        );
-                      },
-                      child: Container(
-                          height: 50,
-                          width: size.width * 0.9,
-                          decoration: const BoxDecoration(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(32.0)),
-                            color: fhwsGreen,
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 20.0, vertical: 10),
-                            child: Center(
-                              child: Text(
-                                'Abstimmung neu starten',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                maxLines: 1,
-                              ),
-                            ),
-                          )),
-                    )
-                        :TextButton(
-                      onPressed: () async {
-                        ib.endInnovationProcess(context, size);
-                        await ib.innovationProcessFinished();
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return const RoundedAlert("Erfolgreich",
-                                "Die Abstimmung wurde erfolgreich beendet!");
-                          },
-                        );
-                      },
-                      child: Container(
-                          height: 50,
-                          width: size.width * 0.9,
-                          decoration: const BoxDecoration(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(32.0)),
-                            color: fhwsGreen,
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 20.0, vertical: 10),
-                            child: Center(
-                              child: Text(
-                                'Abstimmung beenden',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                maxLines: 1,
-                              ),
-                            ),
-                          )),
-                    ),
-                  ):const SizedBox()),
+                      child: widget.isSmartContractOwner
+                          ? SizedBox(
+                              child: widget.isInnovationsProcessFinished
+                                  ? TextButton(
+                                      onPressed: () async {
+                                        ib.endInnovationProcess(context, size);
+                                        ib.restartInnovationProcess(
+                                            context, size);
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return const RoundedAlert(
+                                                  "Erfolgreich",
+                                                  "Die Abstimmung wird neu gestartet!");
+                                            });
+                                      },
+                                      child: Container(
+                                          height: 50,
+                                          width: size.width * 0.9,
+                                          decoration: const BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(32.0)),
+                                            color: fhwsGreen,
+                                          ),
+                                          child: const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 20.0, vertical: 10),
+                                            child: Center(
+                                              child: Text(
+                                                'Abstimmung neu starten',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                                maxLines: 1,
+                                              ),
+                                            ),
+                                          )),
+                                    )
+                                  : TextButton(
+                                      onPressed: () async {
+                                        ib.endInnovationProcess(context, size);
+                                        await ib.innovationProcessFinished();
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return const RoundedAlert(
+                                                "Erfolgreich",
+                                                "Die Abstimmung wurde erfolgreich beendet!");
+                                          },
+                                        );
+                                      },
+                                      child: Container(
+                                          height: 50,
+                                          width: size.width * 0.9,
+                                          decoration: const BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(32.0)),
+                                            color: fhwsGreen,
+                                          ),
+                                          child: const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 20.0, vertical: 10),
+                                            child: Center(
+                                              child: Text(
+                                                'Abstimmung beenden',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                                maxLines: 1,
+                                              ),
+                                            ),
+                                          )),
+                                    ),
+                            )
+                          : const SizedBox()),
                   SizedBox(height: size.height * 0.015),
                   Container(
                     width: size.width - 30.0,
@@ -333,8 +337,10 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        ShowInnovation(innovation: innovation)));
+                    builder: (context) => ShowInnovation(
+                          innovation: innovation,
+                          studentFirstName: widget.studentFirstName,
+                        )));
           });
         },
         child: Container(
@@ -345,8 +351,10 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(title,
+                      textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: fhwsGreen,
                         fontSize: 20.0,
@@ -355,24 +363,37 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                   IconButton(
                       onPressed: () async {
                         Student student = await ib.getStudentFromSC();
-                        //TODO disable vote button till vote is removed
                         if (student.voted == false) {
-                          ib.vote(Uint8List.fromList(innovationHash), context,
+                          widget.studentHasVoted = await ib.vote(
+                              Uint8List.fromList(innovationHash),
+                              context,
                               size);
-                          widget.studentHasVoted = true;
+                          setState(() {});
                         } else if (student.voted == true &&
                             !(listEquals(student.votedInnovationHash,
                                 innovation.uniqueInnovationHash))) {
-                          Student student = await ib.getStudentFromSC();
-                          // first unvote than vote if student has voted for another innovation and wants to vote for another one
-                          ib.unvote(student.votedInnovationHash, context, size);
-                          ib.vote(innovationHash, context, size);
-                        } else {
-                          ib.unvote(Uint8List.fromList(innovationHash), context,
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return const RoundedAlert("Achtung",
+                                  "Bitte entferne zuerste deine Stimme, bevor du neu wählst");
+                            },
+                          );
+                        } else if (student.voted == true &&
+                            (listEquals(student.votedInnovationHash,
+                                innovation.uniqueInnovationHash))) {
+                          widget.studentHasVoted = await ib.unvote(
+                              Uint8List.fromList(innovationHash),
+                              context,
                               size);
-                          widget.studentHasVoted = false;
+                          setState(() {});
+                        } else {
+                          widget.studentHasVoted = await ib.unvote(
+                              Uint8List.fromList(innovationHash),
+                              context,
+                              size);
+                          setState(() {});
                         }
-                        setState(() {});
                       },
                       icon: innovation.isVoted
                           ? const Icon(Icons.star, color: fhwsGreen)

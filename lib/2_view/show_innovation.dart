@@ -1,14 +1,19 @@
 import 'dart:typed_data';
 import 'package:fhws_innovations/1_model/innovation.dart';
+import 'package:fhws_innovations/1_model/innovations_object.dart';
 import 'package:fhws_innovations/constants/text_constants.dart';
 import 'package:flutter/material.dart';
 import '../constants/rounded_alert.dart';
+import 'innovations_overview.dart';
 import 'login.dart';
 
 class ShowInnovation extends StatefulWidget {
   final Innovation innovation;
+  final String studentFirstName;
 
-  const ShowInnovation({Key? key, required this.innovation}) : super(key: key);
+  const ShowInnovation(
+      {Key? key, required this.innovation, required this.studentFirstName})
+      : super(key: key);
 
   @override
   _ShowInnovationOverviewState createState() => _ShowInnovationOverviewState();
@@ -18,7 +23,7 @@ class _ShowInnovationOverviewState extends State<ShowInnovation> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
+    InnovationsObject ib = InnovationsObject();
     return WillPopScope(
       onWillPop: () async {
         showDialog(
@@ -50,10 +55,25 @@ class _ShowInnovationOverviewState extends State<ShowInnovation> {
                           color: Colors.black.withOpacity(0.7),
                           fontSize: 18.0)),
                   IconButton(
-                      onPressed: () {
-                        Navigator.pop(
-                          context,
-                        );
+                      onPressed: () async {
+                        var student = await ib.getStudentFromSC();
+                        var innos = await ib.getAllInnovations();
+                        var isFinished = await ib.innovationProcessFinished();
+                        var owner = await ib.getContractOwner();
+                        bool isOwner = false;
+                        if (owner == student.studentAddress) {
+                          isOwner = true;
+                        }
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => InnovationsOverview(
+                                      student: student,
+                                      studentFirstName: widget.studentFirstName,
+                                      innovations: innos,
+                                      isInnovationsProcessFinished: isFinished,
+                                      isSmartContractOwner: isOwner,
+                                    )));
                       },
                       icon: const Icon(Icons.home)),
                 ],
@@ -102,19 +122,19 @@ class _ShowInnovationOverviewState extends State<ShowInnovation> {
         color: Colors.black.withOpacity(0.5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Center(
-              child: Row(
-                children: [
-                  Text(title,
-                      style: const TextStyle(
-                        color: fhwsGreen,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      )),
-                ],
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(title,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: fhwsGreen,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ],
             ),
             Text(description,
                 style: const TextStyle(
