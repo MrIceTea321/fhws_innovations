@@ -157,12 +157,6 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                                                   "Erfolgreich",
                                                   "Die Abstimmung wird neu gestartet!");
                                             });
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => const Login(
-                                                  fromStudentCheck: false,
-                                                )));
                                       },
                                       child: Container(
                                           height: 50,
@@ -200,12 +194,6 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                                                 "Die Abstimmung wurde erfolgreich beendet!");
                                           },
                                         );
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => const Login(
-                                                  fromStudentCheck: false,
-                                                )));
                                       },
                                       child: Container(
                                           height: 50,

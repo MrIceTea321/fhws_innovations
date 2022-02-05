@@ -67,281 +67,23 @@ class InnovationsObject {
   }
 
   //transaction functions
-  void endInnovationProcess(BuildContext context, Size size, String studentFirstName) async {
+  void endInnovationProcess(
+      BuildContext context, Size size, String studentFirstName) async {
     var response =
         await smartContract.submitTransaction("endInnovationProcess", []);
 
-      var isStatus = false;
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return Center(
-              child: Dialog(
-                backgroundColor: Colors.transparent,
-                child: Container(
-                  padding: const EdgeInsets.only(right: 16.0),
-                  width: size.width * 0.9,
-                  height: size.height * 0.2,
-                  decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.8),
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          bottomLeft: Radius.circular(15),
-                          topRight: Radius.circular(15),
-                          bottomRight: Radius.circular(15))),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            const Text('Transaktion pendet',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            const SizedBox(height: 20.0),
-                            Container(
-                                height: 40,
-                                width: 70,
-                                decoration: const BoxDecoration(
-                                  color: Colors.transparent,
-                                  borderRadius:
-                                  BorderRadius.all(Radius.circular(20.0)),
-                                ),
-                                child: const CircularProgressIndicator(
-                                  color: fhwsGreen,
-                                ))
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            );
-          });
-
-      var transactionReceipt;
-      while (transactionReceipt?.status == null) {
-        transactionReceipt = await ethClient.getTransactionReceipt(response);
-      }
-
-      if (transactionReceipt.status == true) {
-        isStatus = true;
-        Navigator.of(context, rootNavigator: true).pop();
-      } else {
-        isStatus = false;
-        Navigator.of(context, rootNavigator: true).pop();
-      }
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return Center(
-              child: Dialog(
-                  backgroundColor: Colors.transparent,
-                  child: Container(
-                      padding: const EdgeInsets.only(right: 16.0),
-                      width: size.width * 0.9,
-                      height: size.height * 0.2,
-                      decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.8),
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(15),
-                              bottomLeft: Radius.circular(15),
-                              topRight: Radius.circular(15),
-                              bottomRight: Radius.circular(15))),
-                      child: Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            isStatus
-                                ? const Text('Transaktion erfolgreich ✅',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                ))
-                                : const Text('Transaktion nicht erfolgreich ❌',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            const SizedBox(height: 20.0),
-                            Container(
-                                height: 40,
-                                width: 70,
-                                decoration: const BoxDecoration(
-                                  color: Colors.transparent,
-                                  borderRadius:
-                                  BorderRadius.all(Radius.circular(20.0)),
-                                ),
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    padding: const EdgeInsets.all(16.0),
-                                    primary: fhwsGreen, // background
-                                    onPrimary: Colors.white,
-                                  ),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text("Ok",
-                                      style: TextStyle(color: Colors.white)),
-                                ))
-                          ],
-                        ),
-                      ))),
-            );
-          });
-
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => const Login(fromStudentCheck: false)));
+    await checkTransactionGoToLogin(context, size, response);
 
     log(response);
   }
 
-  void restartInnovationProcess(BuildContext context, Size size, String studentFirstName) async {
+  void restartInnovationProcess(
+      BuildContext context, Size size, String studentFirstName) async {
     var response =
         await smartContract.submitTransaction("restartInnovationProcess", []);
     checkTransactionReceipt(response, context, size, studentFirstName);
 
-    var isStatus = false;
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Center(
-            child: Dialog(
-              backgroundColor: Colors.transparent,
-              child: Container(
-                padding: const EdgeInsets.only(right: 16.0),
-                width: size.width * 0.9,
-                height: size.height * 0.2,
-                decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.8),
-                    borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        bottomLeft: Radius.circular(15),
-                        topRight: Radius.circular(15),
-                        bottomRight: Radius.circular(15))),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          const Text('Transaktion pendet',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                              )),
-                          const SizedBox(height: 20.0),
-                          Container(
-                              height: 40,
-                              width: 70,
-                              decoration: const BoxDecoration(
-                                color: Colors.transparent,
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
-                              ),
-                              child: const CircularProgressIndicator(
-                                color: fhwsGreen,
-                              ))
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          );
-        });
-
-    var transactionReceipt;
-    while (transactionReceipt?.status == null) {
-      transactionReceipt = await ethClient.getTransactionReceipt(response);
-    }
-
-    if (transactionReceipt.status == true) {
-      isStatus = true;
-      Navigator.of(context, rootNavigator: true).pop();
-    } else {
-      isStatus = false;
-      Navigator.of(context, rootNavigator: true).pop();
-    }
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Center(
-            child: Dialog(
-                backgroundColor: Colors.transparent,
-                child: Container(
-                    padding: const EdgeInsets.only(right: 16.0),
-                    width: size.width * 0.9,
-                    height: size.height * 0.2,
-                    decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.8),
-                        borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(15),
-                            bottomLeft: Radius.circular(15),
-                            topRight: Radius.circular(15),
-                            bottomRight: Radius.circular(15))),
-                    child: Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          isStatus
-                              ? const Text('Transaktion erfolgreich ✅',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                              ))
-                              : const Text('Transaktion nicht erfolgreich ❌',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                              )),
-                          const SizedBox(height: 20.0),
-                          Container(
-                              height: 40,
-                              width: 70,
-                              decoration: const BoxDecoration(
-                                color: Colors.transparent,
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
-                              ),
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.all(16.0),
-                                  primary: fhwsGreen, // background
-                                  onPrimary: Colors.white,
-                                ),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text("Ok",
-                                    style: TextStyle(color: Colors.white)),
-                              ))
-                        ],
-                      ),
-                    ))),
-          );
-        });
-
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const Login(fromStudentCheck: false)));
+    await checkTransactionGoToLogin(context, size, response);
 
     log(response);
   }
@@ -457,8 +199,8 @@ class InnovationsObject {
     return response;
   }
 
-  void createInnovation(
-      String title, String description, BuildContext context, Size size, String studentFirstName) async {
+  void createInnovation(String title, String description, BuildContext context,
+      Size size, String studentFirstName) async {
     var response = await smartContract
         .submitTransaction("createInnovation", [title, description]);
     await checkIfStudentUsesInitialRegisteredAddress();
@@ -466,8 +208,8 @@ class InnovationsObject {
     log(response);
   }
 
-  void deleteInnovation(
-      Uint8List uniqueInnovationHash, BuildContext context, Size size, String studentFirstName) async {
+  void deleteInnovation(Uint8List uniqueInnovationHash, BuildContext context,
+      Size size, String studentFirstName) async {
     var response = await smartContract
         .submitTransaction("deleteInnovation", [uniqueInnovationHash]);
     await checkIfStudentUsesInitialRegisteredAddress();
@@ -475,8 +217,13 @@ class InnovationsObject {
     log(response);
   }
 
-  void editInnovation(Uint8List uniqueInnovationHash, String title,
-      String description, BuildContext context, Size size, String studentFirstName) async {
+  void editInnovation(
+      Uint8List uniqueInnovationHash,
+      String title,
+      String description,
+      BuildContext context,
+      Size size,
+      String studentFirstName) async {
     var response = await smartContract.submitTransaction(
         "editInnovation", [uniqueInnovationHash, title, description]);
     await checkIfStudentUsesInitialRegisteredAddress();
@@ -484,8 +231,8 @@ class InnovationsObject {
     log(response);
   }
 
-  Future<bool> vote(
-      Uint8List uniqueInnovationHash, BuildContext context, Size size, String studentFirstName) async {
+  Future<bool> vote(Uint8List uniqueInnovationHash, BuildContext context,
+      Size size, String studentFirstName) async {
     var response = await smartContract
         .submitTransaction("vote", [Uint8List.fromList(uniqueInnovationHash)]);
     await checkIfStudentUsesInitialRegisteredAddress();
@@ -494,18 +241,18 @@ class InnovationsObject {
     return true;
   }
 
-  Future<bool> unvote(
-      Uint8List uniqueInnovationHash, BuildContext context, Size size, String studentFirstName) async {
+  Future<bool> unvote(Uint8List uniqueInnovationHash, BuildContext context,
+      Size size, String studentFirstName) async {
     var response = await smartContract.submitTransaction(
         "unvote", [Uint8List.fromList(uniqueInnovationHash)]);
     await checkIfStudentUsesInitialRegisteredAddress();
-    checkTransactionReceipt(response, context, size,studentFirstName);
+    checkTransactionReceipt(response, context, size, studentFirstName);
     log(response);
     return false;
   }
 
-  Future<void> checkTransactionReceipt(
-      String response, BuildContext context, Size size, String studentFirstName) async {
+  Future<void> checkTransactionReceipt(String response, BuildContext context,
+      Size size, String studentFirstName) async {
     var isStatus = false;
     showDialog(
         context: context,
@@ -645,11 +392,147 @@ class InnovationsObject {
         context,
         MaterialPageRoute(
             builder: (context) => InnovationsOverview(
-              student: student,
-              studentFirstName: studentFirstName,
-              innovations: innos,
-              isInnovationsProcessFinished: isFinished,
-              isSmartContractOwner: isOwner,
-            )));
+                  student: student,
+                  studentFirstName: studentFirstName,
+                  innovations: innos,
+                  isInnovationsProcessFinished: isFinished,
+                  isSmartContractOwner: isOwner,
+                )));
+    Navigator.pop(context);
+  }
+
+  Future<void> checkTransactionGoToLogin(
+      BuildContext context, Size size, String response) async {
+    var isStatus = false;
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Center(
+            child: Dialog(
+              backgroundColor: Colors.transparent,
+              child: Container(
+                padding: const EdgeInsets.only(right: 16.0),
+                width: size.width * 0.9,
+                height: size.height * 0.2,
+                decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.8),
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        bottomLeft: Radius.circular(15),
+                        topRight: Radius.circular(15),
+                        bottomRight: Radius.circular(15))),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          const Text('Transaktion pendet',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                              )),
+                          const SizedBox(height: 20.0),
+                          Container(
+                              height: 40,
+                              width: 70,
+                              decoration: const BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0)),
+                              ),
+                              child: const CircularProgressIndicator(
+                                color: fhwsGreen,
+                              ))
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+
+    var transactionReceipt;
+    while (transactionReceipt?.status == null) {
+      transactionReceipt = await ethClient.getTransactionReceipt(response);
+    }
+
+    if (transactionReceipt.status == true) {
+      isStatus = true;
+      Navigator.of(context, rootNavigator: true).pop();
+    } else {
+      isStatus = false;
+      Navigator.of(context, rootNavigator: true).pop();
+    }
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Center(
+            child: Dialog(
+                backgroundColor: Colors.transparent,
+                child: Container(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    width: size.width * 0.9,
+                    height: size.height * 0.2,
+                    decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.8),
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            bottomLeft: Radius.circular(15),
+                            topRight: Radius.circular(15),
+                            bottomRight: Radius.circular(15))),
+                    child: Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          isStatus
+                              ? const Text('Transaktion erfolgreich ✅',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                  ))
+                              : const Text('Transaktion nicht erfolgreich ❌',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                          const SizedBox(height: 20.0),
+                          Container(
+                              height: 40,
+                              width: 70,
+                              decoration: const BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0)),
+                              ),
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.all(16.0),
+                                  primary: fhwsGreen, // background
+                                  onPrimary: Colors.white,
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text("Ok",
+                                    style: TextStyle(color: Colors.white)),
+                              ))
+                        ],
+                      ),
+                    ))),
+          );
+        });
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const Login(fromStudentCheck: false)));
   }
 }
