@@ -280,7 +280,6 @@ class _LoginState extends State<Login> {
                                             smartContractOwner) {
                                           studentIsContractOwner = true;
                                         }
-                                        Navigator.pop(context);
                                         if (!isInnovationsProcessFinished) {
                                           Future.delayed(Duration.zero, () {
                                             Navigator.push(
