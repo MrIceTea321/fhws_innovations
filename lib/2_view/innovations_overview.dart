@@ -186,14 +186,6 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                                       onPressed: () async {
                                         ib.endInnovationProcess(context, size, widget.studentFirstName);
                                         await ib.innovationProcessFinished();
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return const RoundedAlert(
-                                                "Erfolgreich",
-                                                "Die Abstimmung wurde erfolgreich beendet!");
-                                          },
-                                        );
                                       },
                                       child: Container(
                                           height: 50,
