@@ -368,7 +368,7 @@ class InnovationsObject {
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(20.0)),
                                     ),
-                                    child: const Text('Ok',
+                                    child: const Text('Ok ✅',
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 18.0))),

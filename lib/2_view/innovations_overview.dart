@@ -259,7 +259,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                                           fontWeight: FontWeight.bold),
                                     ),
                               const Text(
-                                ' verbleibende Stimmen',
+                                ' verbleibende Stimme',
                                 style: TextStyle(color: Colors.white),
                               ),
                             ],
@@ -344,45 +344,45 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Row(
-                children: [
-                  Center(
-                    child: Text(title,
+              Center(
+                child: Row(
+                  children: [
+                    Text(title,
                         style: const TextStyle(
                           color: fhwsGreen,
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
                         )),
-                  ),
-                  IconButton(
-                      onPressed: () async {
-                        Student student = await ib.getStudentFromSC();
-                        if (student.voted == false) {
-                          ib.vote(Uint8List.fromList(innovationHash), context,
-                              size);
-                          widget.studentHasVoted = true;
-                        } else if (student.voted == true &&
-                            !(listEquals(student.votedInnovationHash,
-                                innovation.uniqueInnovationHash))) {
+                    IconButton(
+                        onPressed: () async {
                           Student student = await ib.getStudentFromSC();
-                          // first unvote than vote if student has voted for another innovation and wants to vote for another one
-                          ib.unvote(student.votedInnovationHash, context, size);
-                          ib.vote(innovationHash, context, size);
-                        } else {
-                          ib.unvote(Uint8List.fromList(innovationHash), context,
-                              size);
-                          widget.studentHasVoted = false;
-                        }
+                          if (student.voted == false) {
+                            ib.vote(Uint8List.fromList(innovationHash), context,
+                                size);
+                            widget.studentHasVoted = true;
+                          } else if (student.voted == true &&
+                              !(listEquals(student.votedInnovationHash,
+                                  innovation.uniqueInnovationHash))) {
+                            Student student = await ib.getStudentFromSC();
+                            // first unvote than vote if student has voted for another innovation and wants to vote for another one
+                            ib.unvote(student.votedInnovationHash, context, size);
+                            ib.vote(innovationHash, context, size);
+                          } else {
+                            ib.unvote(Uint8List.fromList(innovationHash), context,
+                                size);
+                            widget.studentHasVoted = false;
+                          }
 
-                        setState(() {});
-                      },
-                      icon: innovation.isVoted
-                          ? const Icon(Icons.star, color: fhwsGreen)
-                          : const Icon(
-                              Icons.star_border,
-                              color: fhwsGreen,
-                            ))
-                ],
+                          setState(() {});
+                        },
+                        icon: innovation.isVoted
+                            ? const Icon(Icons.star, color: fhwsGreen)
+                            : const Icon(
+                                Icons.star_border,
+                                color: fhwsGreen,
+                              ))
+                  ],
+                ),
               ),
               Text(description,
                   style: const TextStyle(

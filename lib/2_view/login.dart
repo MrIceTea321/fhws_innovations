@@ -33,7 +33,7 @@ class _LoginState extends State<Login> {
         context: context,
         builder: (BuildContext context) {
           return const RoundedAlert("️Achtung",
-              "Benutze bitte den selben MetaMask Account wie bei deinem ersten Log In️");
+              "Benutze bitte den selben MetaMask Account wie bei deinem ersten Log In️ ");
         },
       );
     }

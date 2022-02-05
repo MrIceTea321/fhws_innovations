@@ -104,15 +104,17 @@ class _ShowInnovationOverviewState extends State<ShowInnovation> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Row(
-              children: [
-                Text(title,
-                    style: const TextStyle(
-                      color: fhwsGreen,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                    )),
-              ],
+            Center(
+              child: Row(
+                children: [
+                  Text(title,
+                      style: const TextStyle(
+                        color: fhwsGreen,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      )),
+                ],
+              ),
             ),
             Text(description,
                 style: const TextStyle(
