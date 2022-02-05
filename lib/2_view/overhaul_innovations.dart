@@ -127,6 +127,7 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                                   const Spacer(),
                                   TextButton(
                                     onPressed: () async {
+                                      Navigator.pop(context);
                                       ib.deleteInnovation(
                                           widget.userInnovation
                                               .uniqueInnovationHash,
