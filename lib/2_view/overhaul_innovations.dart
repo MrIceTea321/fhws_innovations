@@ -54,30 +54,38 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
           actions: [
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
-              child: IconButton(
-                  onPressed: () async {
-                    var student = await ib.getStudentFromSC();
-                    var allInnovations = await ib.getAllInnovations();
-                    var isInnovationsProcessFinished =
-                        await ib.innovationProcessFinished();
-                    var contractOwner = await ib.getContractOwner();
-                    bool isOwner = false;
-                    if (student.studentAddress == contractOwner) {
-                      isOwner = true;
-                    }
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => InnovationsOverview(
-                                  student: student,
-                                  innovations: allInnovations,
-                                  isInnovationsProcessFinished:
-                                      isInnovationsProcessFinished,
-                                  isSmartContractOwner: isOwner,
-                                  studentFirstName: widget.studentFirstName,
-                                )));
-                  },
-                  icon: const Icon(Icons.home)),
+              child: Row(
+                children: [
+                  const Text('Übersicht',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0)),
+                  IconButton(
+                      onPressed: () async {
+                        var student = await ib.getStudentFromSC();
+                        var allInnovations = await ib.getAllInnovations();
+                        var isInnovationsProcessFinished =
+                            await ib.innovationProcessFinished();
+                        var contractOwner = await ib.getContractOwner();
+                        bool isOwner = false;
+                        if (student.studentAddress == contractOwner) {
+                          isOwner = true;
+                        }
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => InnovationsOverview(
+                                      student: student,
+                                      innovations: allInnovations,
+                                      isInnovationsProcessFinished:
+                                          isInnovationsProcessFinished,
+                                      isSmartContractOwner: isOwner,
+                                      studentFirstName: widget.studentFirstName,
+                                    )));
+                      },
+                      icon: const Icon(Icons.home)),
+                ],
+              ),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),

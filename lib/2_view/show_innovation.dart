@@ -67,28 +67,36 @@ class _ShowInnovationOverviewState extends State<ShowInnovation> {
                       ],
                     ),
                   ),
-                  IconButton(
-                      onPressed: () async {
-                        var student = await ib.getStudentFromSC();
-                        var innos = await ib.getAllInnovations();
-                        var isFinished = await ib.innovationProcessFinished();
-                        var owner = await ib.getContractOwner();
-                        bool isOwner = false;
-                        if (owner == student.studentAddress) {
-                          isOwner = true;
-                        }
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => InnovationsOverview(
-                                      student: student,
-                                      studentFirstName: widget.studentFirstName,
-                                      innovations: innos,
-                                      isInnovationsProcessFinished: isFinished,
-                                      isSmartContractOwner: isOwner,
-                                    )));
-                      },
-                      icon: const Icon(Icons.home)),
+                  Row(
+                    children: [
+                      const Text('Übersicht',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.0)),
+                      IconButton(
+                          onPressed: () async {
+                            var student = await ib.getStudentFromSC();
+                            var innos = await ib.getAllInnovations();
+                            var isFinished = await ib.innovationProcessFinished();
+                            var owner = await ib.getContractOwner();
+                            bool isOwner = false;
+                            if (owner == student.studentAddress) {
+                              isOwner = true;
+                            }
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => InnovationsOverview(
+                                          student: student,
+                                          studentFirstName: widget.studentFirstName,
+                                          innovations: innos,
+                                          isInnovationsProcessFinished: isFinished,
+                                          isSmartContractOwner: isOwner,
+                                        )));
+                          },
+                          icon: const Icon(Icons.home)),
+                    ],
+                  ),
                 ],
               ),
             ),
