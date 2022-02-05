@@ -122,7 +122,7 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
               },
               child: Container(
                   height: 50,
-                  width: size.width * 0.9,
+                  width: size.width * 0.6,
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     color: fhwsGreen,
