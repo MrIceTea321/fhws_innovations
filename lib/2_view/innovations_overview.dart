@@ -19,7 +19,6 @@ class InnovationsOverview extends StatefulWidget {
 
   int voteCount = 0;
   bool isVoted = false;
-  bool studentHasVoted = false;
 
   InnovationsOverview(
       {Key? key,
@@ -37,7 +36,6 @@ class InnovationsOverview extends StatefulWidget {
 class _InnovationsOverviewState extends State<InnovationsOverview> {
   @override
   void initState() {
-    widget.studentHasVoted = widget.student.voted;
     widget.innovations.forEach((innovation) {
       if ((listEquals(widget.student.votedInnovationHash,
           innovation.uniqueInnovationHash))) {
@@ -234,7 +232,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                                 'Du hast noch ',
                                 style: TextStyle(color: Colors.white),
                               ),
-                              widget.studentHasVoted
+                              widget.student.voted
                                   ? const Text(
                                       '0',
                                       style: TextStyle(
@@ -349,7 +347,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                       onPressed: () async {
                         Student student = await ib.getStudentFromSC();
                         if (student.voted == false) {
-                          widget.studentHasVoted = await ib.vote(
+                         await ib.vote(
                               Uint8List.fromList(innovationHash),
                               context,
                               size,
@@ -368,14 +366,14 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                         } else if (student.voted == true &&
                             (listEquals(student.votedInnovationHash,
                                 innovation.uniqueInnovationHash))) {
-                          widget.studentHasVoted = await ib.unvote(
+                         await ib.unvote(
                               Uint8List.fromList(innovationHash),
                               context,
                               size,
                               widget.studentFirstName);
                           setState(() {});
                         } else {
-                          widget.studentHasVoted = await ib.unvote(
+                          await ib.unvote(
                               Uint8List.fromList(innovationHash),
                               context,
                               size,
