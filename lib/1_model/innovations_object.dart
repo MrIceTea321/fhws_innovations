@@ -81,7 +81,6 @@ class InnovationsObject {
       BuildContext context, Size size, String studentFirstName) async {
     var response =
         await smartContract.submitTransaction("restartInnovationProcess", []);
-    checkTransactionReceipt(response, context, size, studentFirstName);
 
     await checkTransactionGoToLogin(context, size, response);
 

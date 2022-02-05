@@ -79,7 +79,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
           appBar: AppBar(
             automaticallyImplyLeading: false,
             title: const Text(
-              'FHWS Innovations',
+              '⚡️FHWS Innovations⚡️',
               style: TextStyle(fontSize: 18.0, color: Colors.white),
             ),
             backgroundColor: fhwsGreen,
@@ -149,11 +149,10 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                                       onPressed: () async {
                                         ib.endInnovationProcess(context, size,
                                             widget.studentFirstName);
-
                                       },
                                       child: Container(
                                           height: 50,
-                                          width: size.width * 0.9,
+                                          width: size.width * 0.6,
                                           decoration: const BoxDecoration(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(32.0)),
@@ -183,7 +182,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                                       },
                                       child: Container(
                                           height: 50,
-                                          width: size.width * 0.9,
+                                          width: size.width * 0.6,
                                           decoration: const BoxDecoration(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(32.0)),

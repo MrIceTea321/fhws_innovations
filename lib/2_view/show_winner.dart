@@ -46,7 +46,7 @@ class _ShowWinner extends State<ShowWinner> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: const Text(
-            'FHWS Innovations',
+            '⚡️FHWS Innovations⚡️',
             style: TextStyle(fontSize: 18.0, color: Colors.white),
           ),
           backgroundColor: fhwsGreen,
@@ -134,7 +134,7 @@ class _ShowWinner extends State<ShowWinner> {
                   },
                   child: Container(
                       height: 50,
-                      width: size.width * 0.9,
+                      width: size.width * 0.6,
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(32.0)),
                         color: fhwsGreen,

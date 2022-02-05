@@ -40,7 +40,7 @@ class _ShowInnovationOverviewState extends State<ShowInnovation> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: const Text(
-            'FHWS Innovations',
+            '⚡️FHWS Innovations⚡️',
             style: TextStyle(fontSize: 18.0, color: Colors.white),
           ),
           backgroundColor: fhwsGreen,
