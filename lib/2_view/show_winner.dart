@@ -190,10 +190,12 @@ class _ShowWinner extends State<ShowWinner> {
                     )),
               ],
             ),
+            const SizedBox(height: 5.0,),
             Text(description,
                 style: const TextStyle(
                   color: Colors.white,
                 )),
+            const SizedBox(height: 5.0,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -211,28 +213,30 @@ class _ShowWinner extends State<ShowWinner> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Innovation von: ',
+                const Text('Ersteller: ',
                     style: TextStyle(
                       color: Colors.white,
                     )),
-                Text(creator.studentAddress.toString(),
+                Text(creator.studentAddress.toString() + ' ',
                     style: const TextStyle(
                       color: fhwsGreen,
                       fontWeight: FontWeight.bold,
                     )),
+                const Text(' (',
+                    style: TextStyle(
+                      color: Colors.white,
+                    )),
+                Text(creator.kNumber,
+                    style: const TextStyle(
+                      color: fhwsGreen,
+                      fontWeight: FontWeight.bold,
+                    )),
+                const Text(')',
+                    style: TextStyle(
+                      color: Colors.white,
+                    )),
               ],
             ),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              const Text('Ersteller k-Nummer: ',
-                  style: TextStyle(
-                    color: Colors.white,
-                  )),
-              Text(creator.kNumber,
-                  style: const TextStyle(
-                    color: fhwsGreen,
-                    fontWeight: FontWeight.bold,
-                  ))
-            ])
           ],
         ),
       ),

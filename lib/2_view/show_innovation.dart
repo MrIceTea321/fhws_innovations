@@ -135,7 +135,7 @@ class _ShowInnovationOverviewState extends State<ShowInnovation> {
         color: Colors.black.withOpacity(0.5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -149,10 +149,14 @@ class _ShowInnovationOverviewState extends State<ShowInnovation> {
                     )),
               ],
             ),
+            const SizedBox(height: 5.0,),
+
             Text(description,
                 style: const TextStyle(
                   color: Colors.white,
                 )),
+            const SizedBox(height: 5.0,),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -170,21 +174,16 @@ class _ShowInnovationOverviewState extends State<ShowInnovation> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Ersteller hash: ',
+                const Text('Ersteller: ',
                     style: TextStyle(
                       color: Colors.white,
                     )),
-                Text(widget.innovation.creator.studentAddress.toString(),
+                Text(widget.innovation.creator.studentAddress.toString() + ' ',
                     style: const TextStyle(
                       color: fhwsGreen,
                       fontWeight: FontWeight.bold,
                     )),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Ersteller k-Nummer: ',
+                const Text(' (',
                     style: TextStyle(
                       color: Colors.white,
                     )),
@@ -193,8 +192,13 @@ class _ShowInnovationOverviewState extends State<ShowInnovation> {
                       color: fhwsGreen,
                       fontWeight: FontWeight.bold,
                     )),
+                const Text(')',
+                    style: TextStyle(
+                      color: Colors.white,
+                    )),
               ],
             ),
+
           ],
         ),
       ),
