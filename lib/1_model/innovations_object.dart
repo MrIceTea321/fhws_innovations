@@ -513,7 +513,7 @@ class InnovationsObject {
     if (owner == student.studentAddress) {
       isOwner = true;
     }
-    await Future.delayed(const Duration(seconds: 1, milliseconds: 500));
+    await Future.delayed(const Duration(seconds: 1));
 
     Navigator.push(
         context,
@@ -655,7 +655,7 @@ class InnovationsObject {
                     ))),
           );
         });
-    await Future.delayed(const Duration(seconds: 1, milliseconds: 500));
+    await Future.delayed(const Duration(seconds: 1));
     Navigator.push(
         context,
         MaterialPageRoute(
