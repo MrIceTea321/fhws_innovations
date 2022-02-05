@@ -144,7 +144,7 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
               },
               child: Container(
                   height: 50,
-                  width: size.width * 0.6,
+                  width: size.width * 0.35,
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     color: fhwsGreen,
@@ -180,7 +180,7 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
         color: Colors.black.withOpacity(0.5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             TextFormField(
               onChanged: (value) {

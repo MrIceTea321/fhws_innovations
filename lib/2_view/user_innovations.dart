@@ -122,7 +122,7 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
               },
               child: Container(
                   height: 50,
-                  width: size.width * 0.6,
+                  width: size.width * 0.35,
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     color: fhwsGreen,
@@ -207,7 +207,7 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
           color: Colors.black.withOpacity(0.5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Text(title,
                   style: const TextStyle(

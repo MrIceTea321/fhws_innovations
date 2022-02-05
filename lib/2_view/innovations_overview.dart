@@ -150,7 +150,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                                       },
                                       child: Container(
                                           height: 50,
-                                          width: size.width * 0.6,
+                                          width: size.width * 0.35,
                                           decoration: const BoxDecoration(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(32.0)),
@@ -180,7 +180,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                                       },
                                       child: Container(
                                           height: 50,
-                                          width: size.width * 0.6,
+                                          width: size.width * 0.35,
                                           decoration: const BoxDecoration(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(32.0)),
@@ -331,7 +331,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
           color: Colors.black.withOpacity(0.5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
