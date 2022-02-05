@@ -342,47 +342,45 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
           color: Colors.black.withOpacity(0.5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Center(
-                child: Row(
-                  children: [
-                    Text(title,
-                        style: const TextStyle(
-                          color: fhwsGreen,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                        )),
-                    IconButton(
-                        onPressed: () async {
+              Row(
+                children: [
+                  Text(title,
+                      style: const TextStyle(
+                        color: fhwsGreen,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      )),
+                  IconButton(
+                      onPressed: () async {
+                        Student student = await ib.getStudentFromSC();
+                        //TODO disable vote button till vote is removed
+                        if (student.voted == false) {
+                          ib.vote(Uint8List.fromList(innovationHash), context,
+                              size);
+                          widget.studentHasVoted = true;
+                        } else if (student.voted == true &&
+                            !(listEquals(student.votedInnovationHash,
+                                innovation.uniqueInnovationHash))) {
                           Student student = await ib.getStudentFromSC();
-                          if (student.voted == false) {
-                            ib.vote(Uint8List.fromList(innovationHash), context,
-                                size);
-                            widget.studentHasVoted = true;
-                          } else if (student.voted == true &&
-                              !(listEquals(student.votedInnovationHash,
-                                  innovation.uniqueInnovationHash))) {
-                            Student student = await ib.getStudentFromSC();
-                            // first unvote than vote if student has voted for another innovation and wants to vote for another one
-                            ib.unvote(student.votedInnovationHash, context, size);
-                            ib.vote(innovationHash, context, size);
-                          } else {
-                            ib.unvote(Uint8List.fromList(innovationHash), context,
-                                size);
-                            widget.studentHasVoted = false;
-                          }
-
-                          setState(() {});
-                        },
-                        icon: innovation.isVoted
-                            ? const Icon(Icons.star, color: fhwsGreen)
-                            : const Icon(
-                                Icons.star_border,
-                                color: fhwsGreen,
-                              ))
-                  ],
-                ),
+                          // first unvote than vote if student has voted for another innovation and wants to vote for another one
+                          ib.unvote(student.votedInnovationHash, context, size);
+                          ib.vote(innovationHash, context, size);
+                        } else {
+                          ib.unvote(Uint8List.fromList(innovationHash), context,
+                              size);
+                          widget.studentHasVoted = false;
+                        }
+                        setState(() {});
+                      },
+                      icon: innovation.isVoted
+                          ? const Icon(Icons.star, color: fhwsGreen)
+                          : const Icon(
+                              Icons.star_border,
+                              color: fhwsGreen,
+                            ))
+                ],
               ),
               Text(description,
                   style: const TextStyle(

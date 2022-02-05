@@ -132,7 +132,6 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                                               .uniqueInnovationHash,
                                           context,
                                           size);
-                                      Navigator.pop(context);
                                     },
                                     child: const Text('Löschen',
                                         style: TextStyle(color: Colors.red)),

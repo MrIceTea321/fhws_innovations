@@ -102,7 +102,7 @@ class _ShowInnovationOverviewState extends State<ShowInnovation> {
         color: Colors.black.withOpacity(0.5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Center(
               child: Row(
