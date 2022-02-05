@@ -18,7 +18,7 @@ class ShowWinner extends StatefulWidget {
       {required this.innovations,
       required this.studentIsContractOwner,
       required this.studentFromLogin,
-      required this.smartContractOwner});
+      required this.smartContractOwner,});
 
   @override
   _ShowWinner createState() => _ShowWinner();
@@ -129,7 +129,7 @@ class _ShowWinner extends State<ShowWinner> {
           widget.studentIsContractOwner
               ? TextButton(
                   onPressed: () async {
-                    ib.restartInnovationProcess(context, size);
+                    ib.restartInnovationProcess(context, size, '');
                     showDialog(
                         context: context,
                         builder: (BuildContext context) {

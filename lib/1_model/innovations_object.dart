@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:html';
 import 'dart:typed_data';
 import 'package:fhws_innovations/1_model/student_object.dart';
+import 'package:fhws_innovations/2_view/innovations_overview.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:web3dart/browser.dart';
@@ -66,17 +67,17 @@ class InnovationsObject {
   }
 
   //transaction functions
-  void endInnovationProcess(BuildContext context, Size size) async {
+  void endInnovationProcess(BuildContext context, Size size, String studentFirstName) async {
     var response =
         await smartContract.submitTransaction("endInnovationProcess", []);
-    checkTransactionReceipt(response, context, size);
+    checkTransactionReceipt(response, context, size, studentFirstName);
     log(response);
   }
 
-  void restartInnovationProcess(BuildContext context, Size size) async {
+  void restartInnovationProcess(BuildContext context, Size size, String studentFirstName) async {
     var response =
         await smartContract.submitTransaction("restartInnovationProcess", []);
-    checkTransactionReceipt(response, context, size);
+    checkTransactionReceipt(response, context, size, studentFirstName);
     log(response);
   }
 
@@ -186,60 +187,60 @@ class InnovationsObject {
       BuildContext context, String kNumber, Size size) async {
     var response = await smartContract
         .submitTransaction("initialRegistrationOfStudent", [kNumber]);
-    checkTransactionReceipt(response, context, size);
+    checkTransactionReceipt(response, context, size, '');
     log(response);
     return response;
   }
 
   void createInnovation(
-      String title, String description, BuildContext context, Size size) async {
+      String title, String description, BuildContext context, Size size, String studentFirstName) async {
     var response = await smartContract
         .submitTransaction("createInnovation", [title, description]);
     await checkIfStudentUsesInitialRegisteredAddress();
-    checkTransactionReceipt(response, context, size);
+    checkTransactionReceipt(response, context, size, studentFirstName);
     log(response);
   }
 
   void deleteInnovation(
-      Uint8List uniqueInnovationHash, BuildContext context, Size size) async {
+      Uint8List uniqueInnovationHash, BuildContext context, Size size, String studentFirstName) async {
     var response = await smartContract
         .submitTransaction("deleteInnovation", [uniqueInnovationHash]);
     await checkIfStudentUsesInitialRegisteredAddress();
-    checkTransactionReceipt(response, context, size);
+    checkTransactionReceipt(response, context, size, studentFirstName);
     log(response);
   }
 
   void editInnovation(Uint8List uniqueInnovationHash, String title,
-      String description, BuildContext context, Size size) async {
+      String description, BuildContext context, Size size, String studentFirstName) async {
     var response = await smartContract.submitTransaction(
         "editInnovation", [uniqueInnovationHash, title, description]);
     await checkIfStudentUsesInitialRegisteredAddress();
-    checkTransactionReceipt(response, context, size);
+    checkTransactionReceipt(response, context, size, studentFirstName);
     log(response);
   }
 
   Future<bool> vote(
-      Uint8List uniqueInnovationHash, BuildContext context, Size size) async {
+      Uint8List uniqueInnovationHash, BuildContext context, Size size, String studentFirstName) async {
     var response = await smartContract
         .submitTransaction("vote", [Uint8List.fromList(uniqueInnovationHash)]);
     await checkIfStudentUsesInitialRegisteredAddress();
-    checkTransactionReceipt(response, context, size);
+    checkTransactionReceipt(response, context, size, studentFirstName);
     log(response);
     return true;
   }
 
   Future<bool> unvote(
-      Uint8List uniqueInnovationHash, BuildContext context, Size size) async {
+      Uint8List uniqueInnovationHash, BuildContext context, Size size, String studentFirstName) async {
     var response = await smartContract.submitTransaction(
         "unvote", [Uint8List.fromList(uniqueInnovationHash)]);
     await checkIfStudentUsesInitialRegisteredAddress();
-    checkTransactionReceipt(response, context, size);
+    checkTransactionReceipt(response, context, size,studentFirstName);
     log(response);
     return false;
   }
 
   Future<void> checkTransactionReceipt(
-      String response, BuildContext context, Size size) async {
+      String response, BuildContext context, Size size, String studentFirstName) async {
     var isStatus = false;
     showDialog(
         context: context,
@@ -366,5 +367,23 @@ class InnovationsObject {
                     ))),
           );
         });
+    var student = await getStudentFromSC();
+    var innos = await getAllInnovations();
+    var isFinished = await innovationProcessFinished();
+    var owner = await getContractOwner();
+    bool isOwner = false;
+    if (owner == student.studentAddress) {
+      isOwner = true;
+    }
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => InnovationsOverview(
+              student: student,
+              studentFirstName: studentFirstName,
+              innovations: innos,
+              isInnovationsProcessFinished: isFinished,
+              isSmartContractOwner: isOwner,
+            )));
   }
 }

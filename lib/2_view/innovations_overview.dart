@@ -147,9 +147,9 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                               child: widget.isInnovationsProcessFinished
                                   ? TextButton(
                                       onPressed: () async {
-                                        ib.endInnovationProcess(context, size);
+                                        ib.endInnovationProcess(context, size, widget.studentFirstName);
                                         ib.restartInnovationProcess(
-                                            context, size);
+                                            context, size, widget.studentFirstName);
                                         showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
@@ -157,6 +157,12 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                                                   "Erfolgreich",
                                                   "Die Abstimmung wird neu gestartet!");
                                             });
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => const Login(
+                                                  fromStudentCheck: false,
+                                                )));
                                       },
                                       child: Container(
                                           height: 50,
@@ -184,7 +190,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                                     )
                                   : TextButton(
                                       onPressed: () async {
-                                        ib.endInnovationProcess(context, size);
+                                        ib.endInnovationProcess(context, size, widget.studentFirstName);
                                         await ib.innovationProcessFinished();
                                         showDialog(
                                           context: context,
@@ -194,6 +200,12 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                                                 "Die Abstimmung wurde erfolgreich beendet!");
                                           },
                                         );
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => const Login(
+                                                  fromStudentCheck: false,
+                                                )));
                                       },
                                       child: Container(
                                           height: 50,
@@ -367,7 +379,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                           widget.studentHasVoted = await ib.vote(
                               Uint8List.fromList(innovationHash),
                               context,
-                              size);
+                              size, widget.studentFirstName);
                           setState(() {});
                         } else if (student.voted == true &&
                             !(listEquals(student.votedInnovationHash,
@@ -385,13 +397,13 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                           widget.studentHasVoted = await ib.unvote(
                               Uint8List.fromList(innovationHash),
                               context,
-                              size);
+                              size, widget.studentFirstName);
                           setState(() {});
                         } else {
                           widget.studentHasVoted = await ib.unvote(
                               Uint8List.fromList(innovationHash),
                               context,
-                              size);
+                              size, widget.studentFirstName);
                           setState(() {});
                         }
                       },

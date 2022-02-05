@@ -138,26 +138,8 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
                     },
                   );
                 } else {
-                  ib.createInnovation(
-                      widget.title, widget.description, context, size);
-                  var student = await ib.getStudentFromSC();
-                  var innos = await ib.getAllInnovations();
-                  var isFinished = await ib.innovationProcessFinished();
-                  var owner = await ib.getContractOwner();
-                  bool isOwner = false;
-                  if (owner == student.studentAddress) {
-                    isOwner = true;
-                  }
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => InnovationsOverview(
-                                student: student,
-                                studentFirstName: widget.studentFirstName,
-                                innovations: innos,
-                                isInnovationsProcessFinished: isFinished,
-                                isSmartContractOwner: isOwner,
-                              )));
+                  ib.createInnovation(widget.title, widget.description, context, size, widget.studentFirstName);
+
                 }
               },
               child: Container(
