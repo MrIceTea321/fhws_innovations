@@ -380,7 +380,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                               color: fhwsGreen,
                             ))
                 ],
-              ),g
+              ),
               Text(description,
                   style: const TextStyle(
                     color: Colors.white,
