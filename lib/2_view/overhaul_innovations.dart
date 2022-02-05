@@ -99,7 +99,7 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                                       studentFirstName: widget.studentFirstName,
                                     )));
                       },
-                      icon: const Icon(Icons.description)),
+                      icon: const Icon(Icons.description, color:Colors.black)),
                 ],
               ),
             ),
@@ -141,7 +141,7 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                               );
                             });
                       },
-                      icon: const Icon(Icons.delete)),
+                      icon: const Icon(Icons.delete, color: Colors.red)),
                 ],
               ),
             ),

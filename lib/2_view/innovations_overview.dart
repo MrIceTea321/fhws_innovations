@@ -92,7 +92,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                       style: TextStyle(
                           color: Colors.black.withOpacity(0.7), fontSize: 18.0),
                     ),
-                    IconButton(onPressed: () {}, icon: const Icon(Icons.home)),
+                    IconButton(onPressed: () {}, icon: const Icon(Icons.home, color:Colors.black)),
                   ],
                 ),
               ),

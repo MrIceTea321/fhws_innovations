@@ -50,10 +50,19 @@ class _ShowInnovationOverviewState extends State<ShowInnovation> {
               padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
               child: Row(
                 children: [
-                  Text('Detailansicht',
-                      style: TextStyle(
-                          color: Colors.black.withOpacity(0.7),
-                          fontSize: 18.0)),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Detailansicht',
+                          style: TextStyle(
+                              color: Colors.black.withOpacity(0.7), fontSize: 18.0),
+                        ),
+                        IconButton(onPressed: () {}, icon: const Icon(Icons.search, color:Colors.black)),
+                      ],
+                    ),
+                  ),
                   IconButton(
                       onPressed: () async {
                         var student = await ib.getStudentFromSC();
@@ -157,11 +166,25 @@ class _ShowInnovationOverviewState extends State<ShowInnovation> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Innovation von: ',
+                const Text('Ersteller hash: ',
                     style: TextStyle(
                       color: Colors.white,
                     )),
                 Text(widget.innovation.creator.studentAddress.toString(),
+                    style: const TextStyle(
+                      color: fhwsGreen,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Ersteller k-Nummer: ',
+                    style: TextStyle(
+                      color: Colors.white,
+                    )),
+                Text(widget.innovation.creator.kNumber,
                     style: const TextStyle(
                       color: fhwsGreen,
                       fontWeight: FontWeight.bold,
