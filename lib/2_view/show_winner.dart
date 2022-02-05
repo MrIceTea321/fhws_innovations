@@ -180,6 +180,7 @@ class _ShowWinner extends State<ShowWinner> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(title,
                     style: const TextStyle(
