@@ -102,10 +102,8 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                 padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
                 child: Row(
                   children: [
-                   const Text('Innovationen bearbeiten',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18.0)),
+                    const Text('Meine Innovationen',
+                        style: TextStyle(color: Colors.white, fontSize: 18.0)),
                     IconButton(
                         onPressed: () async {
                           var innovationsFromStudent =

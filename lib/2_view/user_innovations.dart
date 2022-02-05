@@ -57,9 +57,7 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
               child: Row(
                 children: [
                   const Text('Übersicht',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18.0)),
+                      style: TextStyle(color: Colors.white, fontSize: 18.0)),
                   IconButton(
                       onPressed: () async {
                         var student = await ib.getStudentFromSC();
@@ -224,12 +222,16 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
                   )),
-              const SizedBox(height: 5.0,),
+              const SizedBox(
+                height: 5.0,
+              ),
               Text(description,
                   style: const TextStyle(
                     color: Colors.white,
                   )),
-              const SizedBox(height: 5.0,),
+              const SizedBox(
+                height: 5.0,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

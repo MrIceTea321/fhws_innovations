@@ -190,12 +190,16 @@ class _ShowWinner extends State<ShowWinner> {
                     )),
               ],
             ),
-            const SizedBox(height: 5.0,),
+            const SizedBox(
+              height: 5.0,
+            ),
             Text(description,
                 style: const TextStyle(
                   color: Colors.white,
                 )),
-            const SizedBox(height: 5.0,),
+            const SizedBox(
+              height: 5.0,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

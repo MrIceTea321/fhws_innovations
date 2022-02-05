@@ -57,9 +57,7 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
               child: Row(
                 children: [
                   const Text('Übersicht',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18.0)),
+                      style: TextStyle(color: Colors.white, fontSize: 18.0)),
                   IconButton(
                       onPressed: () async {
                         var student = await ib.getStudentFromSC();
