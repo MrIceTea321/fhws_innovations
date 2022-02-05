@@ -232,7 +232,7 @@ class InnovationsObject {
                               decoration: const BoxDecoration(
                                 color: Colors.transparent,
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
+                                    BorderRadius.all(Radius.circular(20.0)),
                               ),
                               child: const CircularProgressIndicator(
                                 color: fhwsGreen,
@@ -283,17 +283,17 @@ class InnovationsObject {
                         children: <Widget>[
                           isStatus
                               ? const Text('Transaktion erfolgreich ✅',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                              ))
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                  ))
                               : const Text('Transaktion nicht erfolgreich ❌',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                              )),
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                  )),
                           const SizedBox(height: 20.0),
                           Container(
                               height: 40,
@@ -301,7 +301,7 @@ class InnovationsObject {
                               decoration: const BoxDecoration(
                                 color: Colors.transparent,
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
+                                    BorderRadius.all(Radius.circular(20.0)),
                               ),
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
@@ -320,6 +320,7 @@ class InnovationsObject {
                     ))),
           );
         });
+
     log(response);
     return response;
   }
@@ -523,7 +524,6 @@ class InnovationsObject {
                   isInnovationsProcessFinished: isFinished,
                   isSmartContractOwner: isOwner,
                 )));
-    Navigator.pop(context);
   }
 
   Future<void> checkTransactionGoToLogin(

@@ -138,8 +138,8 @@ class _CreateNewInnovationOverviewState extends State<CreateNewInnovation> {
                     },
                   );
                 } else {
-                  ib.createInnovation(widget.title, widget.description, context, size, widget.studentFirstName);
-
+                  ib.createInnovation(widget.title, widget.description, context,
+                      size, widget.studentFirstName);
                 }
               },
               child: Container(

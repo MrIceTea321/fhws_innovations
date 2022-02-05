@@ -131,7 +131,8 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                                           widget.userInnovation
                                               .uniqueInnovationHash,
                                           context,
-                                          size, widget.studentFirstName);
+                                          size,
+                                          widget.studentFirstName);
                                     },
                                     child: const Text('Löschen',
                                         style: TextStyle(color: Colors.red)),
@@ -171,8 +172,8 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                     widget.userInnovation.title,
                     widget.userInnovation.description,
                     context,
-                    size, widget.studentFirstName);
-
+                    size,
+                    widget.studentFirstName);
               },
               child: Container(
                   height: 50,
