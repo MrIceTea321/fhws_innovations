@@ -14,11 +14,12 @@ class ShowWinner extends StatefulWidget {
   final Student studentFromLogin;
   final EthereumAddress smartContractOwner;
 
-  const ShowWinner(
-      {required this.innovations,
-      required this.studentIsContractOwner,
-      required this.studentFromLogin,
-      required this.smartContractOwner,});
+  const ShowWinner({
+    required this.innovations,
+    required this.studentIsContractOwner,
+    required this.studentFromLogin,
+    required this.smartContractOwner,
+  });
 
   @override
   _ShowWinner createState() => _ShowWinner();
@@ -130,12 +131,6 @@ class _ShowWinner extends State<ShowWinner> {
               ? TextButton(
                   onPressed: () async {
                     ib.restartInnovationProcess(context, size, '');
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return const RoundedAlert("Erfolgreich",
-                              "Eine neue Abstimmungsperiode wurde eröffnet!");
-                        });
                   },
                   child: Container(
                       height: 50,
