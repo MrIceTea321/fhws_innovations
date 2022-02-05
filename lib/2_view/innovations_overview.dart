@@ -387,7 +387,9 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                   style: const TextStyle(
                     color: Colors.white,
                   )),
-              const SizedBox(height: 5.0,),
+              const SizedBox(
+                height: 5.0,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

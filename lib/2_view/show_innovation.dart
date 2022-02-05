@@ -76,7 +76,8 @@ class _ShowInnovationOverviewState extends State<ShowInnovation> {
                           onPressed: () async {
                             var student = await ib.getStudentFromSC();
                             var innos = await ib.getAllInnovations();
-                            var isFinished = await ib.innovationProcessFinished();
+                            var isFinished =
+                                await ib.innovationProcessFinished();
                             var owner = await ib.getContractOwner();
                             bool isOwner = false;
                             if (owner == student.studentAddress) {
@@ -87,9 +88,11 @@ class _ShowInnovationOverviewState extends State<ShowInnovation> {
                                 MaterialPageRoute(
                                     builder: (context) => InnovationsOverview(
                                           student: student,
-                                          studentFirstName: widget.studentFirstName,
+                                          studentFirstName:
+                                              widget.studentFirstName,
                                           innovations: innos,
-                                          isInnovationsProcessFinished: isFinished,
+                                          isInnovationsProcessFinished:
+                                              isFinished,
                                           isSmartContractOwner: isOwner,
                                         )));
                           },
@@ -156,14 +159,16 @@ class _ShowInnovationOverviewState extends State<ShowInnovation> {
                     )),
               ],
             ),
-            const SizedBox(height: 5.0,),
-
+            const SizedBox(
+              height: 5.0,
+            ),
             Text(description,
                 style: const TextStyle(
                   color: Colors.white,
                 )),
-            const SizedBox(height: 5.0,),
-
+            const SizedBox(
+              height: 5.0,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -205,7 +210,6 @@ class _ShowInnovationOverviewState extends State<ShowInnovation> {
                     )),
               ],
             ),
-
           ],
         ),
       ),
