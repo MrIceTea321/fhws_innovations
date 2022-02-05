@@ -88,7 +88,8 @@ class _UserInnovationsOverviewState extends State<UserInnovations> {
                           color: Colors.black.withOpacity(0.7),
                           fontSize: 18.0)),
                   IconButton(
-                      onPressed: () {}, icon: const Icon(Icons.description, color:Colors.black)),
+                      onPressed: () {},
+                      icon: const Icon(Icons.description, color: Colors.black)),
                 ],
               ),
             ),

@@ -99,7 +99,7 @@ class _InnovationsDetailOverviewState extends State<OverhaulInnovation> {
                                       studentFirstName: widget.studentFirstName,
                                     )));
                       },
-                      icon: const Icon(Icons.description, color:Colors.black)),
+                      icon: const Icon(Icons.description, color: Colors.black)),
                 ],
               ),
             ),

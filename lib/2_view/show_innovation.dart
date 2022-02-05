@@ -57,9 +57,13 @@ class _ShowInnovationOverviewState extends State<ShowInnovation> {
                         Text(
                           'Detailansicht',
                           style: TextStyle(
-                              color: Colors.black.withOpacity(0.7), fontSize: 18.0),
+                              color: Colors.black.withOpacity(0.7),
+                              fontSize: 18.0),
                         ),
-                        IconButton(onPressed: () {}, icon: const Icon(Icons.search, color:Colors.black)),
+                        IconButton(
+                            onPressed: () {},
+                            icon:
+                                const Icon(Icons.search, color: Colors.black)),
                       ],
                     ),
                   ),

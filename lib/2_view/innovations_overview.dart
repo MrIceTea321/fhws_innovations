@@ -92,7 +92,9 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                       style: TextStyle(
                           color: Colors.black.withOpacity(0.7), fontSize: 18.0),
                     ),
-                    IconButton(onPressed: () {}, icon: const Icon(Icons.home, color:Colors.black)),
+                    IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.home, color: Colors.black)),
                   ],
                 ),
               ),
@@ -176,7 +178,6 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                                       onPressed: () async {
                                         ib.endInnovationProcess(context, size,
                                             widget.studentFirstName);
-                                        await ib.innovationProcessFinished();
                                       },
                                       child: Container(
                                           height: 50,
@@ -347,11 +348,8 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                       onPressed: () async {
                         Student student = await ib.getStudentFromSC();
                         if (student.voted == false) {
-                         await ib.vote(
-                              Uint8List.fromList(innovationHash),
-                              context,
-                              size,
-                              widget.studentFirstName);
+                          await ib.vote(Uint8List.fromList(innovationHash),
+                              context, size, widget.studentFirstName);
                           setState(() {});
                         } else if (student.voted == true &&
                             !(listEquals(student.votedInnovationHash,
@@ -366,18 +364,12 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                         } else if (student.voted == true &&
                             (listEquals(student.votedInnovationHash,
                                 innovation.uniqueInnovationHash))) {
-                         await ib.unvote(
-                              Uint8List.fromList(innovationHash),
-                              context,
-                              size,
-                              widget.studentFirstName);
+                          await ib.unvote(Uint8List.fromList(innovationHash),
+                              context, size, widget.studentFirstName);
                           setState(() {});
                         } else {
-                          await ib.unvote(
-                              Uint8List.fromList(innovationHash),
-                              context,
-                              size,
-                              widget.studentFirstName);
+                          await ib.unvote(Uint8List.fromList(innovationHash),
+                              context, size, widget.studentFirstName);
                           setState(() {});
                         }
                       },
