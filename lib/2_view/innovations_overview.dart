@@ -376,7 +376,7 @@ class _InnovationsOverviewState extends State<InnovationsOverview> {
                             context: context,
                             builder: (BuildContext context) {
                               return const RoundedAlert("Achtung",
-                                  "Bitte entferne zuerste deine Stimme, bevor du neu wählst");
+                                  "Bitte entferne zuerste deine Stimme, indem du erneut auf das Vote-Icon deiner ausgewählten Innovation klickst, bevor du neu wählst");
                             },
                           );
                         } else if (student.voted == true &&
