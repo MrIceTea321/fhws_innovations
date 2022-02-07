@@ -54,49 +54,48 @@ class _ShowInnovationOverviewState extends State<ShowInnovation> {
                     padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
                     child: Row(
                       children: [
-                        Text(
-                          'Detailansicht',
-                          style: TextStyle(
-                              color: Colors.black.withOpacity(0.7),
-                              fontSize: 18.0),
-                        ),
+                        const Text('Übersicht',
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 18.0)),
                         IconButton(
-                            onPressed: () {},
-                            icon:
-                                const Icon(Icons.search, color: Colors.black)),
+                            onPressed: () async {
+                              var student = await ib.getStudentFromSC();
+                              var innos = await ib.getAllInnovations();
+                              var isFinished =
+                                  await ib.innovationProcessFinished();
+                              var owner = await ib.getContractOwner();
+                              bool isOwner = false;
+                              if (owner == student.studentAddress) {
+                                isOwner = true;
+                              }
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => InnovationsOverview(
+                                            student: student,
+                                            studentFirstName:
+                                                widget.studentFirstName,
+                                            innovations: innos,
+                                            isInnovationsProcessFinished:
+                                                isFinished,
+                                            isSmartContractOwner: isOwner,
+                                          )));
+                            },
+                            icon: const Icon(Icons.home)),
                       ],
                     ),
                   ),
                   Row(
                     children: [
-                      const Text('Übersicht',
-                          style:
-                              TextStyle(color: Colors.white, fontSize: 18.0)),
+                      Text(
+                        'Detailansicht',
+                        style: TextStyle(
+                            color: Colors.black.withOpacity(0.7),
+                            fontSize: 18.0),
+                      ),
                       IconButton(
-                          onPressed: () async {
-                            var student = await ib.getStudentFromSC();
-                            var innos = await ib.getAllInnovations();
-                            var isFinished =
-                                await ib.innovationProcessFinished();
-                            var owner = await ib.getContractOwner();
-                            bool isOwner = false;
-                            if (owner == student.studentAddress) {
-                              isOwner = true;
-                            }
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => InnovationsOverview(
-                                          student: student,
-                                          studentFirstName:
-                                              widget.studentFirstName,
-                                          innovations: innos,
-                                          isInnovationsProcessFinished:
-                                              isFinished,
-                                          isSmartContractOwner: isOwner,
-                                        )));
-                          },
-                          icon: const Icon(Icons.home)),
+                          onPressed: () {},
+                          icon: const Icon(Icons.search, color: Colors.black)),
                     ],
                   ),
                 ],

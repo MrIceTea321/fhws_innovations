@@ -18,9 +18,7 @@ class InnovationsObject {
   List<Innovation> allInnovationsList = [];
   List<Innovation> innovationFromStudentList = [];
   List<Innovation> winningInnovationsList = [];
-  var ethClient = Web3Client(
-      "https://rinkeby.infura.io/v3/dbd61902b58949348a3045a157d038ca",
-      Client());
+  var ethClient = Web3Client(rinkebyInfuraLink, Client());
 
   //All SmartContract Owner functions
   //call functions
