@@ -7,4 +7,6 @@ const String fhwsApi = 'https://apistaging.fiw.fhws.de/auth/api/users/me';
 const String rinkebyInfuraLink =
     'https://rinkeby.infura.io/v3/dbd61902b58949348a3045a157d038ca';
 const String abiJson = 'abi.json';
+const String etherscanRequest =
+    'https://api.etherscan.io/api?module=transaction&action=getstatus&txhash=';
 const String etherscanToken = '1QBB8UAT38HC86C4IQQQXXC376S4XF3PH8';

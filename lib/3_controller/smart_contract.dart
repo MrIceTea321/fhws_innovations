@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:html';
 import 'package:web3dart/browser.dart';
 import 'package:http/http.dart';
@@ -5,6 +6,7 @@ import 'package:web3dart/web3dart.dart';
 import '../constants/text_constants.dart';
 import 'package:fhws_innovations/constants/text_constants.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
 class SmartContract {
   var ethClient = Web3Client(rinkebyInfuraLink, Client());
@@ -47,7 +49,32 @@ class SmartContract {
               contract: contract, function: ethFunction, parameters: args),
           chainId: null,
           fetchChainIdFromNetworkId: true);
+      await getStatusOfTransaction(result);
       return result;
     }
+  }
+
+  Future<bool> getStatusOfTransaction(String transactionHash) async {
+    bool transactionGetsProcessed = false;
+    final response = await http.get(Uri.parse(
+        etherscanRequest + transactionHash + '&apikey=' + etherscanToken));
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      Map<String, dynamic> etherScanFetch = jsonDecode(response.body);
+      if (('${etherScanFetch['result']['isError']}' == "0") &&
+          ('${etherScanFetch['status']}' == "1")) {
+        // Transaction gets processed fine.
+        transactionGetsProcessed = true;
+      } else {
+        // Throw Exception if there was an error in the transaction
+        throw Exception('Transaction failed!');
+      }
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Transaction failed!');
+    }
+    return transactionGetsProcessed;
   }
 }
