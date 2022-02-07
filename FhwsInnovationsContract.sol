@@ -23,7 +23,7 @@ contract FhwsInnovationsContract {
     address private owner;
     
     //check if innovation process is finished
-    bool private innovationProcessFinished;
+    bool public innovationProcessFinished;
 
     //search with registred address for student
     mapping(address => Student) private students;
@@ -185,7 +185,6 @@ contract FhwsInnovationsContract {
         uint check = 0;
         for(uint i = 0; i < innovations.length; i++) {
             if(innovations[i].uniqueInnovationHash ==_uniqueInnovationHash){
-                giveStudentsVoteBack(_uniqueInnovationHash, i);
                 innovations[i].title = _title;
                 innovations[i].description = _description;
                 check++;
