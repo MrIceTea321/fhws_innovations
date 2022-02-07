@@ -7,13 +7,11 @@ import 'package:fhws_innovations/constants/text_constants.dart';
 import 'package:flutter/services.dart';
 
 class SmartContract {
-  var ethClient = Web3Client(
-      "https://rinkeby.infura.io/v3/dbd61902b58949348a3045a157d038ca",
-      Client());
+  var ethClient = Web3Client(rinkebyInfuraLink, Client());
 
   Future<DeployedContract> loadContract() async {
     // Load Contract from the Abi
-    String abi = await rootBundle.loadString("abi.json");
+    String abi = await rootBundle.loadString(abiJson);
 
     // Transform contract into an object
     final contract = DeployedContract(ContractAbi.fromJson(abi, contractName),
