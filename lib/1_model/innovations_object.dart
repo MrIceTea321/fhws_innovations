@@ -67,8 +67,8 @@ class InnovationsObject {
   //transaction functions
   void endInnovationProcess(
       BuildContext context, Size size, String studentFirstName) async {
-    var response =
-        await smartContract.submitTransaction("endInnovationProcess", []);
+    var response = await smartContract.submitTransaction(
+        "endInnovationProcess", [], context);
 
     await checkTransactionGoToLogin(context, size, response);
 
@@ -77,8 +77,8 @@ class InnovationsObject {
 
   void restartInnovationProcess(
       BuildContext context, Size size, String studentFirstName) async {
-    var response =
-        await smartContract.submitTransaction("restartInnovationProcess", []);
+    var response = await smartContract.submitTransaction(
+        "restartInnovationProcess", [], context);
 
     await checkTransactionGoToLogin(context, size, response);
 
@@ -189,8 +189,8 @@ class InnovationsObject {
 
   Future<String> initialRegistrationOfStudent(
       BuildContext context, String kNumber, Size size) async {
-    var response = await smartContract
-        .submitTransaction("initialRegistrationOfStudent", [kNumber]);
+    var response = await smartContract.submitTransaction(
+        "initialRegistrationOfStudent", [kNumber], context);
     var isStatus = false;
     showDialog(
         context: context,
@@ -324,8 +324,8 @@ class InnovationsObject {
 
   void createInnovation(String title, String description, BuildContext context,
       Size size, String studentFirstName) async {
-    var response = await smartContract
-        .submitTransaction("createInnovation", [title, description]);
+    var response = await smartContract.submitTransaction(
+        "createInnovation", [title, description], context);
     await checkIfStudentUsesInitialRegisteredAddress();
     checkTransactionReceipt(response, context, size, studentFirstName);
     log(response);
@@ -333,8 +333,8 @@ class InnovationsObject {
 
   void deleteInnovation(Uint8List uniqueInnovationHash, BuildContext context,
       Size size, String studentFirstName) async {
-    var response = await smartContract
-        .submitTransaction("deleteInnovation", [uniqueInnovationHash]);
+    var response = await smartContract.submitTransaction(
+        "deleteInnovation", [uniqueInnovationHash], context);
     await checkIfStudentUsesInitialRegisteredAddress();
     checkTransactionReceipt(response, context, size, studentFirstName);
     log(response);
@@ -348,7 +348,7 @@ class InnovationsObject {
       Size size,
       String studentFirstName) async {
     var response = await smartContract.submitTransaction(
-        "editInnovation", [uniqueInnovationHash, title, description]);
+        "editInnovation", [uniqueInnovationHash, title, description], context);
     await checkIfStudentUsesInitialRegisteredAddress();
     checkTransactionReceipt(response, context, size, studentFirstName);
     log(response);
@@ -356,8 +356,8 @@ class InnovationsObject {
 
   Future<bool> vote(Uint8List uniqueInnovationHash, BuildContext context,
       Size size, String studentFirstName) async {
-    var response = await smartContract
-        .submitTransaction("vote", [Uint8List.fromList(uniqueInnovationHash)]);
+    var response = await smartContract.submitTransaction(
+        "vote", [Uint8List.fromList(uniqueInnovationHash)], context);
     await checkIfStudentUsesInitialRegisteredAddress();
     checkTransactionReceipt(response, context, size, studentFirstName);
     log(response);
@@ -367,7 +367,7 @@ class InnovationsObject {
   Future<bool> unvote(Uint8List uniqueInnovationHash, BuildContext context,
       Size size, String studentFirstName) async {
     var response = await smartContract.submitTransaction(
-        "unvote", [Uint8List.fromList(uniqueInnovationHash)]);
+        "unvote", [Uint8List.fromList(uniqueInnovationHash)], context);
     await checkIfStudentUsesInitialRegisteredAddress();
     checkTransactionReceipt(response, context, size, studentFirstName);
     log(response);

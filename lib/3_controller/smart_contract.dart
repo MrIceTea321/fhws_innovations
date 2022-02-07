@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'dart:html';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:web3dart/browser.dart';
 import 'package:http/http.dart';
 import 'package:web3dart/web3dart.dart';
+import '../constants/rounded_alert.dart';
 import '../constants/text_constants.dart';
 import 'package:fhws_innovations/constants/text_constants.dart';
 import 'package:flutter/services.dart';
@@ -34,7 +37,7 @@ class SmartContract {
   }
 
   Future<String> submitTransaction(
-      String functionName, List<dynamic> args) async {
+      String functionName, List<dynamic> args, BuildContext context) async {
     final eth = window.ethereum;
     if (eth == null) {
       return "MetaMask is not available";
@@ -49,12 +52,12 @@ class SmartContract {
               contract: contract, function: ethFunction, parameters: args),
           chainId: null,
           fetchChainIdFromNetworkId: true);
-      await getStatusOfTransaction(result);
+      await getStatusOfTransaction(result, context);
       return result;
     }
   }
 
-  Future<bool> getStatusOfTransaction(String transactionHash) async {
+  Future<bool> getStatusOfTransaction(String transactionHash, BuildContext context) async {
     bool transactionGetsProcessed = false;
     final response = await http.get(Uri.parse(
         etherscanRequest + transactionHash + '&apikey=' + etherscanToken));
@@ -67,12 +70,27 @@ class SmartContract {
         // Transaction gets processed fine.
         transactionGetsProcessed = true;
       } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const RoundedAlert("Achtung",
+                "Die Transaktion schlug leider fehl!");
+          },
+        );
+
         // Throw Exception if there was an error in the transaction
         throw Exception('Transaction failed!');
       }
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const RoundedAlert("Servertimeout",
+              "Die Transaktion schlug leider fehl!");
+        },
+      );
       throw Exception('Transaction failed!');
     }
     return transactionGetsProcessed;
